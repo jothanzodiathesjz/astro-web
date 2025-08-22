@@ -1,0 +1,24 @@
+@import "tailwindcss";
+@custom-variant dark (&:where([color-scheme=dark], [color-scheme=dark] *));
+@import "./assets/fonts.css";
+
+body {
+  font-family: "Be Vietnam Pro", sans-serif;
+  font-style: normal;
+}
+
+.table-header-custom {
+  @apply px-5 table-cell bg-gray-100 dark:bg-gray-800 py-4 border-gray-700 dark:border-gray-600 rounded-tl-sm text-sm;
+}
+
+.table-row-custom {
+  @apply table-row flex-row flex-nowrap mb-0;
+}
+
+.table-body-custom {
+  @apply table-row-group align-middle;
+}
+
+.table-cell-custom {
+  @apply w-auto py-3 px-5 border-b table-cell border-gray-200 dark:border-gray-700 static text-sm;
+}
