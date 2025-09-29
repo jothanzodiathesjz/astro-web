@@ -1,7 +1,8 @@
 // src/domain/repositories/IAttendanceRepository.ts
-import type { Attendance } from '../models/attendance';
+import type { IQueryMetadata } from '@/http-client/query-metadata';
+import type { DomainAttendance } from '../models/Attendance';
 
 export interface AttendanceRepository {
-    getAttendanceList(date: Date): Promise<Attendance[]>;
-    checkIn(userId: string): Promise<Attendance>;
+    getAttendanceList(query?: IQueryMetadata): Promise<[DomainAttendance[], string | undefined]>;
+    checkIn(userId: string): Promise<DomainAttendance>;
 }

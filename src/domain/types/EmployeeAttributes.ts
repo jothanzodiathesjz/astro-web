@@ -1,33 +1,74 @@
-export type JobLevel = {
-    uuid: string;
+import type { Address } from "../shared/Address";
+import type { TimestampsAttributes } from "../shared/TimestampsAttributes";
+import type { Schedule } from "./ScheduleAttributes";
+
+export type EmergencyContact = {
     name: string;
-    status: boolean;
+    relation: string;
+    phone_number: string;
+};
+
+export type TContactDetail = {
+    phone_number: string;
+    email: string;
+    emergency_contact: EmergencyContact;
+};
+
+
+export type PersonalDetail = {
+    birthday: string;
+    birth_place: string;
+    religion: string;
+    gender: string;
+    marital_status: string;
+    blood_type: string;
+};
+
+export type Department = {
+    name: string;
+    code: string;
 }
 
-export type Organization = {
-    uuid: string;
-    name: string;
-    status: boolean;
-}
-
-export type JobPosition = {
-    uuid: string;
-    name: string;
-    level: JobLevel;
-    organization: Organization;
-    status: boolean;
-}
+export type Employment = {
+    department: Department;
+    job_level: string;
+    job_title: string;
+    employment_type: string;
+    start_date: number;
+    end_date: number;
+    resign_date: number;
+    status: string;
+};
 
 export type BankDetail = {
-    bankName: string;
-    bankAccount: string;
-    bankAccountHolder: string
-    insuranceDetails: string;
-    bpjsKetenagaKerjaan: string;
-    bpjsKesehatan: string;
-}
+    account_name: string;
+    account_number: string;
+    bank_name: string;
+    ifsc_code: string;
+};
 
-export type TaxDetail = {
-    mobilePhone: string;
-}
+export type InsuranceDetail = {
+    bpjs_ketenagakerjaan: string;
+    bpjs_kesehatan: string;
+};
+export type ContactDetail = {
+    phone_number: string;
+    email: string;
+    emergency_contact: EmergencyContact;
+};
 
+
+export type Employee = TimestampsAttributes & {
+    uuid: string;
+    full_name: string;
+    nick_name: string;
+    employee_id: string;
+    fingerprint_id: string;
+    address: Address;
+    personal_detail: PersonalDetail;
+    contact_detail: ContactDetail;
+    employment: Employment;
+    bank_detail: BankDetail;
+    insurance_details: InsuranceDetail;
+    schedule: Schedule | null;
+};

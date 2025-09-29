@@ -1,55 +1,30 @@
 <template>
-  <div class="w-full min-h-0 flex flex-col px-14 bg-gray-50 dark:bg-gray-900">
+  <div class="w-full min-h-0 flex flex-col px-14  dark:bg-gray-900">
+    <ConfirmModal
+      :visible="tbd ? true : false"
+      :header="'Delete Employee'"
+      message="Are you sure you want to delete this employee?"
+      :icon="'fa-triangle-exclamation'"
+      @confirm="deleteItem()"
+      @cancel="tbd = null"
+    />
     <div class="w-full flex flex-row py-3 mt-3">
-      <span class="text-2xl font-semibold dark:text-gray-200">Employee</span>
+      <span class="text-lg font-semibold dark:text-gray-200">Employee</span>
     </div>
-    <!-- <div class="mb-4">
-      <div class="w-full flex flex-row gap-5">
-        <div
-          class="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 py-3 px-4 rounded-md flex flex-col gap-2"
-        >
-          <div class="flex flex-row items-center gap-2">
-            <font-awesome-icon
-              class="text-blue-700 dark:text-blue-500"
-              icon="fa-solid fa-user-group"
-            />
-            <span class="font-extrabold text-blue-800 dark:text-blue-500"
-              >150</span
-            >
-          </div>
-          <span class="text-sm font-medium dark:text-gray-400">Employee</span>
-          <div class="flex flex-row items-center flex-wrap gap-2">
-            <div
-              class="flex flex-row items-center gap-1 border border-gray-100 dark:border-gray-700 py-1 px-2 rounded-md"
-            >
-              <span
-                class="text-xs font-semibold text-green-600 dark:text-green-400"
-              >
-                Present
-              </span>
-              <span
-                class="text-xs font-medium text-gray-500 dark:text-gray-400"
-              >
-                50
-              </span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div> -->
     <div
-      class="py-5 rounded-lg flex flex-col gap-3 bg-white dark:bg-gray-800 mt-4 px-5 mb-3"
+      class="py-5 rounded-lg flex flex-col gap-3 bg-white dark:bg-gray-800 mt-2 px-5 mb-3"
     >
       <span class="dark:text-gray-200">List Employee</span>
       <div class="w-full flex flex-row">
         <div class="w-1/5">
-          <TextInput :value="''" :placeholder="'Search employee'" />
+          <TextInput :value="search" :placeholder="'Search employee'" :debounce="400" @input="(v) =>[ search = v, getList()]" />
         </div>
         <div class="w-full flex flex-row gap-4 justify-end">
           <ButtonComponent
             class="text-sm"
             :variant="'outline'"
             :icon-name="'fa-file-import'"
+            :disabled="true"
             >Import</ButtonComponent
           >
           <ButtonComponent
@@ -66,7 +41,7 @@
           >
         </div>
       </div>
-      <TableComponent :empty="false">
+      <TableComponent :empty="employees.length === 0">
         <template #table-header>
           <tr>
             <th
@@ -77,12 +52,12 @@
             <th
               class="table-header-custom text-start font-normal dark:text-gray-400"
             >
-              Branch
+              Fingerprint ID
             </th>
             <th
               class="table-header-custom text-start font-normal dark:text-gray-400"
             >
-              Organazation
+              Department
             </th>
             <th
               class="table-header-custom text-start font-normal dark:text-gray-400"
@@ -97,7 +72,7 @@
             <th
               class="table-header-custom text-start font-normal dark:text-gray-400"
             >
-              Employment Status
+              Status
             </th>
             <th class="table-header-custom"></th>
           </tr>
@@ -105,44 +80,51 @@
         <template #table-body>
           <tr
             class="table-row-custom"
-            v-for="emp in employeeList"
-            :key="emp.name"
+            v-for="emp in employees.toSorted((a, b) => a.full_name.localeCompare(b.full_name))"
+            :key="emp.uuid"
           >
             <td class="table-cell-custom text-gray-700 dark:text-gray-300">
               <div class="flex flex-row gap-3 w-52 shrink-0">
                 <div
-                  class="rounded-full w-10 h-10 bg-gray-200 flex flex-row items-center justify-center"
+                  class="rounded-full w-10 h-10 shrink-0 dark:bg-gray-700 dark:text-gray-300 bg-gray-200 flex flex-row items-center justify-center"
                 >
-                  {{ emp.name.charAt(0) }}
+                  {{ emp.full_name.charAt(0) }}
                 </div>
                 <div class="flex flex-col gap-2">
-                  <span class="font-semibold text-blue-500">{{
-                    emp.name
+                  <span class="font-semibold text-blue-500 truncate">{{
+                    emp.full_name
                   }}</span>
                   <span>{{ emp.employee_id }}</span>
                 </div>
               </div>
             </td>
             <td class="table-cell-custom text-gray-700 dark:text-gray-300">
-              {{ emp.branch }}
+              {{ emp.fingerprint_id }}
             </td>
             <td class="table-cell-custom text-gray-700 dark:text-gray-300">
-              {{ emp.organization }}
+              {{ emp.employment.department.name }}
             </td>
             <td class="table-cell-custom text-gray-700 dark:text-gray-300">
-              {{ emp.job_position }}
+              {{ emp.employment.job_title }}
             </td>
             <td class="table-cell-custom text-gray-700 dark:text-gray-300">
-              {{ emp.job_level }}
+              {{ emp.employment.job_level }}
             </td>
             <td class="table-cell-custom text-gray-700 dark:text-gray-300">
-              {{ emp.job_status }}
+              <span class="text-green-500 border border-green-500 rounded px-2">{{ emp.employment.status }}</span>
             </td>
             <td class="table-cell-custom">
               <div class="flex flex-row gap-2">
-                <IconButton :icon-name="'eye'" />
-                <IconButton :icon-name="'pencil'" />
-                <IconButton :icon-name="'trash'" />
+                <IconButton 
+                 class="border border-gray-300 dark:border-gray-600 rounded p-2"
+                :icon-color="'text-gray-400 dark:text-gray-400'"
+                @click="$router.push({ name: 'EmployeeDetail', params: { uuid: emp.uuid }})" 
+                :icon-name="'pencil'" 
+                />
+                <IconButton 
+                 class="border border-gray-300 dark:border-gray-600 rounded p-2"
+                :icon-color="'text-gray-400 dark:text-gray-400'"
+                @click="tbd = emp" :icon-name="'trash'" />
               </div>
             </td>
           </tr>
@@ -153,14 +135,43 @@
 </template>
 
 <script setup lang="ts">
-import TextInput from "@/components/input/Text.input.vue";
-import TableComponent from "@/components/table/Table.component.vue";
-import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
-import IconButton from "@/components/button/Icon.button.vue";
-import ButtonComponent from "@/components/button/Button.component.vue";
-import dataEmployee from "../dummy/employee.json";
+import TextInput from "@/core/components/input/Text.input.vue";
+import TableComponent from "@/core/components/table/Table.component.vue";
+// import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+import IconButton from "@/core/components/button/Icon.button.vue";
+import ButtonComponent from "@/core/components/button/Button.component.vue";
+// import dataEmployee from "../dummy/employee.json";
+import { onMounted, ref } from "vue";
+import { container } from "@/container/di";
+import { TOKENS } from "@/container/tokens";
+import { DomainEmployee } from "@/domain/models/Employee";
+import ConfirmModal from "@/core/components/modal/Confirm.modal.vue";
 
-const employeeList: typeof dataEmployee = dataEmployee;
+const repository = container.get(TOKENS.EmployeeRepository)
+
+// const employeeList: typeof dataEmployee = dataEmployee;
+const employees = ref<DomainEmployee[]>([]);
+const tbd = ref<DomainEmployee | null>(null);
+const search = ref<string>("");
+
+async function getList() {
+  [employees.value] = await repository.getALl({
+    search: search.value,
+  });
+}
+
+async function deleteItem() {
+  if (tbd.value) {
+    await repository.delete(tbd.value.uuid);
+    tbd.value = null;
+    getList();
+  }
+}
+
+onMounted(() => {
+  getList();
+});
+
 </script>
 
 <style scoped></style>

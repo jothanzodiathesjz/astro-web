@@ -17,8 +17,9 @@
       <div class="flex flex-col gap-6">
         <TextInput
           :value="email"
-          label="Username"
-          placeholder="Masukkan username Anda"
+          label="Username / Email"
+          placeholder="Masukkan username atau email Anda"
+          :error="errors?.data?.email"
           :icon="{
             left: {
               name: 'user',
@@ -33,6 +34,7 @@
           label="Password"
           placeholder="Masukkan password Anda"
           hidden="true"
+          :error="errors?.data?.password"
           :icon="{
             left: {
               name: 'lock',
@@ -40,9 +42,16 @@
             },
           }"
           @input="(value) => (password = value)"
+          @enter="handleLogin"
         />
 
-        <ButtonComponent :variant="'primary'">Masuk</ButtonComponent>
+        <span v-if="errors?.message" class="text-xs text-red-600 dark:text-red-400 p-4 border border-red-300 rounded">{{ errors?.message }}</span>
+
+        <ButtonComponent 
+        :variant="'primary'" @click="handleLogin"
+        :disabled="diSabled"
+          >Masuk</ButtonComponent
+        >
       </div>
     </div>
   </div>
@@ -50,23 +59,37 @@
 
 <script setup lang="ts">
 import { ref } from "vue";
-import { library } from "@fortawesome/fontawesome-svg-core";
-import { faEnvelope, faLock } from "@fortawesome/free-solid-svg-icons";
-import TextInput from "@/components/input/Text.input.vue";
-import ButtonComponent from "@/components/button/Button.component.vue";
-
-// Tambahkan ikon ke library Font Awesome
-library.add(faEnvelope, faLock);
+import TextInput from "@/core/components/input/Text.input.vue";
+import ButtonComponent from "@/core/components/button/Button.component.vue";
+import { useAuthStore } from "./store/Auth.store";
+import { useRouter } from "vue-router";
+import { handleErrors, UIError } from "@/core/ui/UIError";
 
 const email = ref("");
 const password = ref("");
 
-const handleLogin = () => {
-  console.log("Login attempt with:", {
-    email: email.value,
-    password: password.value,
-  });
-  // Tambahkan logika otentikasi di sini
+const $auth = useAuthStore();
+const router = useRouter();
+const errors = ref<UIError | null>(null);
+const diSabled = ref(false);
+
+const handleLogin = async () => {
+  diSabled.value = true;
+  setTimeout( async () => {
+     try {
+    await $auth.login({
+      username: email.value,
+      email: email.value,
+      password: password.value,
+    });
+    router.push({ name: "Main" });
+  } catch (error) {
+    errors.value = handleErrors(error);
+  } finally {
+    diSabled.value = false;
+  }
+  },2000)
+ 
 };
 </script>
 

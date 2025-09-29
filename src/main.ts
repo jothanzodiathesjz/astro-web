@@ -10,8 +10,12 @@ import { far } from '@fortawesome/free-regular-svg-icons'
 import { fab } from '@fortawesome/free-brands-svg-icons'
 import { createPinia } from 'pinia'
 
+
+
 library.add(fas, far, fab)
+
 
 createApp(App)
     .use(createPinia())
-    .use(router).mount('#app')
+    .use(router).
+    mount('#app')

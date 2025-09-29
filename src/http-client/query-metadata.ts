@@ -11,6 +11,8 @@ export interface IQueryMetadata {
     treatment?: string;
     customer?: string;
     status?: string;
+    has_schedule?: boolean;
+    employment_type?: string;
 }
 
 export class QueryMetadata {
@@ -64,6 +66,14 @@ export class QueryMetadata {
 
         if (query?.status) {
             this.params.set("status", query.status);
+        }
+
+        if (query?.has_schedule) {
+            this.params.set("has_schedule", query.has_schedule.toString());
+        }
+
+        if (query?.employment_type) {
+            this.params.set("employment_type", query.employment_type);
         }
     }
 
