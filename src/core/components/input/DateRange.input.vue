@@ -157,10 +157,10 @@ const displayLabel = computed(() => {
         mode.value === "custom"
             ? ""
             : mode.value === "weekly"
-            ? "Weekly"
-            : mode.value === "biweekly"
-            ? "Biweekly"
-            : "Monthly";
+              ? "Weekly"
+              : mode.value === "biweekly"
+                ? "Biweekly"
+                : "Monthly";
     return `${cap} (${from} – ${to})`;
 });
 

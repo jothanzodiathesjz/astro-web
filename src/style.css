@@ -3,19 +3,19 @@
 @import "./assets/fonts.css";
 
 body {
-  font-family: "Be Vietnam Pro", sans-serif;
-  font-style: normal;
+    font-family: "Be Vietnam Pro", sans-serif;
+      font-style: normal;
 }
 
 /* Default transition: fade in/out for all unnamed <Transition> */
 .v-enter-active,
 .v-leave-active {
-  transition: opacity 200ms ease;
+    transition: opacity 200ms ease;
 }
 
 .v-enter-from,
 .v-leave-to {
-  opacity: 0;
+    opacity: 0;
 }
 
 /*
@@ -28,153 +28,190 @@ body {
   Rationale: horizontal 240ms (within 200–300ms), vertical 200ms.
 */
 :root {
-  --slide-ease: cubic-bezier(.22, .61, .36, 1);
-  --slide-h-distance: 24px;
-  /* subtle, formal */
-  --slide-v-distance: 20px;
-  /* slightly tighter vertically */
-  --slide-h-duration: 240ms;
-  --slide-v-duration: 200ms;
+    --slide-ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+      --slide-h-distance: 24px;
+      /* subtle, formal */
+      --slide-v-distance: 20px;
+      /* slightly tighter vertically */
+      --slide-h-duration: 240ms;
+      --slide-v-duration: 200ms;
 }
 
 /* Horizontal: content enters from the right */
 .slide-right-enter-active,
 .slide-right-leave-active {
-  transition: transform var(--slide-h-duration) var(--slide-ease),
-    opacity var(--slide-h-duration) ease;
-  will-change: transform, opacity;
-  overflow: hidden;
-  /* prevent scrollbars during horizontal slide */
+    transition: transform var(--slide-h-duration) var(--slide-ease),
+        opacity var(--slide-h-duration) ease;
+      will-change: transform, opacity;
+      overflow: hidden;
+      /* prevent scrollbars during horizontal slide */
 }
 
 .slide-right-enter-from {
-  transform: translateX(var(--slide-h-distance));
-  opacity: 0;
+    transform: translateX(var(--slide-h-distance));
+      opacity: 0;
 }
 
 .slide-right-leave-to {
-  transform: translateX(calc(var(--slide-h-distance) * -1));
-  opacity: 0;
+    transform: translateX(calc(var(--slide-h-distance) * -1));
+      opacity: 0;
 }
 
 /* Horizontal: content enters from the left */
 .slide-left-enter-active,
 .slide-left-leave-active {
-  transition: transform var(--slide-h-duration) var(--slide-ease),
-    opacity var(--slide-h-duration) ease;
-  will-change: transform, opacity;
-  overflow: hidden;
-  /* prevent scrollbars during horizontal slide */
+    transition: transform var(--slide-h-duration) var(--slide-ease),
+        opacity var(--slide-h-duration) ease;
+      will-change: transform, opacity;
+      overflow: hidden;
+      /* prevent scrollbars during horizontal slide */
 }
 
 .slide-left-enter-from {
-  transform: translateX(calc(var(--slide-h-distance) * -1));
-  opacity: 0;
+    transform: translateX(calc(var(--slide-h-distance) * -1));
+      opacity: 0;
 }
 
 .slide-left-leave-to {
-  transform: translateX(var(--slide-h-distance));
-  opacity: 0;
+    transform: translateX(var(--slide-h-distance));
+      opacity: 0;
 }
 
 /* Vertical: content enters from the bottom */
 .slide-up-enter-active,
 .slide-up-leave-active {
-  transition: transform var(--slide-v-duration) var(--slide-ease),
-    opacity var(--slide-v-duration) ease;
-  will-change: transform, opacity;
-  overflow: hidden;
-  /* prevent scrollbars during vertical slide */
+    transition: transform var(--slide-v-duration) var(--slide-ease),
+        opacity var(--slide-v-duration) ease;
+      will-change: transform, opacity;
+      overflow: hidden;
+      /* prevent scrollbars during vertical slide */
 }
 
 .slide-up-enter-from {
-  transform: translateY(var(--slide-v-distance));
-  opacity: 0;
+    transform: translateY(var(--slide-v-distance));
+      opacity: 0;
 }
 
 .slide-up-leave-to {
-  transform: translateY(calc(var(--slide-v-distance) * -1));
-  opacity: 0;
+    transform: translateY(calc(var(--slide-v-distance) * -1));
+      opacity: 0;
 }
 
 /* Vertical: content enters from the top */
 .slide-down-enter-active,
 .slide-down-leave-active {
-  transition: transform var(--slide-v-duration) var(--slide-ease),
-    opacity var(--slide-v-duration) ease;
-  will-change: transform, opacity;
-  overflow: hidden;
-  /* prevent scrollbars during vertical slide */
+    transition: transform var(--slide-v-duration) var(--slide-ease),
+        opacity var(--slide-v-duration) ease;
+      will-change: transform, opacity;
+      overflow: hidden;
+      /* prevent scrollbars during vertical slide */
 }
 
 .slide-down-enter-from {
-  transform: translateY(calc(var(--slide-v-distance) * -1));
-  opacity: 0;
+    transform: translateY(calc(var(--slide-v-distance) * -1));
+      opacity: 0;
 }
 
 .slide-down-leave-to {
-  transform: translateY(var(--slide-v-distance));
-  opacity: 0;
+    transform: translateY(var(--slide-v-distance));
+      opacity: 0;
 }
 
 /* Respect reduced motion */
 @media (prefers-reduced-motion: reduce) {
-
-  .slide-right-enter-active,
-  .slide-right-leave-active,
-  .slide-left-enter-active,
-  .slide-left-leave-active,
-  .slide-up-enter-active,
-  .slide-up-leave-active,
-  .slide-down-enter-active,
-  .slide-down-leave-active,
-  .v-enter-active,
-  .v-leave-active {
-    transition-duration: 1ms;
-  }
+    .slide-right-enter-active,
+      .slide-right-leave-active,
+      .slide-left-enter-active,
+      .slide-left-leave-active,
+      .slide-up-enter-active,
+      .slide-up-leave-active,
+      .slide-down-enter-active,
+      .slide-down-leave-active,
+      .v-enter-active,
+      .v-leave-active {
+        transition-duration: 1ms;
+      }
 }
 
 .slide-enter-from {
-  opacity: 0;
-  transform: translateY(-20px);
-  /* start dari atas */
+    opacity: 0;
+      transform: translateY(-20px);
+      /* start dari atas */
 }
 
 .slide-enter-to {
-  opacity: 1;
-  transform: translateY(0);
+    opacity: 1;
+      transform: translateY(0);
 }
 
 .slide-enter-active {
-  transition: all 0.3s ease-out;
+    transition: all 0.3s ease-out;
 }
 
 .slide-leave-from {
-  opacity: 1;
-  transform: translateY(0);
+    opacity: 1;
+      transform: translateY(0);
 }
 
 .slide-leave-to {
-  opacity: 0;
-  transform: translateY(-20px);
-  /* geser ke atas saat leave */
+    opacity: 0;
+      transform: translateY(-20px);
+      /* geser ke atas saat leave */
 }
 
 .slide-leave-active {
-  transition: all 0.3s ease-in;
+    transition: all 0.3s ease-in;
 }
 .table-header-custom {
-  @apply px-5 first:rounded-tl-lg last:rounded-tr-lg table-cell bg-gray-100 dark:bg-gray-700 py-3 border-gray-700 dark:border-gray-600 rounded-tl-sm text-sm;
+    @apply px-5 first:rounded-tl-lg last:rounded-tr-lg table-cell bg-gray-100 dark:bg-gray-700 py-3 border-gray-700 dark:border-gray-600 rounded-tl-sm text-sm;
 }
 
 .table-row-custom {
-  @apply table-row flex-row flex-nowrap mb-0;
+    @apply table-row flex-row flex-nowrap mb-0;
 }
 
 .table-body-custom {
-  @apply table-row-group align-middle;
+    @apply table-row-group align-middle;
 }
 
 .table-cell-custom {
-  @apply w-auto py-3 px-5 border-b table-cell border-gray-200 dark:border-gray-700 static text-sm;
+    @apply w-auto py-3 px-5 border-b table-cell border-gray-200 dark:border-gray-700 static text-sm;
+}
+
+* {
+  scrollbar-width: thin;
+  /* auto | thin | none */
+  scrollbar-color: #364153 #f1f1f100;
+  /* thumb | track */
+}
+
+/* Ukuran scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+/* Track (latar belakang) */
+::-webkit-scrollbar-track {
+  background: #364153;
+  border-radius: 5px;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  -ms-border-radius: 5px;
+  -o-border-radius: 5px;
+}
+
+/* Thumb (handle yg digeser) */
+::-webkit-scrollbar-thumb {
+  background: #364153;
+  border-radius: 5px;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  -ms-border-radius: 5px;
+  -o-border-radius: 5px;
+}
+
+/* Hover efek thumb */
+::-webkit-scrollbar-thumb:hover {
+  background: #364153;
 }

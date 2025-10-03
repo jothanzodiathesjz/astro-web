@@ -7,4 +7,4 @@ export type ShiftRepository = {
     createShift(shift: DomainShift): Promise<DomainShift>;
     updateShift(shift: DomainShift): Promise<DomainShift>;
     deleteShift(uuid: string): Promise<void>;
-}
+};

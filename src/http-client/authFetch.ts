@@ -1,17 +1,19 @@
-
-import { useAuthStore } from '@/auth/store/Auth.store';
-import router from '@/routes';
+import { useAuthStore } from "@/auth/store/Auth.store";
+import router from "@/routes";
 
 // Ganti URL ini dengan URL API Anda dari environment variable
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
 
 // --- STATE GLOBAL UNTUK ANTRIAN ---
 let isRefreshing = false;
-let failedQueue: Array<{ resolve: (value: any) => void; reject: (reason: any) => void }> = [];
+let failedQueue: Array<{
+    resolve: (value: any) => void;
+    reject: (reason: any) => void;
+}> = [];
 
 // Fungsi untuk memproses antrean permintaan yang gagal
 const processQueue = (error: any, token: string | null = null) => {
-    failedQueue.forEach(prom => {
+    failedQueue.forEach((prom) => {
         if (error) {
             prom.reject(error);
         } else {
@@ -36,12 +38,12 @@ const refreshAccessToken = async () => {
 
     try {
         const response = await fetch(`${API_BASE_URL}/auth/refresh-token`, {
-            method: 'POST', // Gunakan POST untuk keamanan
-            headers: { 'Content-Type': 'application/json' },
+            method: "POST", // Gunakan POST untuk keamanan
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ refreshToken: authStore.refreshToken }),
         });
 
-        if (!response.ok) throw new Error('Refresh token failed');
+        if (!response.ok) throw new Error("Refresh token failed");
         const data = await response.json();
 
         // Simpan token baru di Pinia store
@@ -54,7 +56,7 @@ const refreshAccessToken = async () => {
     } catch (err) {
         // Jika refresh gagal, bersihkan semua data auth dan arahkan ke halaman login
         authStore.clearAuthData();
-        router.push({ name: 'login' });
+        router.push({ name: "login" });
 
         // Tolak semua permintaan di antrean
         processQueue(err);
@@ -74,7 +76,7 @@ export const authFetch = async (url: string, options: RequestInit = {}) => {
 
     // Tambahkan token ke header jika ada
     if (authStore.accessToken) {
-        headers.set('Authorization', `Bearer ${authStore.accessToken}`);
+        headers.set("Authorization", `Bearer ${authStore.accessToken}`);
     }
 
     const finalOptions = { ...options, headers };
@@ -89,7 +91,7 @@ export const authFetch = async (url: string, options: RequestInit = {}) => {
                 const newAccessToken = await refreshAccessToken();
 
                 // Ulangi permintaan asli dengan token baru
-                headers.set('Authorization', `Bearer ${newAccessToken}`);
+                headers.set("Authorization", `Bearer ${newAccessToken}`);
                 return fetch(`${API_BASE_URL}${url}`, { ...options, headers });
             } catch (err) {
                 // Jika refresh token gagal, lemparkan error

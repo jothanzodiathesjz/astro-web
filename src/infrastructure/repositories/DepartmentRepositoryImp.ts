@@ -5,19 +5,23 @@ import type { Department } from "@/domain/types/EmployeeAttributes";
 import { injected } from "brandi";
 
 export class DepartmentRepositoryImp implements DepartmentRepository {
-    httpRequest: HttpRequest
+    httpRequest: HttpRequest;
 
     constructor(httpRequest: HttpRequest) {
         this.httpRequest = httpRequest;
     }
 
     async getDepartments(): Promise<Department[]> {
-        const response = await this.httpRequest.GET<Department[]>("departments");
+        const response =
+            await this.httpRequest.GET<Department[]>("departments");
         return response.data;
     }
 
     async create(department: Department): Promise<Department> {
-        const response = await this.httpRequest.POST<Department, Department>("departments", department);
+        const response = await this.httpRequest.POST<Department, Department>(
+            "departments",
+            department,
+        );
         return response.data;
     }
 
@@ -26,7 +30,4 @@ export class DepartmentRepositoryImp implements DepartmentRepository {
     }
 }
 
-injected(
-    DepartmentRepositoryImp,
-    TOKENS.httpRequest
-)
+injected(DepartmentRepositoryImp, TOKENS.httpRequest);

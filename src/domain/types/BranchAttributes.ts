@@ -10,7 +10,7 @@ export type Branch = TimestampsAttributes & {
     address: Address;
     is_head_office: boolean;
     payroll_info: Payroll;
-}
+};
 
 export type Payroll = {
     hq_initial: string;
@@ -21,4 +21,4 @@ export type Payroll = {
     bpjs_code: string;
     jkk: string;
     klu_code: string;
-}
+};

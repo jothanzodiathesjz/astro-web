@@ -11,13 +11,15 @@ export class HttpRequest {
     private readonly baseUrl: string;
     private readonly timeoutMs: number;
     private isRefreshing = false;
-    private refreshSubscribers: Array<{ resolve: (token: string) => void; reject: (err: unknown) => void }> = [];
+    private refreshSubscribers: Array<{
+        resolve: (token: string) => void;
+        reject: (err: unknown) => void;
+    }> = [];
 
     constructor(baseUrl: string, timeoutMs = 20000) {
         this.baseUrl = baseUrl || "https://api.example.com";
         this.timeoutMs = timeoutMs;
     }
-
 
     private async refreshToken(): Promise<string> {
         const authStore = useAuthStore();
@@ -49,7 +51,10 @@ export class HttpRequest {
                 throw new Error("Failed to refresh token");
             }
 
-            const data = (await response.json()) as Response<{ access_token: string; refresh_token: string }>;
+            const data = (await response.json()) as Response<{
+                access_token: string;
+                refresh_token: string;
+            }>;
 
             if (data.data.access_token) {
                 authStore.setToken(data.data.access_token);
@@ -58,7 +63,9 @@ export class HttpRequest {
                 }
 
                 // Notify semua subscribers yang menunggu token baru
-                this.refreshSubscribers.forEach(({ resolve }) => resolve(data.data.access_token));
+                this.refreshSubscribers.forEach(({ resolve }) =>
+                    resolve(data.data.access_token),
+                );
                 this.refreshSubscribers = [];
 
                 return data.data.access_token;
@@ -82,14 +89,18 @@ export class HttpRequest {
         method: string,
         endpoint: string,
         options: RequestInit = {},
-        retryCount = 0
+        retryCount = 0,
     ): Promise<Response<T>> {
         const authStore = useAuthStore();
         const headers = new Headers(options.headers || {});
 
         // Set Content-Type only when sending JSON body (avoid overriding FormData)
         const hasBody = options.body !== undefined && options.body !== null;
-        if (hasBody && !(options.body instanceof FormData) && !headers.has("Content-Type")) {
+        if (
+            hasBody &&
+            !(options.body instanceof FormData) &&
+            !headers.has("Content-Type")
+        ) {
             headers.set("Content-Type", "application/json");
         }
 
@@ -127,51 +138,60 @@ export class HttpRequest {
                 // const isTokenExpiredError =
                 //     errorData?.message?.includes("token") ||
                 //     (errorData as any)?.code === "TOKEN_EXPIRED";
-                    try {
-                        const newToken = await this.refreshToken();
-                        // Lanjutkan dengan retry request
-                        headers.set("Authorization", `Bearer ${newToken}`);
-                        return this.request<T>(
-                            method,
-                            endpoint,
-                            { ...options, headers },
-                            retryCount + 1
-                        );
-                    } catch (refreshError) {
-                        // Jika refresh token gagal, lempar UnauthorizedException
-                        const errorBody = {
-                            message: "Sesi Anda telah berakhir. Silakan masuk kembali.",
-                        };
-                        throw new UnauthorizedException(errorBody as Response<T>);
-                    }
+                try {
+                    const newToken = await this.refreshToken();
+                    // Lanjutkan dengan retry request
+                    headers.set("Authorization", `Bearer ${newToken}`);
+                    return this.request<T>(
+                        method,
+                        endpoint,
+                        { ...options, headers },
+                        retryCount + 1,
+                    );
+                } catch (refreshError) {
+                    // Jika refresh token gagal, lempar UnauthorizedException
+                    const errorBody = {
+                        message:
+                            "Sesi Anda telah berakhir. Silakan masuk kembali.",
+                    };
+                    throw new UnauthorizedException(errorBody as Response<T>);
+                }
 
                 //     // Cek jika error karena token expired
                 //     if (isTokenExpiredError) {
                 //   }
             }
-            const errorData = (await response
-                .json()
-                .catch(() => ({
-                    message: `Error ${response.status}`,
-                }))) as Response<T>;
+            const errorData = (await response.json().catch(() => ({
+                message: `Error ${response.status}`,
+            }))) as Response<T>;
             throw throwExceptionFromStatusCode(response.status, errorData);
         } else {
             // Tangani 204 atau response non-JSON agar tidak melempar error parsing
             if (response.status === 204) {
-                return { success: true, code: 204, message: "", data: undefined as unknown as T } as Response<T>;
+                return {
+                    success: true,
+                    code: 204,
+                    message: "",
+                    data: undefined as unknown as T,
+                } as Response<T>;
             }
             const contentType = response.headers.get("content-type") || "";
             if (contentType.includes("application/json")) {
                 return (await response.json()) as Response<T>;
             }
             // Fallback: treat as empty success
-            return { success: true, code: response.status, message: "", data: undefined as unknown as T } as Response<T>;
+            return {
+                success: true,
+                code: response.status,
+                message: "",
+                data: undefined as unknown as T,
+            } as Response<T>;
         }
     }
 
     public GET<T>(
         endpoint: string,
-        params?: Record<string, string | number | boolean | undefined | null>
+        params?: Record<string, string | number | boolean | undefined | null>,
     ): Promise<Response<T>> {
         const searchParams = new URLSearchParams();
 
@@ -208,5 +228,4 @@ export class HttpRequest {
     public DELETE<T>(endpoint: string): Promise<Response<T>> {
         return this.request("DELETE", endpoint);
     }
-
 }

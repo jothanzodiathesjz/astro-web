@@ -3,4 +3,4 @@ export type TimeOff = {
     name: string;
     code: string;
     description: string;
-}
+};

@@ -45,7 +45,13 @@ import { faPlus, faTrash, faGear } from "@fortawesome/free-solid-svg-icons";
 library.add(faPlus, faTrash, faGear);
 
 const props = defineProps<{
-    variant?: "primary" | "secondary" | "danger" | "outline" | "ghost";
+    variant?:
+        | "primary"
+        | "secondary"
+        | "danger"
+        | "outline"
+        | "ghost"
+        | "white";
     disabled?: boolean;
     iconName?: string;
     loading?: boolean;
@@ -78,6 +84,8 @@ const variantClasses = computed(() => {
             return "border border-gray-300 hover:bg-gray-100 text-gray-700 dark:border-gray-600 dark:hover:bg-gray-700 dark:text-gray-300";
         case "ghost":
             return "bg-transparent hover:bg-gray-100 text-gray-700 dark:hover:bg-gray-700 dark:text-gray-300";
+        case "white":
+            return "bg-white hover:bg-gray-100 text-gray-700 dark:hover:bg-gray-700 dark:text-gray-300";
         case "primary":
         default:
             return "bg-blue-600 hover:bg-blue-700 text-white";

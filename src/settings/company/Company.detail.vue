@@ -5,20 +5,30 @@
             :message="alerts?.message ?? ''"
             :type="alerts?.type"
             :show="alerts ? true : false"
-            @on-close="(alerts = null), (errors = null)"
+            @on-close="((alerts = null), (errors = null))"
         />
 
         <div
-            class="bg-white w-full dark:bg-gray-800 flex flex-row justify-between items-center px-3 py-3 gap-2 rounded mt-4"
+            class="w-full flex flex-row justify-between items-center px-3 gap-2 rounded"
         >
-            <div class="flex flex-row gap-2">
-                <IconButton
+            <div class="flex flex-row items-center gap-4">
+                <ButtonComponent
                     @click="$router.back()"
+                    :variant="'outline'"
                     :icon-name="'fa-angle-left'"
-                />
-                <h1 class="font-semibold dark:text-gray-200">
-                    Company Details
-                </h1>
+                    >Back</ButtonComponent
+                >
+                <div class="w-full flex flex-row gap-3 items-center">
+                    <span
+                        @click="$router.back()"
+                        class="font-semibold text-blue-600 dark:text-gray-200 cursor-pointer"
+                        >Company</span
+                    >
+                    <IconButton :icon-name="'fa-angle-right'" />
+                    <span class="font-semibold text-gray-800 dark:text-gray-200"
+                        >Form Company</span
+                    >
+                </div>
             </div>
             <div class="flex flex-row justify-end gap-3">
                 <ButtonComponent

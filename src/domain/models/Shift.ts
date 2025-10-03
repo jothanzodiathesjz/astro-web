@@ -9,6 +9,7 @@ export class DomainShift {
     break_start: string;
     break_end: string;
     description: string;
+    is_scheduled: boolean;
     inserted_by: string;
     created_at?: number;
     updated_at?: number;
@@ -24,6 +25,7 @@ export class DomainShift {
         this.description = init.description;
         this.label = init.label;
         this.inserted_by = init.inserted_by;
+        this.is_scheduled = init.is_scheduled;
         this.created_at = init.created_at;
         this.updated_at = init.updated_at;
         this.deleted_at = init.deleted_at;

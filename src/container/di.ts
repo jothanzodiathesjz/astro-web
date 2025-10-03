@@ -1,21 +1,22 @@
 // src/container/container.ts
-import { Container } from 'brandi';
-import { TOKENS } from './tokens';
+import { Container } from "brandi";
+import { TOKENS } from "./tokens";
 
-import { HttpRequest } from '@/api/httpRequest';
-import { AuthRepositoryImp } from '@/infrastructure/repositories/AuthRepositoryImp';
-import { UserRepositoryImp } from '@/infrastructure/repositories/UserRepositoryImp';
-import { UserFormViewModel } from '@/user/UserFormViewModel';
-import { EmployeeRepositoryImp } from '@/infrastructure/repositories/EmployeeRepositoryImp';
-import { EmployeeFormViewModel } from '@/employee/EmployeeForm.vm';
-import { DepartmentRepositoryImp } from '@/infrastructure/repositories/DepartmentRepositoryImp';
-import { TimeOffRepositoryImp } from '@/infrastructure/repositories/TimeOffRepositoryImp';
-import { CompanyRepositoryImp } from '@/infrastructure/repositories/CompanyRepositoryImp';
-import { BranchRepositoryImp } from '@/infrastructure/repositories/BranchRepositoryImp';
-import { ShiftRepositoryImp } from '@/infrastructure/repositories/ShiftRepositoryImp';
-import { ScheduleRepositoryImp } from '@/infrastructure/repositories/ScheduleRepositoryImp';
-import { ScheduleFormViewModel } from '@/schedule/ScheduleForm.vm';
-import { AttendanceRepositoryImp } from '@/infrastructure/repositories/AttendanceRepositoryImp';
+import { HttpRequest } from "@/api/httpRequest";
+import { AuthRepositoryImp } from "@/infrastructure/repositories/AuthRepositoryImp";
+import { UserRepositoryImp } from "@/infrastructure/repositories/UserRepositoryImp";
+import { UserFormViewModel } from "@/user/UserFormViewModel";
+import { EmployeeRepositoryImp } from "@/infrastructure/repositories/EmployeeRepositoryImp";
+import { EmployeeFormViewModel } from "@/employee/EmployeeForm.vm";
+import { DepartmentRepositoryImp } from "@/infrastructure/repositories/DepartmentRepositoryImp";
+import { TimeOffRepositoryImp } from "@/infrastructure/repositories/TimeOffRepositoryImp";
+import { CompanyRepositoryImp } from "@/infrastructure/repositories/CompanyRepositoryImp";
+import { BranchRepositoryImp } from "@/infrastructure/repositories/BranchRepositoryImp";
+import { ShiftRepositoryImp } from "@/infrastructure/repositories/ShiftRepositoryImp";
+import { ScheduleRepositoryImp } from "@/infrastructure/repositories/ScheduleRepositoryImp";
+import { ScheduleFormViewModel } from "@/schedule/ScheduleForm.vm";
+import { AttendanceRepositoryImp } from "@/infrastructure/repositories/AttendanceRepositoryImp";
+import { SchedulerViewModel } from "@/schedule/Scheduler.vm";
 
 export const container = new Container();
 
@@ -65,7 +66,6 @@ container
     .toInstance(AttendanceRepositoryImp)
     .inSingletonScope();
 
-
 // view models
 
 container
@@ -79,4 +79,8 @@ container
 container
     .bind(TOKENS.ScheduleFormViewModel)
     .toInstance(ScheduleFormViewModel)
+    .inTransientScope();
+container
+    .bind(TOKENS.SchedulerViewModel)
+    .toInstance(SchedulerViewModel)
     .inTransientScope();

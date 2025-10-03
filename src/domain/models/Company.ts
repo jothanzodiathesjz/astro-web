@@ -33,7 +33,7 @@ export class DomainCompany {
                 email: "",
                 phone_number: "",
             },
-            created_at: 0
+            created_at: 0,
         });
     }
 }

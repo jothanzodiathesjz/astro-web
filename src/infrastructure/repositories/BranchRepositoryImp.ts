@@ -14,32 +14,42 @@ export class BranchRepositoryImp implements BranchRepository {
     }
 
     async getAll(query?: IQueryMetadata): Promise<DomainBranch[]> {
-        const response = await this.http.GET<DomainBranch[]>("companies/branches", { ...query });
+        const response = await this.http.GET<DomainBranch[]>(
+            "companies/branches",
+            { ...query },
+        );
         return response.data;
     }
 
     async getOne(uuid: string): Promise<DomainBranch> {
-        const response = await this.http.GET<DomainBranch>(`companies/${uuid}/branches`);
+        const response = await this.http.GET<DomainBranch>(
+            `companies/${uuid}/branches`,
+        );
         return response.data;
     }
 
     async create(branch: Branch, companyUuid: string): Promise<DomainBranch> {
-        const response = await this.http.POST<DomainBranch, Branch>(`companies/${companyUuid}/branches`, branch);
+        const response = await this.http.POST<DomainBranch, Branch>(
+            `companies/${companyUuid}/branches`,
+            branch,
+        );
         return response.data;
     }
 
     async update(branch: DomainBranch): Promise<DomainBranch> {
-        const response = await this.http.PUT<DomainBranch, DomainBranch>(`branches/${branch.uuid}`, branch);
+        const response = await this.http.PUT<DomainBranch, DomainBranch>(
+            `branches/${branch.uuid}`,
+            branch,
+        );
         return response.data;
     }
 
     async delete(branch: DomainBranch): Promise<DomainBranch> {
-        const response = await this.http.DELETE<DomainBranch>(`companies/${branch.uuid}/branches`);
+        const response = await this.http.DELETE<DomainBranch>(
+            `companies/${branch.uuid}/branches`,
+        );
         return response.data;
     }
 }
 
-injected(
-    BranchRepositoryImp,
-    TOKENS.httpRequest
-)
+injected(BranchRepositoryImp, TOKENS.httpRequest);

@@ -95,10 +95,10 @@
                                     :disabled="emp.uuid ? false : true"
                                     @click="
                                         emp.uuid &&
-                                            $router.push({
-                                                name: 'CompanyDetail',
-                                                params: { uuid: emp.uuid },
-                                            })
+                                        $router.push({
+                                            name: 'CompanyDetail',
+                                            params: { uuid: emp.uuid },
+                                        })
                                     "
                                 />
                                 <IconButton
@@ -108,10 +108,10 @@
                                     :disabled="emp.uuid ? false : true"
                                     @click="
                                         emp.uuid &&
-                                            $router.push({
-                                                name: 'CompanyForm',
-                                                params: { uuid: emp.uuid },
-                                            })
+                                        $router.push({
+                                            name: 'CompanyForm',
+                                            params: { uuid: emp.uuid },
+                                        })
                                     "
                                 />
                                 <IconButton

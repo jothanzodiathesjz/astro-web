@@ -1,6 +1,5 @@
 import { DomainPhone } from "@/domain/shared/Phone";
 
-
 export interface IPhoneUI {
     number?: string;
     country_code: string;

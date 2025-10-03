@@ -13,7 +13,26 @@
             <IconButton @click="$router.back()" :icon-name="'fa-angle-left'" />
             <span class="font-semibold dark:text-gray-200">Form User</span>
         </div> -->
-        <div class="flex flex-row py-2 gap-2">
+        <div class="flex flex-row items-center gap-4">
+            <ButtonComponent
+                @click="$router.back()"
+                :variant="'outline'"
+                :icon-name="'fa-angle-left'"
+                >Back</ButtonComponent
+            >
+            <div class="w-full flex flex-row gap-3 items-center">
+                <span
+                    @click="$router.back()"
+                    class="font-semibold text-blue-600 dark:text-gray-200 cursor-pointer"
+                    >User</span
+                >
+                <IconButton :icon-name="'fa-angle-right'" />
+                <span class="font-semibold text-gray-800 dark:text-gray-200"
+                    >{{ vm.isUpdate ? "Detail" : "Form" }} User</span
+                >
+            </div>
+        </div>
+        <!-- <div class="flex flex-row py-2 gap-2">
             <span
                 @click="$router.back()"
                 class="font-semibold text-blue-600 dark:text-gray-200 cursor-pointer"
@@ -23,7 +42,7 @@
             <span class="font-semibold text-gray-800 dark:text-gray-200"
                 >{{ vm.isUpdate ? "Detail" : "Form" }} User</span
             >
-        </div>
+        </div> -->
         <div
             class="w-full bg-white dark:bg-gray-800 flex flex-col mt-5 rounded px-5 py-3"
         >

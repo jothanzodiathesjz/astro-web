@@ -1,39 +1,55 @@
-<template>
-    <div class="w-full flex flex-col gap-2">
-        <span v-if="label" class="dark:text-gray-300 text-sm">{{ label }}</span>
-        <VueDatePicker
-            v-model="time"
-            time-picker
-            :dark="isDark"
-            :disabled="disabled"
-            :minutes-increment="minuteStep"
-            :seconds-increment="secondStep"
-            :enable-seconds="withSeconds"
-            :clearable="!disabled"
-            :position="'left'"
-        >
-            <template #dp-input="{ value }">
-                <input
-                    class="w-full px-2 py-3 border border-gray-300 dark:border-gray-600 outline-none rounded-lg placeholder:text-sm text-sm dark:text-gray-200 bg-white dark:bg-gray-800 focus:border-blue-200 dark:focus:border-blue-500"
-                    :class="[
-                        readonly
-                            ? 'bg-gray-100 dark:bg-gray-900'
-                            : 'bg-white dark:bg-gray-800',
-                    ]"
-                    :value="value"
-                    :placeholder="placeholder ?? ''"
-                />
-            </template>
-        </VueDatePicker>
-    </div>
+﻿<template>
+    <VueDatePicker
+        v-model="time"
+        time-picker
+        :dark="isDark"
+        :disabled="disabled"
+        :minutes-increment="minuteStep"
+        :seconds-increment="secondStep"
+        :enable-seconds="withSeconds"
+        :clearable="!disabled"
+        :position="'left'"
+        :teleport="true"
+        :auto-apply="autoApply ? true : false"
+    >
+        <template #dp-input="{ value }">
+            <TextInput
+                :value="value ?? ''"
+                :label="props.label"
+                :placeholder="props.placeholder ?? ''"
+                :readonly="isReadonly || disabled"
+                :optional="props.optional"
+                :hint="props.hint"
+                :error="props.error"
+                :success="props.success"
+                :border-class="props.borderClass"
+            >
+                <template v-if="withClear" #suffix>
+                    <IconButton
+                        class="mr-2"
+                        :size="'xs'"
+                        :icon-name="'fa-circle-xmark'"
+                        @click="
+                            (e) => {
+                                e.stopPropagation();
+                                $emit('clear');
+                            }
+                        "
+                    />
+                </template>
+            </TextInput>
+        </template>
+    </VueDatePicker>
 </template>
 
 <script setup lang="ts">
-import { ref, watch, computed } from "vue";
+import { computed, ref, watch } from "vue";
 import VueDatePicker from "@vuepic/vue-datepicker";
 import "@vuepic/vue-datepicker/dist/main.css";
 import isDark from "@/core/ui/composables/dark";
 import { UITime } from "@/core/ui/UITime";
+import TextInput from "./Text.input.vue";
+import IconButton from "../button/Icon.button.vue";
 
 type TimeValue = {
     hours: number;
@@ -44,19 +60,30 @@ type TimeValue = {
 const emit = defineEmits<{
     (e: "update:modelValue", value: UITime | null): void;
     (e: "change", value: UITime | null): void;
+    (e: "clear"): void;
 }>();
 
 const props = withDefaults(
     defineProps<{
         modelValue?: UITime | null;
-        disabled?: boolean;
+        disabled?: boolean | "true" | "false";
         is24Hour?: boolean;
         minuteStep?: number;
         secondStep?: number;
         withSeconds?: boolean;
-        readonly?: boolean;
+        readonly?: boolean | "true";
         placeholder?: string;
         label?: string;
+        autoApply?: boolean;
+        optional?: boolean | "true";
+        hint?: {
+            link?: string;
+            text: string;
+        };
+        error?: string[] | string;
+        success?: string[] | string;
+        borderClass?: string;
+        withClear?: boolean;
     }>(),
     {
         modelValue: null,
@@ -68,13 +95,20 @@ const props = withDefaults(
         readonly: false,
         placeholder: "",
         label: "",
+        autoApply: false,
+        withClear: false,
     },
 );
 
 const minuteStep = computed(() => Math.max(props.minuteStep ?? 1, 1));
 const secondStep = computed(() => Math.max(props.secondStep ?? 1, 1));
 const withSeconds = computed(() => props.withSeconds);
-const disabled = computed(() => props.disabled);
+const disabled = computed(
+    () => props.disabled === true || props.disabled === "true",
+);
+const isReadonly = computed(
+    () => props.readonly === true || props.readonly === "true",
+);
 
 const time = ref<UITime | null>(normalizeTime(props.modelValue));
 let suppressEmit = false;
@@ -123,8 +157,8 @@ function normalizeTime(value: UITime | null | undefined): UITime | null {
 function isSameTime(a: TimeValue | null, b: TimeValue | null): boolean {
     if (!a && !b) return true;
     if (!a || !b) return false;
-    const secondsA = props.withSeconds ? a.seconds ?? 0 : undefined;
-    const secondsB = props.withSeconds ? b.seconds ?? 0 : undefined;
+    const secondsA = props.withSeconds ? (a.seconds ?? 0) : undefined;
+    const secondsB = props.withSeconds ? (b.seconds ?? 0) : undefined;
     return (
         a.hours === b.hours &&
         a.minutes === b.minutes &&

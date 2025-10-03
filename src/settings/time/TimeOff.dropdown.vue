@@ -3,6 +3,7 @@
         label="Select Time Off"
         :options="timeOffOptions"
         :selected="selectedShift"
+        :is-optional="true"
         :dontfilter="true"
         :with-clear="true"
         placeholder="Select Time Off"

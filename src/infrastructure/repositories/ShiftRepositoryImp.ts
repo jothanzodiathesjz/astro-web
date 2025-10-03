@@ -13,7 +13,9 @@ export class ShiftRepositoryImp implements ShiftRepository {
     }
 
     async getShifts(query: IQueryMetadata): Promise<DomainShift[]> {
-        const response = await this.http.GET<DomainShift[]>("/shifts", { ...query });
+        const response = await this.http.GET<DomainShift[]>("/shifts", {
+            ...query,
+        });
         return response.data;
     }
 
@@ -23,12 +25,18 @@ export class ShiftRepositoryImp implements ShiftRepository {
     }
 
     async createShift(shift: DomainShift): Promise<DomainShift> {
-        const response = await this.http.POST<DomainShift, DomainShift>("/shifts", shift);
+        const response = await this.http.POST<DomainShift, DomainShift>(
+            "/shifts",
+            shift,
+        );
         return response.data;
     }
 
     async updateShift(shift: DomainShift): Promise<DomainShift> {
-        const response = await this.http.PUT<DomainShift, DomainShift>(`/shifts/${shift.uuid}`, shift);
+        const response = await this.http.PUT<DomainShift, DomainShift>(
+            `/shifts/${shift.uuid}`,
+            shift,
+        );
         return response.data;
     }
 
@@ -37,7 +45,4 @@ export class ShiftRepositoryImp implements ShiftRepository {
     }
 }
 
-injected(
-    ShiftRepositoryImp,
-    TOKENS.httpRequest
-)
+injected(ShiftRepositoryImp, TOKENS.httpRequest);

@@ -57,9 +57,15 @@ export class ScheduleRepositoryImp implements ScheduleRepository {
         await this.http.DELETE(`/schedules/${uuid}`);
     }
 
-    async createScheduler(scheduler: Scheduler, has_schedule: boolean): Promise<void> {
+    async createScheduler(
+        scheduler: Scheduler,
+        has_schedule: boolean,
+    ): Promise<void> {
         if (has_schedule) {
-            await this.http.PUT<void, Scheduler>(`employee-schedules`, scheduler);
+            await this.http.PUT<void, Scheduler>(
+                `employee-schedules`,
+                scheduler,
+            );
             return;
         }
         await this.http.POST<void, Scheduler>(`employee-schedules`, scheduler);
@@ -81,7 +87,9 @@ export class ScheduleRepositoryImp implements ScheduleRepository {
         ];
     }
 
-    async updateScheduleOnScheduler(dailyAttendance: DomainDailyAttendance): Promise<DailyAttendance> {
+    async updateScheduleOnScheduler(
+        dailyAttendance: DomainDailyAttendance,
+    ): Promise<DailyAttendance> {
         const response = await this.http.PUT<DailyAttendance, DomainShift>(
             `attendances/${dailyAttendance.uuid}`,
             dailyAttendance.shift,
@@ -89,7 +97,9 @@ export class ScheduleRepositoryImp implements ScheduleRepository {
         return response.data;
     }
 
-    async getEmployeeSchedules(query: IQueryMetadata): Promise<[DomainEmployeeSchedule[], string | undefined]> {
+    async getEmployeeSchedules(
+        query: IQueryMetadata,
+    ): Promise<[DomainEmployeeSchedule[], string | undefined]> {
         const response = await this.http.GET<DomainEmployeeSchedule[]>(
             `employees/all-scheduler`,
             { ...query },
@@ -103,7 +113,10 @@ export class ScheduleRepositoryImp implements ScheduleRepository {
     }
 
     async setTimeOffSchedule(uuid: string, data: TimeOffToData): Promise<void> {
-        await this.http.POST<void, TimeOffToData>(`employee-timeoffs/${uuid}`, data);
+        await this.http.POST<void, TimeOffToData>(
+            `employee-timeoffs/${uuid}`,
+            data,
+        );
     }
 }
 

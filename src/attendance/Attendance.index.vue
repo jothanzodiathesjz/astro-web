@@ -1,5 +1,11 @@
 <template>
     <div class="w-full h-full min-h-0 flex flex-col px-14 dark:bg-gray-900">
+        <Toast
+            :duration="alerts?.duration"
+            :message="alerts?.message ?? ''"
+            :show="alerts ? true : false"
+            @on-close="alerts = null"
+        />
         <ModalContent
             :visible="selectedAttendance ? true : false"
             :header="'Detail Attendance'"
@@ -11,15 +17,20 @@
             }}</span>
         </ModalContent>
         <AttendanceSummaryModal
-        :summary-type="selectedSummary"
-        :data="attendanceList"
-        @close="selectedSummary = null"
+            :summary-type="selectedSummary"
+            :data="attendanceList"
+            @close="selectedSummary = null"
         />
         <AttendanceEditModal
-        :visible="tbe ? true : false"
-        :data="tbe"
-        @close="tbe = null"
+            :visible="tbe ? true : false"
+            :data="tbe"
+            @close="tbe = null"
+            @alert="
+                (e) => [(alerts = e), alerts.type === 'success' && getList()]
+            "
         />
+
+        <AttendanceLogsModal :attendance="log" @close="log = null" />
         <div class="w-full flex flex-row py-3 mt-3">
             <span class="text-lg font-semibold dark:text-gray-200"
                 >Attendance</span
@@ -48,8 +59,8 @@
                         <div
                             v-for="summary in value.data"
                             class="cursor-pointer hover:bg-gray-100 flex flex-row items-center gap-1 border border-gray-100 dark:border-gray-700 py-1 px-2 rounded-md"
-                            @click="selectedSummary = value.summaryType"
-                            >
+                            @click="selectedSummary = summary.status"
+                        >
                             <span
                                 class="text-xs font-semibold text-green-600 dark:text-green-400"
                             >
@@ -70,28 +81,25 @@
         >
             <span class="dark:text-gray-200">List Attendance</span>
             <div class="w-full flex flex-row">
-              <div class="w-1/4">
-                <DateInput
-                    :model-value="date"
-                    :readonly="false"
-                    placeholder="Select date"
-                    :with-range="false"
-                    :with-time="false"
-                    @update:model-value="
-                        (value) => {
-                            value instanceof Date && (date = value);
-                            getList();
-                        }
-                    "
-                />
-              </div>
+                <div class="w-1/4">
+                    <DateInput
+                        :model-value="date"
+                        :readonly="false"
+                        placeholder="Select date"
+                        :with-range="false"
+                        :with-time="false"
+                        @update:model-value="
+                            (value) => {
+                                value instanceof Date && (date = value);
+                                getList();
+                            }
+                        "
+                    />
+                </div>
                 <div class="w-full flex flex-row gap-4 justify-end">
-                    <ButtonComponent
-                        class="text-sm"
-                        :variant="'outline'"
-                        :icon-name="'fa-file-import'"
-                        >Import</ButtonComponent
-                    >
+                    <ImportButtonComponent
+                        :allowed-extensions="['.csv', '.xlsx', '.txt']"
+                    />
                     <ButtonComponent
                         class="text-sm"
                         :variant="'outline'"
@@ -104,19 +112,19 @@
                             :placeholder="'Search employee'"
                             :debounce="400"
                             :icon="{
-                              left: {
-                                name: 'fa-search',
-                              }
+                                left: {
+                                    name: 'fa-search',
+                                },
                             }"
                             @input="(v) => [(search = v), getList()]"
                         />
                     </div>
                 </div>
             </div>
-            <TableComponent 
-            :empty="attendanceList.length === 0"
-            @paginate="getListWithCursor()"
-            class="h-[79vh] overflow-auto"
+            <TableComponent
+                :empty="attendanceList.length === 0"
+                @paginate="getListWithCursor()"
+                class="h-[79vh] overflow-auto"
             >
                 <template #table-header>
                     <tr>
@@ -213,7 +221,10 @@
                             {{ att.shift.schedule_out || "-" }}
                         </td>
                         <td
-                            class="table-cell-custom text-gray-700 dark:text-gray-300"
+                            class="table-cell-custom"
+                            :class="{
+                                'text-red-500': att.is_late,
+                            }"
                         >
                             {{ att.actual_check_in || "-" }}
                         </td>
@@ -245,12 +256,22 @@
                                     class="border border-gray-300 dark:border-gray-600 rounded p-2"
                                     :icon-color="'text-gray-400 dark:text-gray-400'"
                                     :icon-name="'pencil'"
+                                    :title="'Edit'"
                                     @click="tbe = att"
+                                />
+                                <IconButton
+                                    v-if="att.updated_at"
+                                    class="border border-gray-300 dark:border-gray-600 rounded p-2"
+                                    :icon-color="'text-gray-400 dark:text-gray-400'"
+                                    :icon-name="'clock-rotate-left'"
+                                    :title="'History Log'"
+                                    @click="log = att"
                                 />
                                 <IconButton
                                     class="border border-gray-300 dark:border-gray-600 rounded p-2"
                                     :icon-color="'text-gray-400 dark:text-gray-400'"
                                     :icon-name="'trash'"
+                                    :title="'Delete'"
                                 />
                             </div>
                         </td>
@@ -275,6 +296,11 @@ import { DomainAttendance } from "@/domain/models/Attendance";
 import DateInput from "@/core/components/input/Date.input.vue";
 import AttendanceEditModal from "./AttendanceEdit.modal.vue";
 import AttendanceSummaryModal from "./AttendanceSummary.modal.vue";
+import Toast from "@/core/components/Toast.vue";
+import type { ToastUI } from "@/core/ui/Toast.ui";
+import ImportButtonComponent from "@/core/components/button/ImportButton.component.vue";
+import { getStatusClass } from "@/core/utils/StatusClass";
+import AttendanceLogsModal from "./AttendanceLogs.modal.vue";
 const attendanceSummary = [
     {
         summaryType: "Present Summary",
@@ -312,29 +338,11 @@ const selectedAttendance = ref<DomainAttendance | null>(null);
 const search = ref<string>("");
 const cursor = ref<string | undefined>(undefined);
 const date = ref<Date | Date[] | undefined>(new Date());
+const alerts = ref<ToastUI | null>(null);
 
 const tbe = ref<DomainAttendance | null>(null);
 const selectedSummary = ref<string | null>(null);
-
-const statusClassMap: Record<string, string> = {
-    pending:
-        "border-yellow-300 bg-yellow-50 text-yellow-700 dark:border-yellow-600 dark:bg-yellow-900/30 dark:text-yellow-200",
-    present:
-        "border-green-300 bg-green-50 text-green-700 dark:border-green-600 dark:bg-green-900/30 dark:text-green-200",
-    late: "border-orange-300 bg-orange-50 text-orange-700 dark:border-orange-600 dark:bg-orange-900/30 dark:text-orange-200",
-    leave: "border-blue-300 bg-blue-50 text-blue-700 dark:border-blue-500 dark:bg-blue-900/30 dark:text-blue-200",
-    absent:
-        "border-red-300 bg-red-50 text-red-700 dark:border-red-600 dark:bg-red-900/30 dark:text-red-200",
-    holiday:
-        "border-purple-300 bg-purple-50 text-purple-700 dark:border-purple-600 dark:bg-purple-900/30 dark:text-purple-200",
-    default:
-        "border-gray-300 bg-gray-100 text-gray-600 dark:border-gray-600 dark:bg-gray-800/60 dark:text-gray-300",
-};
-
-const getStatusClass = (status: string | null | undefined): string => {
-    const key = status?.toLowerCase() ?? "";
-    return statusClassMap[key] ?? statusClassMap.default;
-};
+const log = ref<DomainAttendance | null>(null);
 
 const formatStatus = (status: string | null | undefined): string => {
     if (!status) return "-";
@@ -351,7 +359,10 @@ async function getList() {
     const [result, nextCursor] = await repository.getAttendanceList({
         search: search.value,
         cursor: cursor.value,
-        date: date.value instanceof Date ? date.value.getTime().toString() : undefined,
+        date:
+            date.value instanceof Date
+                ? date.value.getTime().toString()
+                : undefined,
     });
     cursor.value = nextCursor;
     attendanceList.value = result;
@@ -361,7 +372,10 @@ async function getListWithCursor() {
     if (!cursor.value) return;
     const [result, nextCursor] = await repository.getAttendanceList({
         cursor: cursor.value,
-        date: date.value instanceof Date ? date.value.getTime().toString() : undefined,
+        date:
+            date.value instanceof Date
+                ? date.value.getTime().toString()
+                : undefined,
     });
     cursor.value = nextCursor;
     attendanceList.value = [...attendanceList.value, ...result];

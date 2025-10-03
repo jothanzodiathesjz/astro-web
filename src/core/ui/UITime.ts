@@ -1,26 +1,36 @@
-
 export class UITime {
-
-    constructor(public hours: number,
+    constructor(
+        public hours: number,
         public minutes: number,
-        public seconds?: number) {
+        public seconds?: number,
+    ) {}
 
-    }
-
-    static from(value: { hours: number; minutes: number; seconds?: number }): UITime {
+    static from(value: {
+        hours: number;
+        minutes: number;
+        seconds?: number;
+    }): UITime {
         return new UITime(value.hours, value.minutes, value.seconds);
     }
 
-    static default(): UITime { return new UITime(0, 0); }
+    static default(): UITime {
+        return new UITime(0, 0);
+    }
     static now(): UITime {
         const now = new Date();
         return new UITime(now.getHours(), now.getMinutes(), now.getSeconds());
     }
 
     toString(): string {
-        const hours = this.hours < 10 ? `0${this.hours}` : this.hours.toString();
-        const minutes = this.minutes < 10 ? `0${this.minutes}` : this.minutes.toString();
-        const seconds = this.seconds ? this.seconds < 10 ? `0${this.seconds}` : this.seconds.toString() : "00";
+        const hours =
+            this.hours < 10 ? `0${this.hours}` : this.hours.toString();
+        const minutes =
+            this.minutes < 10 ? `0${this.minutes}` : this.minutes.toString();
+        const seconds = this.seconds
+            ? this.seconds < 10
+                ? `0${this.seconds}`
+                : this.seconds.toString()
+            : "00";
         return `${hours}:${minutes}:${seconds}`;
     }
 
@@ -29,8 +39,10 @@ export class UITime {
     }
 
     toHoursMinutesString(): string {
-        const hours = this.hours < 10 ? `0${this.hours}` : this.hours.toString();
-        const minutes = this.minutes < 10 ? `0${this.minutes}` : this.minutes.toString();
+        const hours =
+            this.hours < 10 ? `0${this.hours}` : this.hours.toString();
+        const minutes =
+            this.minutes < 10 ? `0${this.minutes}` : this.minutes.toString();
         return `${hours}:${minutes}`;
     }
 
@@ -51,7 +63,11 @@ export class UITime {
 
     static fromTimestamp(timestamp: number): UITime {
         const date = new Date(timestamp);
-        return new UITime(date.getHours(), date.getMinutes(), date.getSeconds());
+        return new UITime(
+            date.getHours(),
+            date.getMinutes(),
+            date.getSeconds(),
+        );
     }
 
     static fromHoursMinutesString(hoursMinutes: string): UITime {
@@ -61,8 +77,10 @@ export class UITime {
 
     static fromTimestampString(timestamp: string): UITime {
         const date = new Date(timestamp);
-        return new UITime(date.getHours(), date.getMinutes(), date.getSeconds());
+        return new UITime(
+            date.getHours(),
+            date.getMinutes(),
+            date.getSeconds(),
+        );
     }
-
-
 }

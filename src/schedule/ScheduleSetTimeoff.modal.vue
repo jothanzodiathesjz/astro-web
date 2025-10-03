@@ -35,13 +35,11 @@
         <div class="w-full flex flex-row justify-end gap-3">
             <ButtonComponent
                 :variant="'outline'"
-                @click="
-                    [
-                        $emit('close'),
-                        (selectedDates = []),
-                        (selectedTimeOff = null),
-                    ]
-                "
+                @click="[
+                    $emit('close'),
+                    (selectedDates = []),
+                    (selectedTimeOff = null),
+                ]"
             >
                 Cancel
             </ButtonComponent>

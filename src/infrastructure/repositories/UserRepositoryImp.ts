@@ -7,18 +7,23 @@ import type { IQueryMetadata } from "@/http-client/query-metadata";
 import { injected } from "brandi";
 
 export class UserRepositoryImp implements UserRepository {
-    http: HttpRequest
+    http: HttpRequest;
 
     constructor(http: HttpRequest) {
         this.http = http;
     }
     async getAll(query?: IQueryMetadata): Promise<DomainUser[]> {
-        const response = await this.http.GET<UserAttributes[]>("users", { ...query });
+        const response = await this.http.GET<UserAttributes[]>("users", {
+            ...query,
+        });
         return response.data.map((u) => new DomainUser(u));
     }
 
     async create(user: DomainUserWithPassword): Promise<DomainUser> {
-        const response = await this.http.POST<UserAttributes, DomainUserWithPassword>("users", user);
+        const response = await this.http.POST<
+            UserAttributes,
+            DomainUserWithPassword
+        >("users", user);
         return new DomainUser(response.data);
     }
     async getOne(): Promise<DomainUser> {
@@ -27,10 +32,12 @@ export class UserRepositoryImp implements UserRepository {
     }
 
     async update(user: DomainUser): Promise<DomainUser> {
-        const response = await this.http.PUT<UserAttributes, DomainUser>(`users/${user.uuid}`, user);
+        const response = await this.http.PUT<UserAttributes, DomainUser>(
+            `users/${user.uuid}`,
+            user,
+        );
         return new DomainUser(response.data);
     }
-
 }
 
 injected(UserRepositoryImp, TOKENS.httpRequest);

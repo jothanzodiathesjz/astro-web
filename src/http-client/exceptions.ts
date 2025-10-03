@@ -38,7 +38,7 @@ export class RequestEntityTooLargeException extends Error {
 
 export function throwExceptionFromStatusCode<T>(
     status: number,
-    errorResponse: Response<T>
+    errorResponse: Response<T>,
 ): void {
     const errorBody = errorResponse ?? { code: status }; // Cast ke any untuk mengakses data
 

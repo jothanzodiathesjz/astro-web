@@ -20,7 +20,6 @@ export class QueryMetadata {
         query?: IQueryMetadata,
         private params: URLSearchParams = new URLSearchParams(),
     ) {
-
         if (query?.treatment) {
             this.params.set("treatment", query.treatment);
         }

@@ -1,4 +1,7 @@
-export function calculateDuration(schedule_in: string, schedule_out: string): string {
+export function calculateDuration(
+    schedule_in: string,
+    schedule_out: string,
+): string {
     const [inHours, inMinutes] = schedule_in.split(":").map(Number);
     const [outHours, outMinutes] = schedule_out.split(":").map(Number);
 

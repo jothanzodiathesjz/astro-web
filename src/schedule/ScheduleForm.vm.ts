@@ -132,8 +132,11 @@ export class ScheduleFormViewModel {
             (item) => new DomainDaySchedule(item),
         );
         this.data.uuid = this.isUpdate ? this.data.uuid : v4();
-        this.effectiveDate instanceof Date && (this.data.effective_date = this.effectiveDate.getTime());
-        this.data.created_at = this.isUpdate ? this.data.created_at : Date.now();
+        this.effectiveDate instanceof Date &&
+            (this.data.effective_date = this.effectiveDate.getTime());
+        this.data.created_at = this.isUpdate
+            ? this.data.created_at
+            : Date.now();
         return true;
     }
 
@@ -173,7 +176,6 @@ export class ScheduleFormViewModel {
                 this.submiting = false;
                 this.router.push({ name: "Schedule" });
             }, 2300);
-
         } catch (error) {
             this.errors = handleErrors(error);
             this.alerts = new ToastUI(this.errors.message, "error", 2000);
@@ -196,11 +198,14 @@ export class ScheduleFormViewModel {
 
     async getSchedule() {
         try {
-            const result = await this.repository.getSchedule(this.route.params.uuid as string);
+            const result = await this.repository.getSchedule(
+                this.route.params.uuid as string,
+            );
             this.data = result;
             this.effectiveDate = new Date(result.effective_date);
-            this.daySchedules = result.day_schedules.map((item) => new DomainDaySchedule(item));
-
+            this.daySchedules = result.day_schedules.map(
+                (item) => new DomainDaySchedule(item),
+            );
         } catch (error) {
             this.errors = handleErrors(error);
         }

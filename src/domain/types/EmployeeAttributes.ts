@@ -14,7 +14,6 @@ export type TContactDetail = {
     emergency_contact: EmergencyContact;
 };
 
-
 export type PersonalDetail = {
     birthday: string;
     birth_place: string;
@@ -27,7 +26,7 @@ export type PersonalDetail = {
 export type Department = {
     name: string;
     code: string;
-}
+};
 
 export type Employment = {
     department: Department;
@@ -56,7 +55,6 @@ export type ContactDetail = {
     email: string;
     emergency_contact: EmergencyContact;
 };
-
 
 export type Employee = TimestampsAttributes & {
     uuid: string;

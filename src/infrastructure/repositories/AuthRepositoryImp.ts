@@ -6,9 +6,7 @@ import { injected } from "brandi";
 export class AuthRepositoryImp implements AuthRepository {
     httpRequest: HttpRequest;
 
-    constructor(
-        httpRequest: HttpRequest
-    ) {
+    constructor(httpRequest: HttpRequest) {
         this.httpRequest = httpRequest;
     }
 

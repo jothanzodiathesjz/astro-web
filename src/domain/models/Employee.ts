@@ -1,5 +1,12 @@
 import type { Address } from "../shared/Address";
-import type { BankDetail, ContactDetail, Employee, Employment, InsuranceDetail, PersonalDetail } from "../types/EmployeeAttributes";
+import type {
+    BankDetail,
+    ContactDetail,
+    Employee,
+    Employment,
+    InsuranceDetail,
+    PersonalDetail,
+} from "../types/EmployeeAttributes";
 import type { Schedule } from "../types/ScheduleAttributes";
 
 export class DomainEmployee implements Employee {
@@ -46,12 +53,12 @@ export class DomainEmployeeSummary {
     fingerprint_id: string;
 
     constructor(init: {
-        uuid: string,
-        branch_uuid: string,
-        full_name: string,
-        nick_name: string,
-        employee_id: string,
-        fingerprint_id: string
+        uuid: string;
+        branch_uuid: string;
+        full_name: string;
+        nick_name: string;
+        employee_id: string;
+        fingerprint_id: string;
     }) {
         this.uuid = init.uuid;
         this.branch_uuid = init.branch_uuid;

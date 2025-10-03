@@ -5,14 +5,33 @@
             :message="alerts?.message ?? ''"
             :type="alerts?.type"
             :show="alerts ? true : false"
-            @on-close="(alerts = null), (errors = null)"
+            @on-close="((alerts = null), (errors = null))"
         />
-        <div
+        <div class="flex flex-row items-center gap-4">
+            <ButtonComponent
+                @click="$router.back()"
+                :variant="'outline'"
+                :icon-name="'fa-angle-left'"
+                >Back</ButtonComponent
+            >
+            <div class="w-full flex flex-row gap-3 items-center">
+                <span
+                    @click="$router.back()"
+                    class="font-semibold text-blue-600 dark:text-gray-200 cursor-pointer"
+                    >Company</span
+                >
+                <IconButton :icon-name="'fa-angle-right'" />
+                <span class="font-semibold text-gray-800 dark:text-gray-200"
+                    >Form Company</span
+                >
+            </div>
+        </div>
+        <!-- <div
             class="bg-white w-full dark:bg-gray-800 flex flex-row px-3 py-3 gap-2 rounded mt-4"
         >
             <IconButton @click="$router.back()" :icon-name="'fa-angle-left'" />
             <span class="font-semibold dark:text-gray-200">Form Company</span>
-        </div>
+        </div> -->
 
         <div
             class="py-5 rounded-lg flex flex-col gap-3 bg-white dark:bg-gray-800 mt-4 px-5 mb-3"

@@ -9,7 +9,6 @@ import { handleErrors, UIError } from "@/core/ui/UIError";
 import { useRoute, useRouter } from "vue-router";
 import { ToastUI } from "@/core/ui/Toast.ui";
 
-
 export class EmployeeFormViewModel {
     repository: EmployeeRepository;
     departmentRepository: DepartmentRepository;
@@ -23,35 +22,62 @@ export class EmployeeFormViewModel {
     submiting = false;
     isUpdate = false;
 
-    constructor(repository: EmployeeRepository, departmentRepository: DepartmentRepository) {
+    constructor(
+        repository: EmployeeRepository,
+        departmentRepository: DepartmentRepository,
+    ) {
         this.repository = repository;
         this.departmentRepository = departmentRepository;
     }
 
     bloodGroupOptions = ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"].map(
-        (bg) => new DropdownLabel<string>(bg)
+        (bg) => new DropdownLabel<string>(bg),
     );
-    religionOptions = ["Islam", "Kristen", "Katolik", "Hindu", "Buddha", "Konghucu",].map(
-        (religion) => new DropdownLabel<string>(religion)
-    );
+    religionOptions = [
+        "Islam",
+        "Kristen",
+        "Katolik",
+        "Hindu",
+        "Buddha",
+        "Konghucu",
+    ].map((religion) => new DropdownLabel<string>(religion));
     maritalStatusOptions = ["Single", "Married", "Divorced"].map(
-        (maritalStatus) => new DropdownLabel<string>(maritalStatus)
+        (maritalStatus) => new DropdownLabel<string>(maritalStatus),
     );
 
-    genderOptions = ["Male", "Female"].map((gender) => new DropdownLabel<string>(gender));
+    genderOptions = ["Male", "Female"].map(
+        (gender) => new DropdownLabel<string>(gender),
+    );
     departMentOptions: DropdownLabel<Department>[] = [];
-    jobLevelOptions = ["DIREKSI", "STAFF", "HARIAN", "MANAJER"].map((jobLevel) => new DropdownLabel<string>(jobLevel));
-    jobTitleOptions = ["IT", "HR", "Sales", "Marketing", "Finance"].map((jobTitle) => new DropdownLabel<string>(jobTitle));
-    employmentTypeOptions = ["PERMANENT", "CONTRACT", "HARLES"].map((employmentType) => new DropdownLabel<string>(employmentType));
-    statusOptions = ["ACTIVE", "RESIGNED", "TERMINATED", "CONTRACT END"].map((status) => new DropdownLabel<string>(status));
-    relationOptions = ["Ibu", "Ayah", "Suami", "Istri", "Anak", "Saudara", "Kerabat"].map((relation) => new DropdownLabel<string>(relation));
-
-
+    jobLevelOptions = ["DIREKSI", "STAFF", "HARIAN", "MANAJER"].map(
+        (jobLevel) => new DropdownLabel<string>(jobLevel),
+    );
+    jobTitleOptions = ["IT", "HR", "Sales", "Marketing", "Finance"].map(
+        (jobTitle) => new DropdownLabel<string>(jobTitle),
+    );
+    employmentTypeOptions = ["PERMANENT", "CONTRACT", "HARLES"].map(
+        (employmentType) => new DropdownLabel<string>(employmentType),
+    );
+    statusOptions = ["ACTIVE", "RESIGNED", "TERMINATED", "CONTRACT END"].map(
+        (status) => new DropdownLabel<string>(status),
+    );
+    relationOptions = [
+        "Ibu",
+        "Ayah",
+        "Suami",
+        "Istri",
+        "Anak",
+        "Saudara",
+        "Kerabat",
+    ].map((relation) => new DropdownLabel<string>(relation));
 
     async getDepertmentList() {
         try {
             const data = await this.departmentRepository.getDepartments();
-            this.departMentOptions = data.map((department) => new DropdownLabel<Department>(department, "code", "name"));
+            this.departMentOptions = data.map(
+                (department) =>
+                    new DropdownLabel<Department>(department, "code", "name"),
+            );
         } catch (error) {
             this.erorrs = handleErrors(error);
         }
@@ -63,50 +89,54 @@ export class EmployeeFormViewModel {
         const employeeValidate = this.employee.employeeValidate();
         const bankDetailValidate = this.employee.bankDetailValidate();
 
-        console.log(this.steps)
+        console.log(this.steps);
         if (personalDataValidate && this.steps === 1) {
             this.erorrs = new UIError("Form Harus diisi", personalDataValidate);
-            console.log(this.erorrs)
-            return
+            console.log(this.erorrs);
+            return;
         }
 
         if (contactValidate && this.steps === 3) {
             this.erorrs = new UIError("Form Harus diisi", contactValidate);
-            console.log(this.erorrs)
-            return
+            console.log(this.erorrs);
+            return;
         }
 
         if (employeeValidate && this.steps === 4) {
             this.erorrs = new UIError("Form Harus diisi", employeeValidate);
-            console.log(this.erorrs)
-            return
+            console.log(this.erorrs);
+            return;
         }
 
         if (bankDetailValidate && this.steps === 5) {
             this.erorrs = new UIError("Form Harus diisi", bankDetailValidate);
-            console.log(this.erorrs)
-            return
+            console.log(this.erorrs);
+            return;
         }
 
-
-        this.steps = this.steps + 1
+        this.steps = this.steps + 1;
     }
 
     async createEmployee() {
         const insuranceDetailValidate = this.employee.insuranceDetailValidate();
         if (insuranceDetailValidate && this.steps === 6) {
-            this.erorrs = new UIError("Form Harus diisi", insuranceDetailValidate);
-            return
+            this.erorrs = new UIError(
+                "Form Harus diisi",
+                insuranceDetailValidate,
+            );
+            return;
         }
         try {
             this.submiting = true;
             if (this.isUpdate) {
-                await this.repository.update(this.employee.toDomain(this.isUpdate));
+                await this.repository.update(
+                    this.employee.toDomain(this.isUpdate),
+                );
                 this.alerts = new ToastUI(
                     "Successfully Updated Employee",
                     "success",
                     2000,
-                )
+                );
                 setTimeout(() => {
                     this.router.push({ name: "Employee" });
                 }, 2300);
@@ -118,18 +148,16 @@ export class EmployeeFormViewModel {
                 "Successfully Created Employee",
                 "success",
                 2000,
-            )
+            );
 
             setTimeout(() => {
                 this.router.push({ name: "Employee" });
             }, 2300);
         } catch (error) {
-            console.log(error)
+            console.log(error);
             this.erorrs = handleErrors(error);
-            this.submiting = false
+            this.submiting = false;
         }
-
-
     }
 
     async getEmployee(uuid: string) {
@@ -152,4 +180,8 @@ export class EmployeeFormViewModel {
     }
 }
 
-injected(EmployeeFormViewModel, TOKENS.EmployeeRepository, TOKENS.DepartmentRepository);
+injected(
+    EmployeeFormViewModel,
+    TOKENS.EmployeeRepository,
+    TOKENS.DepartmentRepository,
+);

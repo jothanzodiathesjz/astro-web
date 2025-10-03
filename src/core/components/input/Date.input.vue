@@ -107,8 +107,8 @@ onMounted(() => {
 
 <style>
 :root {
-  --dp-font-family: font-family: "Be Vietnam Pro", sans-serif;
-  --dp-font-size: 0.875rem;
+    --dp-font-family: font-family: "Be Vietnam Pro", sans-serif;
+    --dp-font-size: 0.875rem;
 }
 
 .dp__theme_dark {

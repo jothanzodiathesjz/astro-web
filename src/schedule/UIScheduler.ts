@@ -6,8 +6,7 @@ export type UIScheduler = {
     employee_uuid: DomainEmployeeSummary[];
     effective_date: number;
     has_schedule: boolean;
-}
-
+};
 
 export type UpdateShiftAtt = {
     employee: DomainEmployeeSummary;

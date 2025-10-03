@@ -34,9 +34,11 @@ export class UserFormViewModel {
 
     date: Date | Date[] = new Date();
     roles: string[] = ["ADMIN", "MANAGER", "EMPLOYEE"];
-    roleOptions: DropdownLabel<string>[] = (
-        this.roles.map((role) => ({ label: role, value: role, id: role }))
-    );
+    roleOptions: DropdownLabel<string>[] = this.roles.map((role) => ({
+        label: role,
+        value: role,
+        id: role,
+    }));
     selectedRole: DropdownLabel<string> | null = null;
     password: string = "";
     confirmPassword: string = "";
@@ -63,21 +65,20 @@ export class UserFormViewModel {
 
     selectedGender: Gender = "M";
 
-
     validateForm(): UserFormValidationError {
         const errors: UserFormValidationError = {};
 
         // Validasi untuk username, email, dan nama
-        if (!this.user.username || this.user.username.trim() === '') {
+        if (!this.user.username || this.user.username.trim() === "") {
             errors.username = "Username tidak boleh kosong.";
         }
-        if (!this.user.email || this.user.email.trim() === '') {
+        if (!this.user.email || this.user.email.trim() === "") {
             errors.email = "Email tidak boleh kosong.";
         }
         if (!isValidEmail(this.user.email)) {
             errors.email = "Format email tidak valid.";
         }
-        if (!this.user.name || this.user.name.trim() === '') {
+        if (!this.user.name || this.user.name.trim() === "") {
             errors.name = "Nama tidak boleh kosong.";
         }
 
@@ -88,18 +89,24 @@ export class UserFormViewModel {
         // Atau jika password diisi saat update (untuk mengubah password).
         if (!this.isUpdate) {
             // Validasi password kosong
-            if (!this.password || this.password.trim() === '') {
+            if (!this.password || this.password.trim() === "") {
                 errors.password = "Password tidak boleh kosong.";
             }
 
             // Validasi konfirmasi password kosong
-            if (!this.confirmPassword || this.confirmPassword.trim() === '') {
-                errors.confirmPassword = "Konfirmasi password tidak boleh kosong.";
+            if (!this.confirmPassword || this.confirmPassword.trim() === "") {
+                errors.confirmPassword =
+                    "Konfirmasi password tidak boleh kosong.";
             }
 
             // Validasi kesamaan password hanya jika kedua field sudah terisi.
-            if (this.password && this.confirmPassword && this.password !== this.confirmPassword) {
-                errors.confirmPassword = "Password dan konfirmasi password harus sama.";
+            if (
+                this.password &&
+                this.confirmPassword &&
+                this.password !== this.confirmPassword
+            ) {
+                errors.confirmPassword =
+                    "Password dan konfirmasi password harus sama.";
             }
         }
         // --- Akhir Perbaikan Validasi Password ---
@@ -108,7 +115,7 @@ export class UserFormViewModel {
         if (!this.selectedRole) {
             errors.role = "Role tidak boleh kosong.";
         }
-        if (!this.user.employee_id || this.user.employee_id.trim() === '') {
+        if (!this.user.employee_id || this.user.employee_id.trim() === "") {
             errors.employeeId = "ID karyawan tidak boleh kosong.";
         }
         if (!this.selectedGender) {
@@ -131,9 +138,12 @@ export class UserFormViewModel {
 
     async save() {
         const validate = this.validateForm();
-        console.log(validate)
+        console.log(validate);
         if (Object.keys(validate).length > 0) {
-            this.errors = new UIError("Lengkapi form terlebih dahulu.", validate);
+            this.errors = new UIError(
+                "Lengkapi form terlebih dahulu.",
+                validate,
+            );
             return;
         }
         try {
@@ -146,11 +156,15 @@ export class UserFormViewModel {
                         this.selectedGender,
                         this.date.toString(),
                         this.selectedRole!.value,
-                        Array.from(this.selectedAccessFeature)
-                    )
-                )
-                this.user = res
-                this.alerts = new ToastUI("User berhasil diupdate.", "success", 2000);
+                        Array.from(this.selectedAccessFeature),
+                    ),
+                );
+                this.user = res;
+                this.alerts = new ToastUI(
+                    "User berhasil diupdate.",
+                    "success",
+                    2000,
+                );
             } else {
                 await this.repository.create(
                     this.user.toData(
@@ -159,21 +173,24 @@ export class UserFormViewModel {
                         this.selectedGender,
                         this.date.toString(),
                         this.selectedRole!.value,
-                        Array.from(this.selectedAccessFeature)
-                    )
+                        Array.from(this.selectedAccessFeature),
+                    ),
                 );
-                this.alerts = new ToastUI("User berhasil dibuat.", "success", 2000);
+                this.alerts = new ToastUI(
+                    "User berhasil dibuat.",
+                    "success",
+                    2000,
+                );
             }
             setTimeout(() => {
                 this.router.push({ name: "Users" });
             }, 2500);
         } catch (error) {
-            alert(error)
+            alert(error);
         } finally {
             this.submiting = false;
         }
     }
-
 
     async getUser() {
         this.user = await this.repository.getOne();
@@ -184,7 +201,4 @@ export class UserFormViewModel {
     }
 }
 
-injected(
-    UserFormViewModel,
-    TOKENS.UserRepository
-)
+injected(UserFormViewModel, TOKENS.UserRepository);

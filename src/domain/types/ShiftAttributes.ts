@@ -8,6 +8,7 @@ export type Shift = TimestampsAttributes & {
     schedule_out: string;
     break_start: string;
     break_end: string;
+    is_scheduled: boolean;
     description: string;
     inserted_by: string;
-}
+};

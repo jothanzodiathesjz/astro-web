@@ -11,7 +11,7 @@ export class UIError {
         public readonly message: string,
         public readonly data?: any,
         public readonly code?: number,
-    ) { }
+    ) {}
 
     static unknown(): UIError {
         return new UIError("Unknown error");
@@ -29,7 +29,11 @@ export function handleErrors(error: unknown): UIError {
     }
 
     if (error instanceof NotFoundException) {
-        return new UIError(error.message, error.response.data, error.response.code);
+        return new UIError(
+            error.message,
+            error.response.data,
+            error.response.code,
+        );
     }
 
     if (error instanceof UnauthorizedException) {

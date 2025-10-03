@@ -16,7 +16,7 @@ function diffDaysLocal(from: Date, to: Date) {
     const msPerDay = 24 * 60 * 60 * 1000;
     return Math.floor(
         (atMidnightLocal(to).getTime() - atMidnightLocal(from).getTime()) /
-        msPerDay,
+            msPerDay,
     );
 }
 
@@ -99,9 +99,9 @@ export function buildCalendarWeekStartingMonday(
 }
 export type RangeItem = {
     date: Date;
-    label: string;       // "Sen, 22 Sep"
-    cycleDay: number;    // 1..cycle_days
-    shift: any | null;   // tipe Shift kamu di sini
+    label: string; // "Sen, 22 Sep"
+    cycleDay: number; // 1..cycle_days
+    shift: any | null; // tipe Shift kamu di sini
     isToday: boolean;
 };
 export function buildCalendarRangeWithSchedule(
@@ -314,7 +314,10 @@ export function dateRange(startTs: number, endTs: number): RangeDay[] {
  * Build range tanggal (inklusif) dari startTs hingga endTs.
  * Hasil: { date, label: "01", weekdayLabel: "Sen", isToday }
  */
-export function buildCalenderRangeDate(startTs: number, endTs: number): RangeDay[] {
+export function buildCalenderRangeDate(
+    startTs: number,
+    endTs: number,
+): RangeDay[] {
     const result: RangeDay[] = [];
 
     // Normalisasi & urutkan rentang

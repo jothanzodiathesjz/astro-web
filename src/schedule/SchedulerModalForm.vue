@@ -47,13 +47,11 @@
         <div class="w-full flex flex-row justify-end gap-3">
             <ButtonComponent
                 :variant="'outline'"
-                @click="
-                    [
-                        (selectedSchedule = null),
-                        (effectiveDate = undefined),
-                        $emit('close'),
-                    ]
-                "
+                @click="[
+                    (selectedSchedule = null),
+                    (effectiveDate = undefined),
+                    $emit('close'),
+                ]"
             >
                 Cancel
             </ButtonComponent>

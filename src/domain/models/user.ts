@@ -4,7 +4,7 @@ import type {
     UserAttributes,
     UserWithPassword,
 } from "../types/UserAttributes";
-import { v4 as uuidv4 } from 'uuid';
+import { v4 as uuidv4 } from "uuid";
 
 export class DomainUser implements UserAttributes {
     branch_uuid: string;
@@ -48,7 +48,14 @@ export class DomainUser implements UserAttributes {
         });
     }
 
-    toData(password: string, confirm_password: string, gender: Gender, birthdate: string, role: string, access: string[]) {
+    toData(
+        password: string,
+        confirm_password: string,
+        gender: Gender,
+        birthdate: string,
+        role: string,
+        access: string[],
+    ) {
         return new DomainUserWithPassword({
             ...this,
             password: password,

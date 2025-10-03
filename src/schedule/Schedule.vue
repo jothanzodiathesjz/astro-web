@@ -62,6 +62,7 @@
                     </th>
 
                     <th class="table-header-custom"></th>
+                    <th class="table-header-custom"></th>
                 </tr>
             </template>
             <template #table-body>
@@ -96,6 +97,16 @@
                         class="table-cell-custom text-gray-700 dark:text-gray-300"
                     >
                         {{ emp.cycle_days }} Days
+                    </td>
+                    <td
+                        class="table-cell-custom text-gray-700 dark:text-gray-300"
+                    >
+                        <span
+                            class="border border-gray-300 dark:border-gray-600 rounded p-2"
+                            >{{
+                                emp.is_assigned ? "Assigned" : "Unassigned"
+                            }}</span
+                        >
                     </td>
                     <td class="table-cell-custom">
                         <div class="flex flex-row gap-2">

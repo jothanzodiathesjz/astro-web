@@ -18,11 +18,24 @@
         <!-- <div class="w-full flex flex-row py-3 mt-3">
             <span class="text-lg font-semibold dark:text-gray-200">Users</span>
         </div> -->
-        <div
-            class="bg-white w-full dark:bg-gray-700 flex flex-row px-3 py-3 gap-2 rounded mt-4"
-        >
-            <IconButton @click="$router.back()" :icon-name="'fa-angle-left'" />
-            <span class="font-semibold dark:text-gray-200">Branch</span>
+        <div class="flex flex-row items-center gap-4">
+            <ButtonComponent
+                @click="$router.back()"
+                :variant="'outline'"
+                :icon-name="'fa-angle-left'"
+                >Back</ButtonComponent
+            >
+            <div class="w-full flex flex-row gap-3 items-center">
+                <span
+                    @click="$router.back()"
+                    class="font-semibold text-blue-600 dark:text-gray-200 cursor-pointer"
+                    >Company</span
+                >
+                <IconButton :icon-name="'fa-angle-right'" />
+                <span class="font-semibold text-gray-800 dark:text-gray-200"
+                    >Branch</span
+                >
+            </div>
         </div>
 
         <div

@@ -7,4 +7,4 @@ export type TimeOffRepository = {
     update(timeOff: DomainTimeOff): Promise<DomainTimeOff>;
     delete(uuid: string): Promise<void>;
     get(uuid: string): Promise<DomainTimeOff>;
-}
+};

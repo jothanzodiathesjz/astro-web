@@ -1,5 +1,9 @@
-import { createWebHistory, createRouter, type RouteRecordRaw } from "vue-router";
-import { } from 'vue-router'
+import {
+    createWebHistory,
+    createRouter,
+    type RouteRecordRaw,
+} from "vue-router";
+import {} from "vue-router";
 import Login from "../auth/Login.vue";
 import Main from "@/core/layout/Main.vue";
 import { useAuthStore } from "@/auth/store/Auth.store";
@@ -26,7 +30,8 @@ const routes: RouteRecordRaw[] = [
                     {
                         path: "",
                         name: "Employee",
-                        component: () => import("@/employee/Employee.index.vue"),
+                        component: () =>
+                            import("@/employee/Employee.index.vue"),
                     },
                     {
                         path: "form",
@@ -37,8 +42,8 @@ const routes: RouteRecordRaw[] = [
                         path: ":uuid",
                         name: "EmployeeDetail",
                         component: () => import("@/employee/Employee.form.vue"),
-                    }
-                ]
+                    },
+                ],
             },
             {
                 path: "settings",
@@ -51,12 +56,18 @@ const routes: RouteRecordRaw[] = [
                             {
                                 path: "",
                                 name: "Company",
-                                component: () => import("@/settings/company/Company.index.vue"),
+                                component: () =>
+                                    import(
+                                        "@/settings/company/Company.index.vue"
+                                    ),
                             },
                             {
                                 path: "form",
                                 name: "CompanyForm",
-                                component: () => import("@/settings/company/Company.form.vue"),
+                                component: () =>
+                                    import(
+                                        "@/settings/company/Company.form.vue"
+                                    ),
                             },
                             {
                                 path: ":uuid",
@@ -64,7 +75,10 @@ const routes: RouteRecordRaw[] = [
                                     {
                                         path: "",
                                         name: "CompanyDetail",
-                                        component: () => import("@/settings/company/Company.detail.vue"),
+                                        component: () =>
+                                            import(
+                                                "@/settings/company/Company.detail.vue"
+                                            ),
                                     },
                                     {
                                         path: "Branch",
@@ -72,34 +86,48 @@ const routes: RouteRecordRaw[] = [
                                             {
                                                 path: "",
                                                 name: "Branch",
-                                                component: () => import("@/settings/branch/Branch.index.vue"),
+                                                component: () =>
+                                                    import(
+                                                        "@/settings/branch/Branch.index.vue"
+                                                    ),
                                             },
                                             {
                                                 path: "form",
                                                 name: "BranchForm",
-                                                component: () => import("@/settings/branch/Branch.form.vue"),
+                                                component: () =>
+                                                    import(
+                                                        "@/settings/branch/Branch.form.vue"
+                                                    ),
                                             },
                                             {
                                                 path: ":uuidBranch",
                                                 name: "BranchDetail",
-                                                component: () => import("@/settings/branch/Branch.form.vue"),
+                                                component: () =>
+                                                    import(
+                                                        "@/settings/branch/Branch.form.vue"
+                                                    ),
                                             },
                                             {
                                                 path: ":uuidBranch/edit",
                                                 name: "BranchEdit",
-                                                component: () => import("@/settings/branch/Branch.form.vue"),
-                                            }
-                                        ]
-                                    }
+                                                component: () =>
+                                                    import(
+                                                        "@/settings/branch/Branch.form.vue"
+                                                    ),
+                                            },
+                                        ],
+                                    },
                                 ],
-
                             },
                             {
                                 path: ":uuid/edit",
                                 name: "CompanyEdit",
-                                component: () => import("@/settings/company/Company.form.vue"),
-                            }
-                        ]
+                                component: () =>
+                                    import(
+                                        "@/settings/company/Company.form.vue"
+                                    ),
+                            },
+                        ],
                     },
                     {
                         path: "user",
@@ -107,7 +135,8 @@ const routes: RouteRecordRaw[] = [
                             {
                                 path: "",
                                 name: "Users",
-                                component: () => import("@/user/User.index.vue"),
+                                component: () =>
+                                    import("@/user/User.index.vue"),
                             },
                             {
                                 path: "form",
@@ -118,8 +147,8 @@ const routes: RouteRecordRaw[] = [
                                 path: ":uuid",
                                 name: "UserDetail",
                                 component: () => import("@/user/User.form.vue"),
-                            }
-                        ]
+                            },
+                        ],
                     },
                     {
                         path: "department",
@@ -127,14 +156,16 @@ const routes: RouteRecordRaw[] = [
                             {
                                 path: "",
                                 name: "Department",
-                                component: () => import("@/settings/Department.index.vue"),
+                                component: () =>
+                                    import("@/settings/Department.index.vue"),
                             },
                             {
                                 path: "form",
                                 name: "DepartmentForm",
-                                component: () => import("@/settings/Department.form.vue"),
-                            }
-                        ]
+                                component: () =>
+                                    import("@/settings/Department.form.vue"),
+                            },
+                        ],
                     },
                     {
                         path: "time-off",
@@ -142,19 +173,22 @@ const routes: RouteRecordRaw[] = [
                             {
                                 path: "",
                                 name: "TimeOff",
-                                component: () => import("@/settings/time/TimeOff.index.vue"),
+                                component: () =>
+                                    import("@/settings/time/TimeOff.index.vue"),
                             },
                             {
                                 path: "form",
                                 name: "TimeOffForm",
-                                component: () => import("@/settings/time/TimeOff.form.vue"),
+                                component: () =>
+                                    import("@/settings/time/TimeOff.form.vue"),
                             },
                             {
                                 path: ":uuid",
                                 name: "TimeOffDetail",
-                                component: () => import("@/settings/time/TimeOff.form.vue"),
-                            }
-                        ]
+                                component: () =>
+                                    import("@/settings/time/TimeOff.form.vue"),
+                            },
+                        ],
                     },
                     {
                         path: "overtime",
@@ -162,22 +196,25 @@ const routes: RouteRecordRaw[] = [
                             {
                                 path: "",
                                 name: "Overtime",
-                                component: () => import("@/settings/time/Overtime.index.vue"),
+                                component: () =>
+                                    import(
+                                        "@/settings/time/Overtime.index.vue"
+                                    ),
                             },
-                        ]
-                    }
-                    ,
+                        ],
+                    },
                     {
                         path: "holiday",
                         children: [
                             {
                                 path: "",
                                 name: "Holiday",
-                                component: () => import("@/settings/time/Holiday.index.vue"),
+                                component: () =>
+                                    import("@/settings/time/Holiday.index.vue"),
                             },
-                        ]
-                    }
-                ]
+                        ],
+                    },
+                ],
             },
             {
                 path: "schedule",
@@ -185,19 +222,22 @@ const routes: RouteRecordRaw[] = [
                     {
                         path: "",
                         name: "ScheduleIndex",
-                        component: () => import("@/schedule/Schedule.index.vue"),
+                        component: () =>
+                            import("@/schedule/Schedule.index.vue"),
                         children: [
                             {
                                 path: "index",
                                 name: "Schedule",
-                                component: () => import("@/schedule/Schedule.vue"),
+                                component: () =>
+                                    import("@/schedule/Schedule.vue"),
                             },
                             {
                                 path: "main",
                                 name: "Scheduler",
-                                component: () => import("@/schedule/Scheduler.vue"),
-                            }
-                        ]
+                                component: () =>
+                                    import("@/schedule/Scheduler.vue"),
+                            },
+                        ],
                     },
                     {
                         path: "form",
@@ -208,8 +248,8 @@ const routes: RouteRecordRaw[] = [
                         path: ":uuid",
                         name: "ScheduleDetail",
                         component: () => import("@/schedule/Schedule.form.vue"),
-                    }
-                ]
+                    },
+                ],
             },
             {
                 path: "shift",
@@ -228,10 +268,10 @@ const routes: RouteRecordRaw[] = [
                         path: ":uuid",
                         name: "ShiftDetail",
                         component: () => import("@/shift/Shift.form.vue"),
-                    }
-                ]
-            }
-        ]
+                    },
+                ],
+            },
+        ],
     },
     {
         path: "/login",
@@ -255,8 +295,8 @@ router.beforeEach(async (to) => {
 
     // Custom redirect rules
     const customRedirects: Record<string, string> = {
-        'Settings': 'Users',
-        'ScheduleIndex': 'Schedule',
+        Settings: "Users",
+        ScheduleIndex: "Schedule",
     };
 
     // Check custom redirect
@@ -265,17 +305,17 @@ router.beforeEach(async (to) => {
     }
 
     // Handle root path
-    if (to.path === '/') {
-        return isAuthenticated ? '/app' : '/login';
+    if (to.path === "/") {
+        return isAuthenticated ? "/app" : "/login";
     }
 
     // // Auth checks
     if (requiresAuth && !isAuthenticated) {
-        return { name: 'Login' };
+        return { name: "Login" };
     }
 
     if (requiresGuest && isAuthenticated) {
-        return { name: 'Main' };
+        return { name: "Main" };
     }
 
     // Continue navigation

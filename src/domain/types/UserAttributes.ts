@@ -12,15 +12,14 @@ export type UserAttributes = TimestampsAttributes & {
     dob: string;
     employee_id: string;
     role: Role;
-}
-
+};
 
 export type Role = {
     name: string;
     access_codes: string[];
-}
+};
 
 export type UserWithPassword = UserAttributes & {
     password: string;
     confirm_password: string;
-}
+};

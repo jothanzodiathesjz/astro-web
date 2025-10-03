@@ -62,7 +62,7 @@ export class DomainBranch {
                 umr_city: "",
                 umr_province: "",
             },
-            created_at: 0
+            created_at: 0,
         });
     }
 }

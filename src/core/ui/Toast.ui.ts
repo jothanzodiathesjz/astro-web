@@ -2,7 +2,7 @@ export type ToastAttributes = {
     message: string;
     type?: "success" | "error" | "warning" | "info";
     duration?: number;
-}
+};
 
 export class ToastUI {
     constructor(
@@ -14,5 +14,4 @@ export class ToastUI {
         this.type = type;
         this.duration = duration;
     }
-
 }

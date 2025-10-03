@@ -15,6 +15,7 @@ export class DomainSchedule {
     cycle_days: number;
     day_schedules: DomainDaySchedule[];
     inserted_by: string;
+    is_assigned: boolean;
     created_at: number;
     updated_at?: number;
     deleted_at?: number;
@@ -25,6 +26,7 @@ export class DomainSchedule {
         this.effective_date = init.effective_date;
         this.description = init.description;
         this.cycle_days = init.cycle_days;
+        this.is_assigned = init.is_assigned;
         this.day_schedules = init.day_schedules.map(
             (day_schedule) => new DomainDaySchedule(day_schedule),
         );
@@ -94,4 +96,3 @@ export class DomainEmployeeSchedule {
         this.deleted_at = init.deleted_at;
     }
 }
-
