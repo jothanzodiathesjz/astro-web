@@ -421,7 +421,6 @@ export class EmployeeUI {
 
     employeeValidate() {
         const errors: EmployeeDataErrors = {};
-        console.log(this.employmentDetail.startDate);
 
         if (
             !this.employmentDetail.employeeId ||

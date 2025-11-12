@@ -24,6 +24,7 @@
                     class="w-full text-sm px-2 py-3 relative z-0 outline-none"
                     type="text"
                     :value="phone.number"
+                    :placeholder="placeholder"
                     @focus="[(focused = true), closeCountryCodeOptions()]"
                     @blur="focused = false"
                     @input="handleInput($event as InputEvent)"
@@ -76,6 +77,7 @@ const $props = withDefaults(
             country_code: string | string[];
         };
         optional?: boolean | "true" | "false";
+        placeholder?: string;
     }>(),
     {
         phone(props) {

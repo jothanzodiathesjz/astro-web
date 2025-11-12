@@ -1,39 +1,40 @@
 <template>
+    <div>
+<Toast
+        :duration="vm.alerts?.duration"
+        :message="vm.alerts?.message ?? ''"
+        :show="vm.alerts ? true : false"
+        @on-close="vm.alerts = null"
+    />
+    <SchedulerModalForm
+        :visible="vm.tbs ? true : false"
+        :scheduler="vm.tbs"
+        :submiting="vm.submiting"
+        @close="vm.tbs = null"
+        @save="(s, e) => vm.createScheduler(s, e.getTime())"
+    />
+    <SchedulerEditShiftModal
+        :data="vm.updateShiftData"
+        :submiting="vm.submiting"
+        @save="(e) => [(vm.updateShiftData = e), vm.updateShift()]"
+        @close="vm.updateShiftData = null"
+    />
+    <ScheduleSetTimeoffModal
+        :visible="vm.toBeTimeOff ? true : false"
+        :data="vm.toBeTimeOff"
+        :submiting="vm.submiting"
+        @close="vm.toBeTimeOff = null"
+        @save="
+            (data) =>
+                vm.setTimeOffEmployee({
+                    date: data.dates,
+                    timeOff: data.time_off,
+                })
+        "
+    />
     <div
-        class="py-5 rounded-lg flex flex-col gap-3 bg-white dark:bg-gray-800 mt-2 px-5 mb-3 h-full min-h-0"
+        class="py-5 flex flex-col gap-3 mt-2 px-5 mb-3 h-full min-h-0 bg-white/90 dark:bg-gray-800/90 backdrop-blur rounded-2xl shadow-sm ring-1 ring-gray-200/70 dark:ring-gray-700"
     >
-        <Toast
-            :duration="vm.alerts?.duration"
-            :message="vm.alerts?.message ?? ''"
-            :show="vm.alerts ? true : false"
-            @on-close="vm.alerts = null"
-        />
-        <SchedulerModalForm
-            :visible="vm.tbs ? true : false"
-            :scheduler="vm.tbs"
-            :submiting="vm.submiting"
-            @close="vm.tbs = null"
-            @save="(s, e) => vm.createScheduler(s, e.getTime())"
-        />
-        <SchedulerEditShiftModal
-            :data="vm.updateShiftData"
-            :submiting="vm.submiting"
-            @save="(e) => [(vm.updateShiftData = e), vm.updateShift()]"
-            @close="vm.updateShiftData = null"
-        />
-        <ScheduleSetTimeoffModal
-            :visible="vm.toBeTimeOff ? true : false"
-            :data="vm.toBeTimeOff"
-            :submiting="vm.submiting"
-            @close="vm.toBeTimeOff = null"
-            @save="
-                (data) =>
-                    vm.setTimeOffEmployee({
-                        date: data.dates,
-                        timeOff: data.time_off,
-                    })
-            "
-        />
         <ConfirmModal
             :header="'Are you sure?'"
             :content-class="'-top-14 w-[35rem]'"
@@ -91,7 +92,7 @@
                 <div ref="filterWrapper" class="relative">
                     <div
                         v-if="vm.showFilter"
-                        class="absolute z-40 top-0 right-[7rem] items-start w-60 border bg-white border-gray-300 p-2 rounded-lg flex flex-col"
+                        class="absolute z-40 top-0 right-[9rem] items-start w-60 border border-gray-300 p-2 flex flex-col bg-white rounded"
                     >
                         <div
                             class="flex flex-col w-full"
@@ -385,6 +386,8 @@
             </template>
         </TableComponent>
     </div>
+    </div>
+    
 </template>
 
 <script setup lang="ts">

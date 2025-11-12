@@ -66,7 +66,6 @@
 
 <script setup lang="ts">
 import VueDatePicker from "@vuepic/vue-datepicker";
-import "@vuepic/vue-datepicker/dist/main.css";
 import isDark from "@/core/ui/composables/dark";
 import { onMounted } from "vue";
 import TextInput from "./Text.input.vue";
@@ -105,11 +104,7 @@ onMounted(() => {
 });
 </script>
 
-<style>
-:root {
-    --dp-font-family: font-family: "Be Vietnam Pro", sans-serif;
-    --dp-font-size: 0.875rem;
-}
+<style scoped>
 
 .dp__theme_dark {
     --dp-background-color: #1e2939;

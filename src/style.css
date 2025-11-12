@@ -1,7 +1,24 @@
+:root {
+  --slide-ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --slide-h-distance: 24px;
+  --slide-v-distance: 20px;
+  --slide-h-duration: 240ms;
+  --slide-v-duration: 200ms;
+  --dp-font-family: "Be Vietnam Pro", sans-serif;
+  --dp-font-size: 0.875rem;
+
+}
 @import "tailwindcss";
 @custom-variant dark (&:where([color-scheme=dark], [color-scheme=dark] *));
 @import "./assets/fonts.css";
 
+/* $slide-ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+  $slide-h-distance: 24px; // subtle, formal
+  $slide-v-distance: 20px; // slightly tighter vertically
+  $slide-h-duration: 240ms;
+  $slide-v-duration: 200ms;
+  $dp-font-family: "Be Vietnam Pro", sans-serif;
+  $dp-font-size: 0.875rem; */
 body {
     font-family: "Be Vietnam Pro", sans-serif;
       font-style: normal;
@@ -27,15 +44,6 @@ body {
     <Transition name="slide-down"  mode="out-in"> ... </Transition>
   Rationale: horizontal 240ms (within 200–300ms), vertical 200ms.
 */
-:root {
-    --slide-ease: cubic-bezier(0.22, 0.61, 0.36, 1);
-      --slide-h-distance: 24px;
-      /* subtle, formal */
-      --slide-v-distance: 20px;
-      /* slightly tighter vertically */
-      --slide-h-duration: 240ms;
-      --slide-v-duration: 200ms;
-}
 
 /* Horizontal: content enters from the right */
 .slide-right-enter-active,

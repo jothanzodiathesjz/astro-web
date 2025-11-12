@@ -1,3 +1,4 @@
+import { nanoid } from "nanoid";
 import type { Address } from "../shared/Address";
 import type {
     BankDetail,
@@ -26,7 +27,7 @@ export class DomainEmployee implements Employee {
     updated_at?: number | undefined;
     deleted_at?: number | undefined;
     constructor(init: Employee) {
-        this.uuid = init.uuid;
+        this.uuid = init.uuid || nanoid();
         this.full_name = init.full_name;
         this.nick_name = init.nick_name;
         this.employee_id = init.employee_id;

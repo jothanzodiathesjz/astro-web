@@ -1,8 +1,8 @@
-import type { TimestampsAttributes } from "../shared/TimestampsAttributes";
+import type { BaseEntity } from "../shared/Base";
 
 export type Gender = "M" | "F";
 
-export type UserAttributes = TimestampsAttributes & {
+export type UserAttributes = BaseEntity & {
     uuid?: string;
     branch_uuid: string;
     username: string;

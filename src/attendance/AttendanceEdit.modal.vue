@@ -1,89 +1,142 @@
 <template>
     <ModalContent
         :visible="visible"
-        :header="'Edit Attendance' + ' - ' + (data?.employee.full_name ?? '')"
+        :header="
+            'Edit Attendance' +
+            ' ' +
+            (isDataMoreThanOne ? 's' : selections[0]?.employee.full_name)
+        "
         :body-class="'w-[40rem] mt-10'"
         :position="'top'"
         @close="$emit('close')"
     >
         <div class="w-full h-[70vh] overflow-y-auto">
+            <div v-if="isDataMoreThanOne" class="w-full flex flex-col gap-3">
+                <span class="dark:text-gray-200 text-sm">Employee *</span>
+                <div
+                    class="w-full flex flex-row border flex-wrap border-gray-200 dark:border-gray-700 rounded-lg px-2 py-3 gap-2"
+                >
+                    <span
+                        v-for="name in selections"
+                        class="text-gray-700 dark:text-gray-300 bg-gray-200 dark:bg-gray-700 rounded-full px-2 py-1 text-sm"
+                        >{{ name.employee.full_name }}</span
+                    >
+                </div>
+            </div>
             <div class="w-full flex flex-col gap-5 p-3">
-                <DateInput
-                    label="Date"
-                    :model-value="attendanceDate"
-                    :readonly="true"
-                    :with-range="false"
-                    :with-time="false"
-                />
-                <ShiftDropdown
-                    :selected="selectedShift"
-                    @select="(e) => (selectedShift = e)"
-                    @clear="selectedShift = null"
-                />
-                <span>Attendance</span>
-                <div class="w-full flex flex-row gap-2">
-                    <TimeInput
-                        label="Clock In"
-                        :model-value="clockIn"
-                        :is24-hour="true"
-                        @update:model-value="onUpdateClockIn"
-                    />
-                    <TimeInput
-                        label="Clock Out"
-                        :is24-hour="true"
-                        :model-value="clockOut"
-                        @update:model-value="onUpdateClockOut"
-                    />
-                </div>
-                <span>Time Off</span>
-                <TimeOffDropdown
-                    :selected="selectedTimeOff"
-                    @select="(e) => (selectedTimeOff = e)"
-                    @clear="selectedTimeOff = null"
-                />
-                <span>Overtime</span>
-                <span class="text-sm dark:text-gray-400 font-bold"
-                    >Before the shift start</span
-                >
-                <div class="w-full flex flex-row gap-2">
-                    <TimeInput
-                        label="Overtime Duration"
-                        :model-value="overTimeBeforeDuration"
-                        :is24-hour="true"
-                        :placeholder="'00:00'"
-                        @update:model-value="onUpdateOverTimeBeforeDuration"
-                    />
-                    <TimeInput
-                        label="Break duration during overtime"
-                        :is24-hour="true"
-                        :model-value="overTimeBeforeBreak"
-                        :placeholder="'00:00'"
-                        @update:model-value="onUpdateOverTimeBeforeBreak"
-                    />
-                </div>
-                <span class="text-sm dark:text-gray-400 font-bold"
-                    >After the shift ends</span
-                >
-                <div class="w-full flex flex-row gap-2">
-                    <TimeInput
-                        label="Overtime Duration"
-                        :model-value="overTimeAfterDuration"
-                        :is24-hour="true"
-                        :placeholder="'00:00'"
-                        @update:model-value="onUpdateOverTimeAfterDuration"
-                    />
-                    <TimeInput
-                        label="Break duration during overtime"
-                        :is24-hour="true"
-                        :model-value="overTimeAfterBreak"
-                        :placeholder="'00:00'"
-                        @update:model-value="onUpdateOverTimeAfterBreak"
-                    />
+                <div class="flex flex-col gap-4">
+                    <div
+                        class="flex border-b border-gray-200 dark:border-gray-700"
+                    >
+                        <button
+                            v-for="tab in tabs"
+                            :key="tab.key"
+                            type="button"
+                            class="px-4 py-2 text-sm font-medium border-b-2 transition-colors focus:outline-none"
+                            :class="[
+                                activeTab === tab.key
+                                    ? 'text-blue-600 border-blue-500 dark:text-blue-400'
+                                    : 'text-gray-500 border-transparent hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200',
+                            ]"
+                            @click="activeTab = tab.key"
+                        >
+                            {{ tab.label }}
+                        </button>
+                    </div>
+                    <div
+                        v-if="activeTab === TAB_KEYS.attendance"
+                        class="flex flex-col gap-4"
+                    >
+                        <DateInput
+                            label="Date"
+                            :model-value="attendanceDate"
+                            :readonly="true"
+                            :with-range="false"
+                            :with-time="false"
+                        />
+                        <ShiftDropdown
+                            :selected="selectedShift"
+                            @select="(e) => (selectedShift = e)"
+                            @clear="selectedShift = null"
+                        />
+                        <div class="w-full flex flex-row gap-2">
+                            <TimeInput
+                                label="Clock In"
+                                :model-value="clockIn"
+                                :is24-hour="true"
+                                @update:model-value="onUpdateClockIn"
+                            />
+                            <TimeInput
+                                label="Clock Out"
+                                :is24-hour="true"
+                                :model-value="clockOut"
+                                @update:model-value="onUpdateClockOut"
+                            />
+                        </div>
+                        <div class="flex flex-col gap-2">
+                            <span>Time Off</span>
+                            <TimeOffDropdown
+                                :selected="selectedTimeOff"
+                                @select="(e) => (selectedTimeOff = e)"
+                                @clear="selectedTimeOff = null"
+                            />
+                        </div>
+                    </div>
+                    <div v-else class="flex flex-col gap-4">
+                        <div class="w-full flex flex-row gap-2">
+                            <TimeInput
+                                label="Start Time"
+                                :model-value="overtimeStartTime"
+                                :is24-hour="true"
+                                :placeholder="'00:00'"
+                                @update:model-value="onUpdateOvertimeStartTime"
+                            />
+                            <TimeInput
+                                label="End Time"
+                                :model-value="overtimeEndTime"
+                                :is24-hour="true"
+                                :placeholder="'00:00'"
+                                @update:model-value="onUpdateOvertimeEndTime"
+                            />
+                        </div>
+                        <div class="w-full flex flex-row gap-2">
+                            <TimeInput
+                                label="Break start time"
+                                :is24-hour="true"
+                                :model-value="overtimeBreakStart"
+                                :placeholder="'00:00'"
+                                @update:model-value="onUpdateOvertimeBreakStart"
+                            />
+                            <TimeInput
+                                label="Break end time"
+                                :is24-hour="true"
+                                :model-value="overtimeBreakEnd"
+                                :placeholder="'00:00'"
+                                @update:model-value="onUpdateOvertimeBreakEnd"
+                            />
+                        </div>
+                        <div
+                            :class="[
+                                'inline-flex items-center justify-center rounded-full border px-3 py-1 text-xs font-semibold transition-colors',
+                                getStatusClass('default'),
+                            ]"
+                        >
+                           Duration: {{ totalMinutes.display }}
+                        </div>
+                        <div class="flex flex-col gap-3">
+                            <span class="text-sm">Holiday</span>
+                            <SwitchComponent
+                                :checked="isHoliday"
+                                @click="isHoliday = !isHoliday"
+                            />
+                        </div>
+                    </div>
                 </div>
                 <TextAreaInput
                     label="Notes"
                     :value="notes"
                     :placeholder="'Notes'"
+                    :error="errorMessages?.data.message"
                     @input="(value) => (notes = value)"
                 />
             </div>
@@ -124,11 +177,13 @@ import { TOKENS } from "@/container/tokens";
 import type { Overtime } from "@/domain/types/OvertimeAttributes";
 import { DomainOvertime } from "@/domain/models/Overtime";
 import { ToastUI } from "@/core/ui/Toast.ui";
-import { handleErrors } from "@/core/ui/UIError";
+import { handleErrors, UIError } from "@/core/ui/UIError";
+import SwitchComponent from "@/core/components/button/Switch.component.vue";
+import { getStatusClass } from "@/core/utils/StatusClass";
 
 const $props = defineProps<{
     visible: boolean;
-    data: DomainAttendance | null;
+    selections: DomainAttendance[];
 }>();
 
 const $emit = defineEmits<{
@@ -146,17 +201,78 @@ const loading = ref(false);
 const clockIn = ref<UITime | null>(null);
 const clockOut = ref<UITime | null>(null);
 
-const overTimeBeforeDuration = ref<UITime | null>(null);
-const overTimeBeforeBreak = ref<UITime | null>(null);
-const overTimeAfterDuration = ref<UITime | null>(null);
-const overTimeAfterBreak = ref<UITime | null>(null);
+const overtimeStartTime = ref<UITime | null>(null);
+const overtimeBreakStart = ref<UITime | null>(null);
+const overtimeEndTime = ref<UITime | null>(null);
+const overtimeBreakEnd = ref<UITime | null>(null);
+const isHoliday = ref(false);
+function diffAcrossDay(start: number, end: number): number {
+  let d = end - start;
+  if (d < 0) d += 24 * 60; // misal start 22:00 end 02:00
+  return d;
+}
+const totalMinutes = computed(() => {
+    // const total =
+    //     (overtimeEndTime.value?.toMinutes() || 0) -
+    //     (overtimeStartTime.value?.toMinutes() || 0);
+    // const breakTotal =
+    //     (overtimeBreakEnd.value?.toMinutes() || 0) -
+    //     (overtimeBreakStart.value?.toMinutes() || 0);
+    // const result = total - breakTotal;
+
+    const start =  (overtimeStartTime.value?.toMinutes() || 0);
+    const end = (overtimeEndTime.value?.toMinutes() || 0);
+    if (start === null || end === null) return {
+        minutes: 0,
+        display: "0 Jam 0 Menit",
+    };
+    const work = diffAcrossDay(start, end);
+    const bStart = (overtimeBreakStart.value?.toMinutes() || 0);
+    const bEnd = (overtimeBreakEnd.value?.toMinutes() || 0);
+
+    let breakMin = 0;
+    if (bStart !== null && bEnd !== null) {
+        breakMin = diffAcrossDay(bStart, bEnd);
+        breakMin = Math.min(breakMin, work);
+    }
+
+    const total = Math.max(0, work - breakMin);
+
+    return {
+        minutes: total,
+        display: `${Math.floor(total / 60)} Jam ${total % 60} Menit`,
+    };
+});
+
+const errorMessages = ref<UIError | null>(null);
 
 const notes = ref<string>("");
 
-const disabled = computed(() => loading.value || !$props.data);
+
+
+
+const TAB_KEYS = {
+    attendance: "attendance",
+    overtime: "overtime",
+} as const;
+
+type TabKey = (typeof TAB_KEYS)[keyof typeof TAB_KEYS];
+
+const tabs: ReadonlyArray<{ key: TabKey; label: string }> = [
+    { key: TAB_KEYS.attendance, label: "Attendance" },
+    { key: TAB_KEYS.overtime, label: "Overtime" },
+];
+
+const activeTab = ref<TabKey>(TAB_KEYS.attendance);
+
+const disabled = computed(() => loading.value || !$props.selections.length);
+const isDataMoreThanOne = computed(() => $props.selections.length > 1);
 
 const attendanceDate = computed(() => {
-    const value = $props.data?.attendance_date;
+    if (!$props.selections.length) {
+        return new Date();
+    }
+    const value = $props.selections[0]?.attendance_date;
     if (!value) {
         return new Date();
     }
@@ -175,11 +291,12 @@ const resetForm = () => {
     selectedTimeOff.value = null;
     clockIn.value = null;
     clockOut.value = null;
-    overTimeBeforeDuration.value = null;
-    overTimeBeforeBreak.value = null;
-    overTimeAfterDuration.value = null;
-    overTimeAfterBreak.value = null;
+    overtimeStartTime.value = null;
+    overtimeBreakStart.value = null;
+    overtimeEndTime.value = null;
+    overtimeBreakEnd.value = null;
     notes.value = "";
+    activeTab.value = TAB_KEYS.attendance;
 };
 
 const parseToUITime = (time?: string | null): UITime | null => {
@@ -203,46 +320,47 @@ const assignTime = (target: Ref<UITime | null>) => (value: UITime | null) => {
 
 const onUpdateClockIn = assignTime(clockIn);
 const onUpdateClockOut = assignTime(clockOut);
-const onUpdateOverTimeBeforeDuration = assignTime(overTimeBeforeDuration);
-const onUpdateOverTimeBeforeBreak = assignTime(overTimeBeforeBreak);
-const onUpdateOverTimeAfterDuration = assignTime(overTimeAfterDuration);
-const onUpdateOverTimeAfterBreak = assignTime(overTimeAfterBreak);
+const onUpdateOvertimeStartTime = assignTime(overtimeStartTime);
+const onUpdateOvertimeBreakStart = assignTime(overtimeBreakStart);
+const onUpdateOvertimeEndTime = assignTime(overtimeEndTime);
+const onUpdateOvertimeBreakEnd = assignTime(overtimeBreakEnd);
 
 watch(
-    () => $props.data,
+    () => $props.selections,
     (attendance) => {
         if (!attendance) {
             resetForm();
             return;
         }
-
-        selectedShift.value = attendance.shift ?? null;
-        selectedTimeOff.value = attendance.time_off ?? null;
-
-        clockIn.value = parseToUITime(attendance.actual_check_in);
-        clockOut.value = parseToUITime(attendance.actual_check_out);
-
-        if (attendance.over_time) {
-            overTimeBeforeDuration.value = parseToUITime(
-                attendance.over_time.before_shift_duration,
-            );
-            overTimeBeforeBreak.value = parseToUITime(
-                attendance.over_time.before_shift_break,
-            );
-            overTimeAfterDuration.value = parseToUITime(
-                attendance.over_time.after_shift_duration,
-            );
-            overTimeAfterBreak.value = parseToUITime(
-                attendance.over_time.after_shift_break,
-            );
-        } else {
-            overTimeBeforeDuration.value = null;
-            overTimeBeforeBreak.value = null;
-            overTimeAfterDuration.value = null;
-            overTimeAfterBreak.value = null;
+        if (attendance.length > 1) {
+            activeTab.value = TAB_KEYS.overtime;
         }
 
-        notes.value = attendance.notes ?? "";
+        if (attendance.length === 1) {
+            const att = attendance[0];
+            selectedShift.value = att.shift ?? null;
+            selectedTimeOff.value = att.time_off ?? null;
+
+            clockIn.value = parseToUITime(att.actual_check_in);
+            clockOut.value = parseToUITime(att.actual_check_out);
+
+            if (att.over_time) {
+                overtimeStartTime.value = parseToUITime(
+                    att.over_time.start_time,
+                );
+                overtimeBreakStart.value = parseToUITime(
+                    att.over_time.break_start,
+                );
+                overtimeEndTime.value = parseToUITime(att.over_time.end_time);
+                overtimeBreakEnd.value = parseToUITime(att.over_time.break_end);
+            }
+            notes.value = attendance[0].notes ?? "";
+        } else {
+            overtimeStartTime.value = null;
+            overtimeBreakStart.value = null;
+            overtimeEndTime.value = null;
+            overtimeBreakEnd.value = null;
+        }
     },
     { immediate: true },
 );
@@ -262,10 +380,10 @@ const formatToHoursMinutes = (time: UITime | null): string => {
 
 const buildOvertimePayload = (): DomainOvertime | null => {
     const hasOvertime = [
-        overTimeBeforeDuration.value,
-        overTimeBeforeBreak.value,
-        overTimeAfterDuration.value,
-        overTimeAfterBreak.value,
+        overtimeStartTime.value,
+        overtimeBreakStart.value,
+        overtimeEndTime.value,
+        overtimeBreakEnd.value,
     ].some(Boolean);
 
     if (!hasOvertime) {
@@ -273,41 +391,64 @@ const buildOvertimePayload = (): DomainOvertime | null => {
     }
 
     const overtimePayload: Overtime = {
-        before_shift_duration: formatToHoursMinutes(
-            overTimeBeforeDuration.value,
-        ),
-        before_shift_break: formatToHoursMinutes(overTimeBeforeBreak.value),
-        after_shift_duration: formatToHoursMinutes(overTimeAfterDuration.value),
-        after_shift_break: formatToHoursMinutes(overTimeAfterBreak.value),
+        start_time: formatToHoursMinutes(overtimeStartTime.value),
+        break_start: formatToHoursMinutes(overtimeBreakStart.value),
+        end_time: formatToHoursMinutes(overtimeEndTime.value),
+        break_end: formatToHoursMinutes(overtimeBreakEnd.value),
+        notes: notes.value.trim() ? notes.value.trim() : "",
+        is_holiday: isHoliday.value,
+        total_minutes: totalMinutes.value.minutes,
     };
 
     return new DomainOvertime(overtimePayload);
 };
 
 const submit = async () => {
-    if (!$props.data) {
+    if (!$props.selections.length) {
         return;
     }
 
     loading.value = true;
     try {
-        const payload = JSON.parse(
-            JSON.stringify($props.data),
-        ) as DomainAttendance;
+        if (activeTab.value === TAB_KEYS.overtime) {
+            const overtimePayload = buildOvertimePayload();
+            if (!overtimePayload) {
+                throw new Error("Invalid overtime payload");
+            }
+            await repository.updateAttendanceOvertime(
+                $props.selections[0].date.getTime(),
+                $props.selections.map((a) => a.employee.uuid),
+                overtimePayload,
+            );
+            $emit("alert", new ToastUI("Attendance updated", "success", 2000));
+            resetForm();
+            $emit("close");
+            errorMessages.value = null;
+        } else {
+            if ($props.selections.length > 1) {
+                throw new Error("Only one attendance can be updated at a time");
+            }
+            const payload = JSON.parse(
+                JSON.stringify($props.selections[0]),
+            ) as DomainAttendance;
 
-        payload.actual_check_in = formatToHoursMinutes(clockIn.value);
-        payload.actual_check_out = formatToHoursMinutes(clockOut.value);
-        payload.shift = selectedShift.value ?? payload.shift;
-        payload.time_off = selectedTimeOff.value ?? null;
-        payload.over_time = buildOvertimePayload();
-        payload.notes = notes.value.trim() ? notes.value.trim() : null;
+            payload.actual_check_in = formatToHoursMinutes(clockIn.value);
+            payload.actual_check_out = formatToHoursMinutes(clockOut.value);
+            payload.shift = selectedShift.value ?? payload.shift;
+            payload.time_off = selectedTimeOff.value ?? null;
+            payload.over_time = buildOvertimePayload();
+            payload.notes = notes.value.trim() ? notes.value.trim() : null;
 
-        const updated = await repository.update(payload);
-        $emit("save", updated);
-        $emit("alert", new ToastUI("Attendance updated", "success", 2000));
-        $emit("close");
+            const updated = await repository.update(payload);
+            $emit("save", updated);
+            $emit("alert", new ToastUI("Attendance updated", "success", 2000));
+            resetForm();
+            $emit("close");
+            errorMessages.value = null;
+        }
     } catch (error) {
         const errors = handleErrors(error);
+        errorMessages.value = errors;
         $emit("alert", new ToastUI(errors.message, "error", 2000));
     } finally {
         loading.value = false;

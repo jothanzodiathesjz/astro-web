@@ -115,6 +115,14 @@ const routes: RouteRecordRaw[] = [
                                                         "@/settings/branch/Branch.form.vue"
                                                     ),
                                             },
+                                            {
+                                                path: ":uuidBranch/configuration",
+                                                name: "BranchConfiguration",
+                                                component: () =>
+                                                    import(
+                                                        "@/settings/branch/Branch.config.vue"
+                                                    ),
+                                            },
                                         ],
                                     },
                                 ],
@@ -271,6 +279,16 @@ const routes: RouteRecordRaw[] = [
                     },
                 ],
             },
+            {
+                path: "calendar",
+                children: [
+                    {
+                        path: "",
+                        name: "Calendar",
+                        component: () => import("@/calendar/Calendar.index.vue"),
+                    },
+                ],
+            }
         ],
     },
     {

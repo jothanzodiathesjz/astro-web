@@ -89,7 +89,6 @@ export class EmployeeFormViewModel {
         const employeeValidate = this.employee.employeeValidate();
         const bankDetailValidate = this.employee.bankDetailValidate();
 
-        console.log(this.steps);
         if (personalDataValidate && this.steps === 1) {
             this.erorrs = new UIError("Form Harus diisi", personalDataValidate);
             console.log(this.erorrs);

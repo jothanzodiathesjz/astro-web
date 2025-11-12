@@ -55,14 +55,14 @@ div
             </div>
             <div class="w-full flex flex-col gap-2">
                 <span class="text-sm dark:text-gray-300">Head Office</span>
-                <SwitchComponent :checked="true" />
+                <SwitchComponent :checked="data.is_head_office" @click="data.is_head_office = !data.is_head_office"/>
             </div>
             <span>Contact</span>
             <div class="flex flex-row gap-5 items-end">
                 <TextInput
                     label="Email"
                     :value="data.contact.email"
-                    :placeholder="'street'"
+                    :placeholder="'Email'"
                     :error="errors?.data?.email"
                     @input="(v) => (data.contact.email = v)"
                 />
@@ -70,6 +70,7 @@ div
                     <PhoneInput
                         :label="'Phone Number (Whatsapp)'"
                         :phone="contactNumber"
+                        placeholder="Phone Number"
                         @input="(v) => (contactNumber = new PhoneUI(v))"
                     />
                     <span
@@ -118,7 +119,7 @@ div
                     <TextInput
                         label="Zip Code"
                         :value="data.address.zip_code"
-                        :placeholder="'Postal Code'"
+                        :placeholder="'Zip Code'"
                         :error="errors?.data?.zip_code"
                         @input="(v) => (data.address.zip_code = v)"
                     />
@@ -151,7 +152,7 @@ div
                 <TextInput
                     label="UMR Province"
                     :value="data.payroll_info.umr_province"
-                    :placeholder="'Province'"
+                    :placeholder="'Umr Province'"
                     :error="errors?.data?.umr_province"
                     @input="(v) => (data.payroll_info.umr_province = v)"
                 />
@@ -160,7 +161,7 @@ div
                 <TextInput
                     label="UMR City"
                     :value="data.payroll_info.umr_city"
-                    :placeholder="'Province'"
+                    :placeholder="'Umr City'"
                     :error="errors?.data?.umr_city"
                     @input="(v) => (data.payroll_info.umr_city = v)"
                 />

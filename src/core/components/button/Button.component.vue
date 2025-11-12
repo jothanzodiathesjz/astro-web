@@ -72,7 +72,7 @@ defineExpose({
 });
 
 const baseClass =
-    "rounded-lg cursor-pointer text-sm py-2.5 px-6 transition-all duration-300 flex items-center justify-center";
+    "rounded-lg cursor-pointer text-sm py-3 px-6 transition-all duration-300 flex items-center justify-center";
 
 const variantClasses = computed(() => {
     switch (props.variant) {

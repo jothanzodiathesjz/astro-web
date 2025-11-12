@@ -25,7 +25,7 @@
         > -->
 
         <div
-            class="py-5 rounded-lg flex flex-col gap-3 bg-white dark:bg-gray-800 px-5 mb-3"
+            class="py-5 flex flex-col gap-3 px-5 mb-3 bg-white/90 dark:bg-gray-800/90 backdrop-blur rounded-2xl shadow-sm ring-1 ring-gray-200/70 dark:ring-gray-7"
         >
             <div class="w-full flex flex-row">
                 <div class="w-1/3">

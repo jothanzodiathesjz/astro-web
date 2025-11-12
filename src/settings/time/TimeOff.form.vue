@@ -27,7 +27,7 @@
             </div>
         </div>
         <div
-            class="py-5 rounded-lg flex flex-col gap-3 bg-white dark:bg-gray-800 mt-4 px-5 mb-3"
+            class="py-5 flex flex-col gap-3 mt-4 px-5 mb-3 bg-white/90 dark:bg-gray-800/90 backdrop-blur rounded-2xl shadow-sm ring-1 ring-gray-200/70 dark:ring-gray-7"
         >
             <div class="w-full flex flex-row gap-4">
                 <TextInput
@@ -69,6 +69,38 @@
                     "
                 />
             </div>
+            <div class="w-full pr-2 flex flex-row gap-4">
+                <TimeOffCategory
+                :selected="data.category ? new DropdownLabel(data.category) : null"
+                @update="(e) => data.category = e.value"
+                />
+                <NumberInput
+                :model-value="data.tolerance_minutes"
+                :placeholder="'Tolerance'"
+                :label="'Tolerance'"
+                @update:model-value="
+                    (value) => {
+                        data.tolerance_minutes = value;
+                    }
+                "
+                />
+            </div>
+            <div class="w-full pr-2 flex flex-col gap-4">
+                <div class="flex flex-col gap-3">
+                    <span class="text-sm">Paid</span>
+                    <SwitchComponent
+                    :checked="data.is_paid"
+                    @click=" data.is_paid = !data.is_paid"
+                    />
+                </div>
+                <div class="flex flex-col gap-3">
+                    <span class="text-sm">Deduct Leave</span>
+                    <SwitchComponent
+                    :checked="data.is_deduct_leave"
+                    @click=" data.is_deduct_leave = !data.is_deduct_leave"
+                    />
+                </div>
+            </div>
             <div class="w-full flex flex-row justify-end">
                 <ButtonComponent
                     v-if="!isUpdate"
@@ -93,6 +125,10 @@ import { DomainTimeOff } from "@/domain/models/TimeOff";
 import { handleErrors, UIError } from "@/core/ui/UIError";
 import IconButton from "@/core/components/button/Icon.button.vue";
 import { useRoute } from "vue-router";
+import TimeOffCategory from "./TimeOffCategory.vue";
+import { DropdownLabel } from "@/core/components/models/DropdownLabel";
+import NumberInput from "@/core/components/input/Number.input.vue";
+import SwitchComponent from "@/core/components/button/Switch.component.vue";
 
 const route = useRoute();
 

@@ -2,7 +2,7 @@
 import { Container } from "brandi";
 import { TOKENS } from "./tokens";
 
-import { HttpRequest } from "@/api/httpRequest";
+import { HttpRequest } from "@/http-client/httpRequest";
 import { AuthRepositoryImp } from "@/infrastructure/repositories/AuthRepositoryImp";
 import { UserRepositoryImp } from "@/infrastructure/repositories/UserRepositoryImp";
 import { UserFormViewModel } from "@/user/UserFormViewModel";

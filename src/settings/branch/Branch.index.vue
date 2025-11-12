@@ -117,8 +117,19 @@
                                     @click="
                                         $router.push({
                                             name: 'BranchEdit',
-                                            params: { uuid: emp.uuid },
+                                            params: { uuidBranch: emp.uuid },
                                         })
+                                    "
+                                />
+                                <IconButton
+                                    class="border border-gray-300 dark:border-gray-600 rounded p-2"
+                                    :icon-name="'gear'"
+                                    :icon-color="'text-gray-400 dark:text-gray-400'"
+                                    @click="
+                                    $router.push({
+                                        name: 'BranchConfiguration',
+                                        params: { uuidBranch: emp.uuid },
+                                    })
                                     "
                                 />
                                 <IconButton

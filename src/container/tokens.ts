@@ -1,6 +1,6 @@
 ﻿// src/container/tokens.ts
 import { token } from "brandi";
-import type { HttpRequest } from "@/api/httpRequest";
+import type { HttpRequest } from "@/http-client/httpRequest";
 import type { AttendanceRepository } from "@/domain/repositories/AttendanceRepository";
 import type { AuthRepository } from "@/domain/repositories/AuthRepository";
 import type { UserRepository } from "@/domain/repositories/UserRepository";

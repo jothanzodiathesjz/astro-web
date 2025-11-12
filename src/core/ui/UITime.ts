@@ -38,6 +38,10 @@ export class UITime {
         return this.hours * 3600 + this.minutes * 60 + (this.seconds || 0);
     }
 
+    toMinutes(): number {
+        return this.hours * 60 + this.minutes;
+    }
+
     toHoursMinutesString(): string {
         const hours =
             this.hours < 10 ? `0${this.hours}` : this.hours.toString();

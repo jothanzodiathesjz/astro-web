@@ -1,7 +1,7 @@
 <template>
     <div class="w-full h-full min-h-0 flex flex-col px-14 dark:bg-gray-900">
         <div class="flex flex-row py-3 mt-3">
-            <div class="bg-white dark:bg-gray-800 p-3 flex flex-row rounded-lg">
+            <div class="p-3 flex flex-row  bg-white/90 dark:bg-gray-800/90 backdrop-blur rounded-2xl shadow-sm ring-1 ring-gray-200/70 dark:ring-gray-700">
                 <router-link
                     v-for="value in routes"
                     :key="value.name"

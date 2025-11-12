@@ -1,15 +1,21 @@
 import type { Overtime } from "../types/OvertimeAttributes";
 
 export class DomainOvertime {
-    before_shift_duration: string;
-    before_shift_break: string;
-    after_shift_duration: string;
-    after_shift_break: string;
+    start_time: string;
+    end_time: string;
+    break_start: string;
+    break_end: string;
+    notes: string;
+    total_minutes: number;
+    is_holiday: boolean;
 
     constructor(init: Overtime) {
-        this.before_shift_duration = init.before_shift_duration;
-        this.before_shift_break = init.before_shift_break;
-        this.after_shift_duration = init.after_shift_duration;
-        this.after_shift_break = init.after_shift_break;
+        this.start_time = init.start_time;
+        this.end_time = init.end_time;
+        this.break_start = init.break_start;
+        this.break_end = init.break_end;
+        this.notes = init.notes;
+        this.total_minutes = init.total_minutes;
+        this.is_holiday = init.is_holiday;
     }
 }

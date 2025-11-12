@@ -1,10 +1,10 @@
+import { nanoid } from "nanoid";
 import type {
     Gender,
     Role,
     UserAttributes,
     UserWithPassword,
 } from "../types/UserAttributes";
-import { v4 as uuidv4 } from "uuid";
 
 export class DomainUser implements UserAttributes {
     branch_uuid: string;
@@ -20,7 +20,7 @@ export class DomainUser implements UserAttributes {
     username: string;
 
     constructor(init: UserAttributes) {
-        this.uuid = init.uuid || uuidv4();
+        this.uuid = init.uuid || nanoid();
         this.name = init.name;
         this.email = init.email;
         this.username = init.username;

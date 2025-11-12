@@ -1,9 +1,9 @@
 import type { DomainEmployeeSummary } from "../models/Employee";
 import type { DomainShift } from "../models/Shift";
-import type { TimestampsAttributes } from "../shared/TimestampsAttributes";
+import type { BaseEntity } from "../shared/Base";
 import type { DailyAttendance } from "./AttendanceAttributes";
 
-export type Schedule = TimestampsAttributes & {
+export type Schedule = BaseEntity & {
     uuid: string;
     name: string;
     effective_date: number;

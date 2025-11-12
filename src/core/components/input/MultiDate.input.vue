@@ -146,12 +146,11 @@ function isHighlighted(date: Date) {
 }
 </script>
 
-<style>
-:root {
-    --dp-font-family: "Be Vietnam Pro", sans-serif;
-    --dp-font-size: 0.875rem;
-    --dp-hover-color: #1e2939;
-}
+<style scoped>
+/* :root {
+  --dp-font-family: font-family: "Be Vietnam Pro", sans-serif;
+  --dp-font-size: 0.875rem;
+} */
 
 .dp__theme_dark {
     --dp-background-color: #1e2939;

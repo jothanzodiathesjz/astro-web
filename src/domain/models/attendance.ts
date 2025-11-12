@@ -1,4 +1,5 @@
-﻿import type {
+﻿import { BaseEntity } from "../shared/Base";
+import type {
     Attendance,
     AttendanceLogs,
     DailyAttendance,
@@ -10,7 +11,7 @@ import type { DomainShift } from "./Shift";
 import type { DomainTimeOff } from "./TimeOff";
 
 // src/domain/models/attendance.ts
-export class DomainAttendance {
+export class DomainAttendance extends BaseEntity {
     uuid: string;
     employee: DomainEmployeeSummary;
     shift: DomainShift;
@@ -20,13 +21,13 @@ export class DomainAttendance {
     over_time: DomainOvertime | null;
     status: string;
     attendance_date: string;
+    date: Date;
     is_late: boolean;
     notes: string | null;
-    created_at?: number;
-    updated_at?: number;
-    deleted_at?: number;
+    is_modify?: string;
 
     constructor(init: Attendance) {
+       super(init);
         this.uuid = init.uuid;
         this.employee = init.employee;
         this.shift = init.shift;
@@ -36,11 +37,10 @@ export class DomainAttendance {
         this.over_time = init.over_time;
         this.status = init.status;
         this.attendance_date = init.attendance_date;
+        this.date = new Date(init.date);
         this.is_late = init.is_late;
         this.notes = init.notes ?? null;
-        this.created_at = init.created_at;
-        this.updated_at = init.updated_at;
-        this.deleted_at = init.deleted_at;
+        this.is_modify = init.is_modify;
     }
 }
 

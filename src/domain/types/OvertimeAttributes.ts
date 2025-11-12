@@ -1,6 +1,9 @@
 export type Overtime = {
-    before_shift_duration: string;
-    before_shift_break: string;
-    after_shift_duration: string;
-    after_shift_break: string;
+    start_time: string;
+    end_time: string;
+    break_start: string;
+    break_end: string;
+    total_minutes: number;
+    is_holiday: boolean;
+    notes: string;
 };

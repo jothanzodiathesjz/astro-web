@@ -1,5 +1,6 @@
 import { createApp } from "vue";
 import router from "./routes";
+import '@vuepic/vue-datepicker/dist/main.css'
 import "./style.css";
 import App from "./App.vue";
 import { library } from "@fortawesome/fontawesome-svg-core";

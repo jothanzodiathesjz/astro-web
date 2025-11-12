@@ -12,11 +12,11 @@
                     v-slot="{ isActive, navigate }"
                 >
                     <button
-                        class="p-3 text-sm cursor-pointer"
+                        class="p-3 text-sm cursor-pointer font-semibold"
                         :class="
                             isActive
                                 ? 'text-blue-500 border-b-2 border-blue-500  dark:text-gray-100 '
-                                : 'text-gray-700  dark:text-gray-400 '
+                                : 'text-gray-600  dark:text-gray-400 '
                         "
                         @click="navigate"
                     >

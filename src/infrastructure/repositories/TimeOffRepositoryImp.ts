@@ -1,4 +1,4 @@
-import type { HttpRequest } from "@/api/httpRequest";
+import type { HttpRequest } from "@/http-client/httpRequest";
 import { TOKENS } from "@/container/tokens";
 import { DomainTimeOff } from "@/domain/models/TimeOff";
 import type { TimeOffRepository } from "@/domain/repositories/TimeOffRepository";

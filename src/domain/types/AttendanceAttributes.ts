@@ -2,9 +2,9 @@
 import type { DomainOvertime } from "../models/Overtime";
 import type { DomainShift } from "../models/Shift";
 import type { DomainTimeOff } from "../models/TimeOff";
-import type { TimestampsAttributes } from "../shared/TimestampsAttributes";
+import type { BaseEntity } from "../shared/Base";
 
-export type Attendance = TimestampsAttributes & {
+export type Attendance = BaseEntity & {
     uuid: string;
     employee: DomainEmployeeSummary;
     shift: DomainShift;
@@ -14,8 +14,10 @@ export type Attendance = TimestampsAttributes & {
     over_time: DomainOvertime | null;
     status: string;
     attendance_date: string;
+    date: number;
     is_late: boolean;
     notes?: string | null;
+    is_modify?: string;
 };
 
 export type DailyAttendance = {
@@ -32,10 +34,9 @@ export type AttendanceLogs = {
     updated_at?: number;
 };
 
-export type LogsType = TimestampsAttributes & {
+export type LogsType = BaseEntity & {
     field: string;
     old_value: string;
     new_value: string;
     notes: string;
-    inserted_by: string;
 };

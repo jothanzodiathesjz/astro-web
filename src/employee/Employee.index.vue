@@ -14,7 +14,7 @@
             >
         </div>
         <div
-            class="py-5 rounded-lg flex flex-col gap-3 bg-white dark:bg-gray-800 mt-2 px-5 mb-3"
+            class="py-5 flex flex-col gap-3 mt-2 px-5 mb-3 bg-white/90 dark:bg-gray-800/90 backdrop-blur rounded-2xl shadow-sm ring-1 ring-gray-200/70 dark:ring-gray-700"
         >
             <span class="dark:text-gray-200">List Employee</span>
             <div class="w-full flex flex-row">
@@ -48,7 +48,11 @@
                     >
                 </div>
             </div>
-            <TableComponent :empty="employees.length === 0">
+            <TableComponent 
+            class="h-[70vh] overflow-auto"
+            :empty="employees.length === 0"
+            @paginate="getListWithCursor()"
+            >
                 <template #table-header>
                     <tr>
                         <th
@@ -87,9 +91,7 @@
                 <template #table-body>
                     <tr
                         class="table-row-custom"
-                        v-for="emp in employees.toSorted((a, b) =>
-                            a.full_name.localeCompare(b.full_name),
-                        )"
+                        v-for="emp in employees"
                         :key="emp.uuid"
                     >
                         <td
@@ -134,7 +136,7 @@
                             class="table-cell-custom text-gray-700 dark:text-gray-300"
                         >
                             <span
-                                class="text-green-500 border border-green-500 rounded px-2"
+                                class="text-green-500 border border-green-500 rounded px-2 text-xs"
                                 >{{ emp.employment.status }}</span
                             >
                         </td>
@@ -185,11 +187,23 @@ const repository = container.get(TOKENS.EmployeeRepository);
 const employees = ref<DomainEmployee[]>([]);
 const tbd = ref<DomainEmployee | null>(null);
 const search = ref<string>("");
+const cursor = ref<string | undefined>(undefined);
 
 async function getList() {
-    [employees.value] = await repository.getALl({
+    [employees.value, cursor.value] = await repository.getALl({
         search: search.value,
     });
+}
+
+async function getListWithCursor() {
+    if (!cursor.value) return;
+    const [data, nextCursor] = await repository.getALl({
+        search: search.value,
+        cursor: cursor.value,
+    });
+
+    employees.value = [...employees.value, ...data];
+    cursor.value = nextCursor;
 }
 
 async function deleteItem() {

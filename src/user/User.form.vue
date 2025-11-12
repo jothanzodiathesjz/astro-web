@@ -1,5 +1,5 @@
 <template>
-    <div class="w-full h-full flex flex-col dark:bg-gray-900 px-5">
+    <div class="w-full h-full flex flex-col dark:bg-gray-900 px-5 pb-7">
         <Toast
             :duration="vm.alerts?.duration"
             :message="vm.alerts?.message ?? ''"
@@ -44,7 +44,7 @@
             >
         </div> -->
         <div
-            class="w-full bg-white dark:bg-gray-800 flex flex-col mt-5 rounded px-5 py-3"
+            class="w-full flex flex-col mt-5 px-5 py-3 bg-white/90 dark:bg-gray-800/90 backdrop-blur rounded-2xl shadow-sm ring-1 ring-gray-200/70 dark:ring-gray-700"
         >
             <div class="w-full p-5 flex flex-col gap-3">
                 <div class="w-full flex flex-col gap-4">

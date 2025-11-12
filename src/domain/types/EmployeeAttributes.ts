@@ -1,5 +1,5 @@
 import type { Address } from "../shared/Address";
-import type { TimestampsAttributes } from "../shared/TimestampsAttributes";
+import type { BaseEntity } from "../shared/Base";
 import type { Schedule } from "./ScheduleAttributes";
 
 export type EmergencyContact = {
@@ -56,8 +56,8 @@ export type ContactDetail = {
     emergency_contact: EmergencyContact;
 };
 
-export type Employee = TimestampsAttributes & {
-    uuid: string;
+export type Employee = BaseEntity & {
+    uuid?: string;
     full_name: string;
     nick_name: string;
     employee_id: string;

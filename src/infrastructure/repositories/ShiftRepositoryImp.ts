@@ -1,4 +1,4 @@
-import type { HttpRequest } from "@/api/httpRequest";
+import type { HttpRequest } from "@/http-client/httpRequest";
 import { TOKENS } from "@/container/tokens";
 import type { DomainShift } from "@/domain/models/Shift";
 import type { ShiftRepository } from "@/domain/repositories/ShiftRepository";

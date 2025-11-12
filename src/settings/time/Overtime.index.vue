@@ -2,9 +2,9 @@
     <div class="p-4">
         <h2 class="text-xl font-semibold mb-2">Live Data dari Server</h2>
         <div v-if="liveData">
-            <p><strong>Timestamp:</strong> {{ liveData.timestamp }}</p>
-            <p><strong>Message:</strong> {{ liveData.message }}</p>
-            <p><strong>Value:</strong> {{ liveData.value }}</p>
+            <p><strong>Timestamp:</strong></p>
+            <p><strong>Message:</strong> </p>
+            <p><strong>Value:</strong> {{ liveData }}</p>
         </div>
         <div v-else>
             <p>Menunggu data...</p>

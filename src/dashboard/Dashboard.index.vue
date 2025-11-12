@@ -92,6 +92,9 @@
     </div>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import DonutChart from '@/core/components/DonutChart.vue';
+
+</script>
 
 <style scoped></style>

@@ -45,7 +45,7 @@
             >
         </div> -->
         <div
-            class="w-[80%] bg-white dark:bg-gray-800 flex flex-col mt-5 rounded-2xl px-8 py-3 gap-5"
+            class="w-[80%] flex flex-col mt-5 px-8 py-3 gap-5 bg-white/90 dark:bg-gray-800/90 backdrop-blur rounded-2xl shadow-sm ring-1 ring-gray-200/70 dark:ring-gray-700"
         >
             <span class="font-semibold dark:text-gray-200">Add Schedule</span>
             <div class="w-full flex flex-row gap-4">
@@ -151,23 +151,13 @@
                             class="table-cell-custom text-gray-700 dark:text-gray-300"
                         >
                             <div class="flex flex-col gap-1">
-                                <TextDropdownInput
-                                    class=""
-                                    :options="vm.shiftOptions"
-                                    :selected="
-                                        day.shift
-                                            ? {
-                                                  label: day.shift.name,
-                                                  value: day.shift,
-                                                  id: day.shift.uuid,
-                                              }
-                                            : null
-                                    "
-                                    :with-clear="true"
-                                    @update="
-                                        (value) => (day.shift = value.value)
-                                    "
-                                    @clear="day.shift = null"
+                                <ShiftDropdown
+                                :selected="day.shift"
+                                :with-clear="true"
+                                @select="
+                                    (value) => (day.shift = value)
+                                "
+                                @clear="day.shift = null"
                                 />
                                 <span
                                     class="text-xs text-red-500"
@@ -260,9 +250,9 @@ import DateInput from "@/core/components/input/Date.input.vue";
 import TableComponent from "@/core/components/table/Table.component.vue";
 import { container } from "@/container/di";
 import { TOKENS } from "@/container/tokens";
-import TextDropdownInput from "@/core/components/input/TextDropdown.input.vue";
 import { calculateDuration } from "@/core/utils/CalculateDuration";
 import SchedulePreview from "./SchedulePreview.vue";
+import ShiftDropdown from "@/shift/Shift.dropdown.vue";
 // import { useRoute } from "vue-router";
 
 const vm = ref(container.get(TOKENS.ScheduleFormViewModel));

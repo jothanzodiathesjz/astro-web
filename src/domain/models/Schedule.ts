@@ -1,3 +1,4 @@
+import { nanoid } from "nanoid";
 import type { DailyAttendance } from "../types/AttendanceAttributes";
 import type {
     DaySchedules,
@@ -71,7 +72,7 @@ export class DomainEmployeeSchedule {
     deleted_at?: number;
 
     constructor(init: {
-        uuid: string;
+        uuid?: string;
         branch_uuid: string;
         full_name: string;
         nick_name: string;
@@ -83,7 +84,7 @@ export class DomainEmployeeSchedule {
         updated_at?: number;
         deleted_at?: number;
     }) {
-        this.uuid = init.uuid;
+        this.uuid = init.uuid ?? nanoid();
         this.branch_uuid = init.branch_uuid;
         this.full_name = init.full_name;
         this.nick_name = init.nick_name;

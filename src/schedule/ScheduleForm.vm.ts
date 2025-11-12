@@ -7,7 +7,7 @@ import type { DomainShift } from "@/domain/models/Shift";
 import type { ScheduleRepository } from "@/domain/repositories/ScheduleRepository";
 import type { ShiftRepository } from "@/domain/repositories/ShiftRepository";
 import { injected } from "brandi";
-import { v4 } from "uuid";
+import { nanoid } from "nanoid";
 import { useRoute, useRouter } from "vue-router";
 type ShiftFormErrors = {
     name: string[];
@@ -41,6 +41,7 @@ export class ScheduleFormViewModel {
         description: "",
         cycle_days: 0,
         day_schedules: [],
+        is_assigned: false,
         inserted_by: "",
         created_at: 0,
         effective_date: 0,
@@ -131,9 +132,9 @@ export class ScheduleFormViewModel {
         this.data.day_schedules = this.daySchedules.map(
             (item) => new DomainDaySchedule(item),
         );
-        this.data.uuid = this.isUpdate ? this.data.uuid : v4();
+        this.data.uuid = this.isUpdate ? this.data.uuid : nanoid();
         this.effectiveDate instanceof Date &&
-            (this.data.effective_date = this.effectiveDate.getTime());
+            (this.data.effective_date = this.effectiveDate.setHours(0, 0, 0, 0));
         this.data.created_at = this.isUpdate
             ? this.data.created_at
             : Date.now();

@@ -171,11 +171,8 @@ function clamp(value: number, min: number, max: number) {
 }
 </script>
 
-<style>
-:root {
-    --dp-font-family: "Be Vietnam Pro", sans-serif;
-    --dp-font-size: 0.875rem;
-}
+<style scoped>
+
 
 .dp__theme_dark {
     --dp-background-color: #1e2939;

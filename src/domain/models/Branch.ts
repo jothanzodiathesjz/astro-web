@@ -1,7 +1,7 @@
-import { v4 as uuidv4, v4 } from "uuid";
 import type { Address } from "../shared/Address";
 import type { Branch, Payroll } from "../types/BranchAttributes";
 import type { Contact } from "../shared/Contact";
+import { nanoid } from "nanoid";
 
 export class DomainBranch {
     uuid: string;
@@ -13,7 +13,7 @@ export class DomainBranch {
     payroll_info: Payroll;
 
     constructor(init: Branch) {
-        this.uuid = init.uuid || uuidv4();
+        this.uuid = init.uuid || nanoid();
         this.name = init.name;
         this.code = init.code;
         this.contact = init.contact;
@@ -24,7 +24,7 @@ export class DomainBranch {
 
     toData(): Branch {
         return {
-            uuid: v4(),
+            uuid: nanoid(),
             name: this.name,
             code: this.code,
             contact: this.contact,

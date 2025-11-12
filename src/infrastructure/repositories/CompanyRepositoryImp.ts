@@ -1,4 +1,4 @@
-import { HttpRequest } from "@/api/httpRequest";
+import { HttpRequest } from "@/http-client/httpRequest";
 import { TOKENS } from "@/container/tokens";
 import type { DomainBranch } from "@/domain/models/Branch";
 import type { DomainCompany } from "@/domain/models/Company";

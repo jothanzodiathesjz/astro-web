@@ -297,7 +297,7 @@ const rangeProp = computed(() =>
 defineExpose({ shift, setMode });
 </script>
 
-<style>
+<style scoped>
 /* Sedikit tweak tema (opsional) */
 :root {
     --dp-font-size: 0.875rem;

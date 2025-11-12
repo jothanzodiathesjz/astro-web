@@ -1,3 +1,4 @@
+import { nanoid } from "nanoid";
 import type { Address } from "../shared/Address";
 import type { Contact } from "../shared/Contact";
 import type { Company } from "../types/CompanyAttributes";
@@ -10,7 +11,7 @@ export class DomainCompany {
     contact: Contact;
 
     constructor(init: Company) {
-        this.uuid = init.uuid;
+        this.uuid = init.uuid || nanoid();
         this.name = init.name;
         this.industry = init.industry;
         this.address = init.address;

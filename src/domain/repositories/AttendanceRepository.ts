@@ -4,6 +4,7 @@ import type {
     DomainAttendance,
     DomainAttendanceLogs,
 } from "../models/Attendance";
+import type { DomainOvertime } from "../models/Overtime";
 
 export interface AttendanceRepository {
     getAttendanceList(
@@ -12,4 +13,12 @@ export interface AttendanceRepository {
     checkIn(userId: string): Promise<DomainAttendance>;
     update(attendance: DomainAttendance): Promise<DomainAttendance>;
     getLogs(uuid: string): Promise<DomainAttendanceLogs>;
+    verifyAttendance(file: File): Promise<Response>;
+    getAttendanceSse(signal?: AbortSignal): Promise<Response>;
+    delete(uuid: string): Promise<void>;
+    updateAttendanceOvertime(
+        date: number,
+        uuid: string[],
+        overtime: DomainOvertime,
+    ): Promise<void>;
 }

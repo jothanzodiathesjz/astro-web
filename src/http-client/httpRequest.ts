@@ -44,6 +44,7 @@ export class HttpRequest {
                 headers: {
                     "Content-Type": "application/json",
                     Authorization: `Bearer ${refreshToken}`,
+                    'ngrok-skip-browser-warning': 'true',
                 },
             });
 
@@ -104,9 +105,13 @@ export class HttpRequest {
             headers.set("Content-Type", "application/json");
         }
 
+        headers.set('ngrok-skip-browser-warning', 'true');
+
         if (authStore.token) {
             headers.set("Authorization", `Bearer ${authStore.token}`);
         }
+
+        options.referrerPolicy = "no-referrer"
 
         const config: RequestInit = {
             method,

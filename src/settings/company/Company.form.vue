@@ -34,7 +34,7 @@
         </div> -->
 
         <div
-            class="py-5 rounded-lg flex flex-col gap-3 bg-white dark:bg-gray-800 mt-4 px-5 mb-3"
+            class="py-5 flex flex-col gap-3 mt-4 px-5 mb-3 bg-white/90 dark:bg-gray-800/90 backdrop-blur rounded-2xl shadow-sm ring-1 ring-gray-200/70 dark:ring-gray-7"
         >
             <div class="w-full flex flex-row gap-4">
                 <TextInput
@@ -133,7 +133,6 @@
 <script setup lang="ts">
 import { computed, ref, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { v4 as uuidv4 } from "uuid";
 
 import TextInput from "@/core/components/input/Text.input.vue";
 import ButtonComponent from "@/core/components/button/Button.component.vue";
@@ -148,6 +147,7 @@ import { ToastUI } from "@/core/ui/Toast.ui";
 import { PhoneUI } from "@/core/ui/Phone.ui";
 import { DomainCompany } from "@/domain/models/Company";
 import { mapToPhoneUI } from "@/core/utils/PhoneParsing";
+import { nanoid } from "nanoid";
 
 // Constants
 const VALIDATION_MESSAGES = {
@@ -305,7 +305,7 @@ async function submitCompanyForm(): Promise<void> {
         } else {
             await repository.create({
                 ...submissionData,
-                uuid: uuidv4(),
+                uuid: nanoid(),
             });
         }
 
