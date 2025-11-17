@@ -63,32 +63,71 @@
             </div>
             <div class="w-full flex flex-row gap-4">
                 <div class="w-full flex flex-col gap-2 pr-2">
-                        <TextDropdownInput
-                            :options="labelDropdown"
-                            :selected="selectedLabel"
-                            :dontfilter="true"
-                            label="Label"
-                            placeholder="Select Label"
-                            @update="
-                                (v: DropdownLabel<Labels>) => {
-                                    data.label = v.value.value;
-                                    clearFieldError('label');
-                                }
-                            "
-                        />
-                        <span
-                            v-if="formErrors.label.length"
-                            class="text-xs text-red-600 dark:text-red-400"
-                            >{{ formErrors.label[0] }}</span
-                        >
-                    </div>
-                <TextInput
-                    :value="data.description"
-                    :optional="true"
-                    :placeholder="'Description'"
-                    :label="'Description'"
-                    @input="(value) => (data.description = value)"
-                />
+                    <TextDropdownInput
+                        :options="labelDropdown"
+                        :selected="selectedLabel"
+                        :dontfilter="true"
+                        label="Label"
+                        placeholder="Select Label"
+                        @update="
+                            (v: DropdownLabel<Labels>) => {
+                                data.label = v.value.value;
+                                clearFieldError('label');
+                            }
+                        "
+                    />
+                    <span
+                        v-if="formErrors.label.length"
+                        class="text-xs text-red-600 dark:text-red-400"
+                        >{{ formErrors.label[0] }}</span
+                    >
+                </div>
+                <div class="w-full flex flex-col gap-2 pr-2">
+                    <TextDropdownInput
+                        :options="typeDropdown"
+                        :selected="selectedType"
+                        :dontfilter="true"
+                        label="Shift Type"
+                        placeholder="Select Type"
+                        @update="
+                            (v: DropdownLabel<ShiftTypeOption>) => {
+                                data.type = v.value.value;
+                                clearFieldError('requiredMinutes');
+                            }
+                        "
+                    />
+                </div>
+            </div>
+            
+            <div
+                v-if="isFlexibleShift"
+                class="w-full flex flex-col gap-2"
+            >
+                <span class="text-sm font-medium text-gray-700 dark:text-gray-200"
+                    >Required Duration (Hours & Minutes)</span
+                >
+                <div class="flex flex-row gap-4">
+                    <NumberInput
+                        :model-value="requiredHours"
+                        label="Hours"
+                        :min="0"
+                        placeholder="0"
+                        @update:model-value="(value) => setRequiredHours(value)"
+                    />
+                    <NumberInput
+                        :model-value="requiredMinutes"
+                        label="Minutes"
+                        :min="0"
+                        :max="59"
+                        placeholder="0"
+                        @update:model-value="(value) => setRequiredMinutes(value)"
+                    />
+                </div>
+                <span
+                    v-if="formErrors.requiredMinutes.length"
+                    class="text-xs text-red-600 dark:text-red-400"
+                    >{{ formErrors.requiredMinutes[0] }}</span
+                >
             </div>
 
             <div class="w-full flex flex-row gap-4">
@@ -168,6 +207,15 @@
                     >
                 </div>
             </div>
+            <div class="w-full">
+                <TextInput
+                    :value="data.description"
+                    :optional="true"
+                    :placeholder="'Description'"
+                    :label="'Description'"
+                    @input="(value) => (data.description = value)"
+                />
+            </div>
             <!-- <div class="w-full flex flex-col gap-2">
                 <span class="text-sm dark:text-gray-300">Cross Day</span>
                 <SwitchComponent :checked="data.is_cross_day" @click="data.is_cross_day = !data.is_cross_day"/>
@@ -182,12 +230,13 @@
 <script setup lang="ts">
 // import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import IconButton from "@/core/components/button/Icon.button.vue";
-import { computed, onMounted, reactive, ref } from "vue";
+import { computed, onMounted, reactive, ref, watch } from "vue";
 import { container } from "@/container/di";
 import { TOKENS } from "@/container/tokens";
 import Toast from "@/core/components/Toast.vue";
 import TextInput from "@/core/components/input/Text.input.vue";
 import TimeInput from "@/core/components/input/Time.input.vue";
+import NumberInput from "@/core/components/input/Number.input.vue";
 import { ToastUI } from "@/core/ui/Toast.ui";
 import { handleErrors, type UIError } from "@/core/ui/UIError";
 import ButtonComponent from "@/core/components/button/Button.component.vue";
@@ -197,7 +246,12 @@ import type { DomainShift } from "@/domain/models/Shift";
 import { nanoid } from "nanoid";
 import { DropdownLabel } from "@/core/components/models/DropdownLabel";
 import TextDropdownInput from "@/core/components/input/TextDropdown.input.vue";
-import { labelOptions, type Labels } from "./Shift.ui";
+import {
+    labelOptions,
+    shiftTypeOptions,
+    type Labels,
+    type ShiftTypeOption,
+} from "./Shift.ui";
 // import { useRoute } from "vue-router";
 
 const repository = container.get(TOKENS.ShiftRepository);
@@ -220,6 +274,8 @@ const data = ref<DomainShift>({
     is_scheduled: false,
     is_cross_day: false,
     created_at: 0,
+    required_minutes: 0,
+    type: "FIXED",
     inserted_by: "",
     updated_at: undefined,
     deleted_at: undefined,
@@ -232,6 +288,12 @@ const breakEnd = ref<UITime | null>(null);
 const labelDropdown = labelOptions.map(
     (option) => new DropdownLabel(option, "value", "label"),
 );
+const typeDropdown = shiftTypeOptions.map(
+    (option) => new DropdownLabel(option, "value", "label"),
+);
+const requiredHours = ref(0);
+const requiredMinutes = ref(0);
+const isFlexibleShift = computed(() => data.value.type === "FLEXIBLE");
 
 type ShiftFormErrors = {
     name: string[];
@@ -241,6 +303,7 @@ type ShiftFormErrors = {
     breakStart: string[];
     breakEnd: string[];
     code: string[];
+    requiredMinutes: string[];
 };
 
 const formErrors = reactive<ShiftFormErrors>({
@@ -251,6 +314,7 @@ const formErrors = reactive<ShiftFormErrors>({
     breakStart: [],
     breakEnd: [],
     code: [],
+    requiredMinutes: [],
 });
 
 const selectedLabel = computed(() => {
@@ -261,6 +325,60 @@ const selectedLabel = computed(() => {
     console.log(data.value.label);
     return temp;
 });
+
+const selectedType = computed(() => {
+    return (
+        typeDropdown.find(
+            (option) => option.value.value === data.value.type,
+        ) ?? null
+    );
+});
+
+function sanitizeNonNegative(value: number) {
+    if (!Number.isFinite(value)) {
+        return 0;
+    }
+    return Math.max(0, Math.floor(value));
+}
+
+function setRequiredHours(value: number) {
+    requiredHours.value = sanitizeNonNegative(value);
+}
+
+function setRequiredMinutes(value: number) {
+    requiredMinutes.value = Math.min(59, sanitizeNonNegative(value));
+}
+
+watch(
+    () => data.value.type,
+    (type) => {
+        if (type === "FLEXIBLE") {
+            const total = data.value.required_minutes ?? 0;
+            setRequiredHours(Math.floor(total / 60));
+            setRequiredMinutes(total % 60);
+        } else {
+            setRequiredHours(0);
+            setRequiredMinutes(0);
+            data.value.required_minutes = 0;
+            clearFieldError("requiredMinutes");
+        }
+    },
+    { immediate: true },
+);
+
+watch(
+    [requiredHours, requiredMinutes],
+    ([hours, minutes]) => {
+        if (!isFlexibleShift.value) {
+            return;
+        }
+        const totalMinutes = hours * 60 + minutes;
+        data.value.required_minutes = totalMinutes;
+        if (totalMinutes > 0) {
+            clearFieldError("requiredMinutes");
+        }
+    },
+);
 
 function clearFieldError(field: keyof ShiftFormErrors) {
     formErrors[field] = [];
@@ -274,6 +392,7 @@ function resetFormErrors() {
     formErrors.breakStart = [];
     formErrors.breakEnd = [];
     formErrors.code = [];
+    formErrors.requiredMinutes = [];
 }
 
 function validate(): boolean {
@@ -315,6 +434,13 @@ function validate(): boolean {
         valid = false;
     }
 
+    if (isFlexibleShift.value && data.value.required_minutes <= 0) {
+        formErrors.requiredMinutes.push(
+            "Required duration must be greater than 0",
+        );
+        valid = false;
+    }
+
 
     return valid;
 }
@@ -339,6 +465,9 @@ function toDomain(): boolean {
     data.value.code = data.value.code.trim().toUpperCase();
     data.value.is_cross_day = data.value.is_cross_day ?? false;
     data.value.inserted_by = "Bos Rio";
+    if (!isFlexibleShift.value) {
+        data.value.required_minutes = 0;
+    }
 
     return true;
 }

@@ -32,11 +32,9 @@ export type Employment = {
     department: Department;
     job_level: string;
     job_title: string;
-    employment_type: string;
-    start_date: number;
-    end_date: number;
-    resign_date: number;
+    type: string;
     status: string;
+    contract_info: ContractInfo;
 };
 
 export type BankDetail = {
@@ -45,6 +43,12 @@ export type BankDetail = {
     bank_name: string;
     ifsc_code: string;
 };
+
+export type ContractInfo = {
+    join_date: number;
+    end_date: number;
+    resign_date: number;
+}
 
 export type InsuranceDetail = {
     bpjs_ketenagakerjaan: string;

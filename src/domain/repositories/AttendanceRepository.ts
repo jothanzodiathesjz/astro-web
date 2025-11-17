@@ -21,4 +21,5 @@ export interface AttendanceRepository {
         uuid: string[],
         overtime: DomainOvertime,
     ): Promise<void>;
+    deleteAttendanceOvertime(uuid: string): Promise<void>;
 }

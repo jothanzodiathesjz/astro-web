@@ -13,4 +13,8 @@ export type Shift = BaseEntity & {
     is_cross_day: boolean;
     description: string;
     inserted_by: string;
+    type: ShiftType;
+    required_minutes: number;
 };
+
+export type ShiftType = | "FIXED" | "FLEXIBLE";

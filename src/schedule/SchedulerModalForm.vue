@@ -7,11 +7,12 @@
         @close="$emit('close')"
     >
         <div class="w-full flex flex-col gap-5 p-3">
-            <div class="w-full flex flex-col gap-3">
+            <div class="w-full flex flex-col gap-3 ">
                 <span class="dark:text-gray-200 text-sm">Employee *</span>
                 <div
-                    class="w-full flex flex-row border flex-wrap border-gray-200 dark:border-gray-700 rounded-lg px-2 py-3 gap-2"
-                >
+                    class="max-h-[30vh] overflow-auto w-full flex flex-row border flex-wrap border-gray-200 dark:border-gray-700 rounded-lg px-2 py-3 gap-2"
+                    
+                    >
                     <span
                         v-for="name in scheduler?.employee_uuid"
                         class="text-gray-700 dark:text-gray-300 bg-gray-200 dark:bg-gray-700 rounded-full px-2 py-1 text-sm"

@@ -200,11 +200,13 @@ export class EmployeeUI {
                 },
                 job_level: this.employmentDetail.jobLevel ?? "",
                 job_title: this.employmentDetail.jobTitle,
-                employment_type: this.employmentDetail.employmentType ?? "",
-                start_date: this.employmentDetail.startDate?.getTime() ?? 0,
-                end_date: this.employmentDetail.endDate?.getTime() ?? 0,
-                resign_date: this.employmentDetail.resignDate?.getTime() ?? 0,
+                type: this.employmentDetail.employmentType ?? "",
                 status: this.employmentDetail.status ?? "",
+                contract_info: {
+                    join_date: this.employmentDetail.startDate?.getTime() ?? 0,
+                    end_date: this.employmentDetail.endDate?.getTime() ?? 0,
+                    resign_date: this.employmentDetail.resignDate?.getTime() ?? 0,
+                }
             },
             bank_detail: {
                 account_name: this.bankDetail.accountName,
@@ -262,10 +264,10 @@ export class EmployeeUI {
         ui.employmentDetail.fingerCode = data.fingerprint_id;
         ui.employmentDetail.jobLevel = data.employment.job_level;
         ui.employmentDetail.jobTitle = data.employment.job_title;
-        ui.employmentDetail.employmentType = data.employment.employment_type;
-        ui.employmentDetail.startDate = new Date(data.employment.start_date);
-        ui.employmentDetail.endDate = new Date(data.employment.end_date);
-        ui.employmentDetail.resignDate = new Date(data.employment.resign_date);
+        ui.employmentDetail.employmentType = data.employment.type;
+        ui.employmentDetail.startDate = new Date(data.employment.contract_info.join_date);
+        ui.employmentDetail.endDate = new Date(data.employment.contract_info.end_date);
+        ui.employmentDetail.resignDate = new Date(data.employment.contract_info.resign_date);
         ui.employmentDetail.status = data.employment.status;
 
         ui.bankDetail.accountName = data.bank_detail.account_name;

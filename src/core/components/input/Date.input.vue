@@ -110,7 +110,5 @@ onMounted(() => {
     --dp-background-color: #1e2939;
     --dp-menu-border-color: #4a5565;
 }
-.dp--clear-btn {
-    display: none;
-}
+
 </style>

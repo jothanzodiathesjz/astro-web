@@ -116,6 +116,9 @@ export class AttendanceRepositoryImp implements AttendanceRepository {
         )
     }
 
+    async deleteAttendanceOvertime(uuid: string): Promise<void> {
+        await this.http.DELETE(`/attendances/${uuid}/over-time`);
+    }
 }
 
 injected(AttendanceRepositoryImp, TOKENS.httpRequest);

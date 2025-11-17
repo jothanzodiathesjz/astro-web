@@ -25,6 +25,9 @@ export class DomainAttendance extends BaseEntity {
     is_late: boolean;
     notes: string | null;
     is_modify?: string;
+    minutes_late?: number;
+    minutes_early?: number;
+    is_early_leave?: boolean;
 
     constructor(init: Attendance) {
        super(init);
@@ -41,6 +44,9 @@ export class DomainAttendance extends BaseEntity {
         this.is_late = init.is_late;
         this.notes = init.notes ?? null;
         this.is_modify = init.is_modify;
+        this.minutes_late = init.minutes_late;
+        this.minutes_early = init.minutes_early;
+        this.is_early_leave = init.is_early_leave;
     }
 }
 

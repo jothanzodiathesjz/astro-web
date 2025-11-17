@@ -1104,7 +1104,6 @@
 
 <script setup lang="ts">
 import TextInput from "@/core/components/input/Text.input.vue";
-import IconButton from "@/core/components/button/Icon.button.vue";
 import TextDropdownInput from "@/core/components/input/TextDropdown.input.vue";
 import { DropdownLabel } from "@/core/components/models/DropdownLabel";
 import { computed, onMounted, ref } from "vue";

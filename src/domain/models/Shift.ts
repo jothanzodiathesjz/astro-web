@@ -1,5 +1,5 @@
 import { nanoid } from "nanoid";
-import type { Shift } from "../types/ShiftAttributes";
+import type { Shift, ShiftType } from "../types/ShiftAttributes";
 
 export class DomainShift {
     uuid: string;
@@ -13,6 +13,8 @@ export class DomainShift {
     description: string;
     is_scheduled: boolean;
     is_cross_day: boolean;
+    type: ShiftType;
+    required_minutes: number;
     inserted_by: string;
     created_at?: number;
     updated_at?: number;
@@ -31,6 +33,8 @@ export class DomainShift {
         this.inserted_by = init.inserted_by;
         this.is_scheduled = init.is_scheduled;
         this.is_cross_day = init.is_cross_day;
+        this.type = init.type;
+        this.required_minutes = init.required_minutes;
         this.created_at = init.created_at;
         this.updated_at = init.updated_at;
         this.deleted_at = init.deleted_at;

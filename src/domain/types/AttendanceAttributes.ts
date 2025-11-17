@@ -18,6 +18,9 @@ export type Attendance = BaseEntity & {
     is_late: boolean;
     notes?: string | null;
     is_modify?: string;
+    minutes_late?: number;
+    minutes_early?: number;
+    is_early_leave?: boolean;
 };
 
 export type DailyAttendance = {

@@ -44,7 +44,117 @@
                         </button>
                     </div>
                     <div
-                        v-if="activeTab === TAB_KEYS.attendance"
+                        v-if="activeTab === TAB_KEYS.detail"
+                        class="flex flex-col gap-4"
+                    >
+                        <template v-if="detailSummaryCard">
+                            <div
+                                class="rounded-2xl bg-gradient-to-r from-blue-600 via-blue-500 to-blue-400 p-4 text-white shadow-lg"
+                            >
+                                <div
+                                    class="flex flex-col gap-3 md:flex-row md:items-start md:justify-between"
+                                >
+                                    <div>
+                                        <span
+                                            class="text-xs uppercase tracking-wide text-white/80"
+                                            >Employee</span
+                                        >
+                                        <p class="text-lg font-semibold">
+                                            {{ detailSummaryCard.name }}
+                                        </p>
+                                        <p class="text-sm text-white/80">
+                                            {{ detailSummaryCard.shift }}
+                                        </p>
+                                    </div>
+                                    <div
+                                        class="flex flex-col items-start gap-2 text-left md:items-end md:text-right"
+                                    >
+                                        <span
+                                            class="text-xs uppercase tracking-wide text-white/80"
+                                            >Status</span
+                                        >
+                                        <span
+                                            class="inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold"
+                                            :class="detailStatusClass"
+                                        >
+                                            {{ detailSummaryCard.status }}
+                                        </span>
+                                        <span class="text-sm text-white/80">
+                                            {{ detailSummaryCard.date }}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div
+                                v-if="detailChips.length"
+                                class="grid grid-cols-1 gap-3 md:grid-cols-2"
+                            >
+                                <div
+                                    v-for="chip in detailChips"
+                                    :key="chip.label"
+                                    class="rounded-xl border border-gray-200 bg-gray-50/80 p-3 dark:border-gray-700 dark:bg-gray-900/40 flex flex-row items-center gap-2"
+                                    
+                                    >
+                                <div  class="w-full">
+                                    <span
+                                        class="text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400"
+                                        >{{ chip.label }}</span
+                                    >
+                                    <p
+                                        class="text-sm font-semibold text-gray-900 dark:text-gray-100"
+                                    >
+                                        {{ chip.value }}
+                                    </p>
+                                    <span
+                                        v-if="chip.helper"
+                                        class="text-xs text-gray-500 dark:text-gray-400"
+                                    >
+                                        {{ chip.helper }}
+                                    </span>
+                                </div>
+                                <IconButton
+                                    v-if="chip.label.toUpperCase() === 'OVERTIME' && chip.value !== '-' && detailAttendance?.over_time"
+                                    :icon-name="'trash'"
+                                    :disabled="deletingOvertime"
+                                    title="Delete overtime"
+                                    @click="requestDeleteOvertime"
+                                />
+                                </div>
+                            </div>
+                            <div
+                                v-if="detailMetrics.length"
+                                class="grid grid-cols-2 gap-3 md:grid-cols-4"
+                            >
+                                <div
+                                    v-for="metric in detailMetrics"
+                                    :key="metric.label"
+                                    class="rounded-xl border border-gray-200 bg-white p-3 text-center dark:border-gray-700 dark:bg-gray-900/60"
+                                >
+                                    <span
+                                        class="text-xs uppercase tracking-wide text-gray-500 dark:text-gray-400"
+                                        >{{ metric.label }}</span
+                                    >
+                                    <p
+                                        class="text-sm font-semibold text-gray-900 dark:text-gray-100"
+                                    >
+                                        {{ metric.value }}
+                                    </p>
+                                </div>
+                            </div>
+                        </template>
+                        <div
+                            v-else
+                            class="text-sm text-gray-500 dark:text-gray-400"
+                        >
+                            {{
+                                isDataMoreThanOne
+                                    ? "Detail hanya tersedia untuk satu attendance."
+                                    : "Pilih attendance untuk melihat detail."
+                            }}
+                        </div>
+                    </div>
+                    <div
+                        v-else-if="activeTab === TAB_KEYS.attendance"
                         class="flex flex-col gap-4"
                     >
                         <DateInput
@@ -81,6 +191,13 @@
                                 @clear="selectedTimeOff = null"
                             />
                         </div>
+                        <TextAreaInput
+                            label="Notes"
+                            :value="notes"
+                            :placeholder="'Notes'"
+                            :error="errorMessages?.data.message"
+                            @input="(value) => (notes = value)"
+                        />
                     </div>
                     <div v-else class="flex flex-col gap-4">
                         <div class="w-full flex flex-row gap-2">
@@ -121,7 +238,7 @@
                                 getStatusClass('default'),
                             ]"
                         >
-                           Duration: {{ totalMinutes.display }}
+                            Duration: {{ totalMinutes.display }}
                         </div>
                         <div class="flex flex-col gap-3">
                             <span class="text-sm">Holiday</span>
@@ -130,15 +247,15 @@
                                 @click="isHoliday = !isHoliday"
                             />
                         </div>
+                        <TextAreaInput
+                            label="Notes"
+                            :value="notes"
+                            :placeholder="'Notes'"
+                            :error="errorMessages?.data.message"
+                            @input="(value) => (notes = value)"
+                        />
                     </div>
                 </div>
-                <TextAreaInput
-                    label="Notes"
-                    :value="notes"
-                    :placeholder="'Notes'"
-                    :error="errorMessages?.data.message"
-                    @input="(value) => (notes = value)"
-                />
             </div>
         </div>
         <div
@@ -157,6 +274,15 @@
             </ButtonComponent>
         </div>
     </ModalContent>
+    <ConfirmModal
+        :visible="showDeleteOvertimeConfirm"
+        header="Delete Overtime"
+        message="Are you sure you want to delete this overtime entry?"
+        :icon="'fa-triangle-exclamation'"
+        :disabled="deletingOvertime"
+        @confirm="executeDeleteOvertime"
+        @cancel="showDeleteOvertimeConfirm = false"
+    />
 </template>
 
 <script setup lang="ts">
@@ -180,6 +306,8 @@ import { ToastUI } from "@/core/ui/Toast.ui";
 import { handleErrors, UIError } from "@/core/ui/UIError";
 import SwitchComponent from "@/core/components/button/Switch.component.vue";
 import { getStatusClass } from "@/core/utils/StatusClass";
+import IconButton from "@/core/components/button/Icon.button.vue";
+import ConfirmModal from "@/core/components/modal/Confirm.modal.vue";
 
 const $props = defineProps<{
     visible: boolean;
@@ -197,6 +325,8 @@ const repository = container.get(TOKENS.attendanceRepository);
 const selectedShift = ref<DomainShift | null>(null);
 const selectedTimeOff = ref<DomainTimeOff | null>(null);
 const loading = ref(false);
+const deletingOvertime = ref(false);
+const showDeleteOvertimeConfirm = ref(false);
 
 const clockIn = ref<UITime | null>(null);
 const clockOut = ref<UITime | null>(null);
@@ -207,9 +337,9 @@ const overtimeEndTime = ref<UITime | null>(null);
 const overtimeBreakEnd = ref<UITime | null>(null);
 const isHoliday = ref(false);
 function diffAcrossDay(start: number, end: number): number {
-  let d = end - start;
-  if (d < 0) d += 24 * 60; // misal start 22:00 end 02:00
-  return d;
+    let d = end - start;
+    if (d < 0) d += 24 * 60; // misal start 22:00 end 02:00
+    return d;
 }
 const totalMinutes = computed(() => {
     // const total =
@@ -220,15 +350,16 @@ const totalMinutes = computed(() => {
     //     (overtimeBreakStart.value?.toMinutes() || 0);
     // const result = total - breakTotal;
 
-    const start =  (overtimeStartTime.value?.toMinutes() || 0);
-    const end = (overtimeEndTime.value?.toMinutes() || 0);
-    if (start === null || end === null) return {
-        minutes: 0,
-        display: "0 Jam 0 Menit",
-    };
+    const start = overtimeStartTime.value?.toMinutes() || 0;
+    const end = overtimeEndTime.value?.toMinutes() || 0;
+    if (start === null || end === null)
+        return {
+            minutes: 0,
+            display: "0 Jam 0 Menit",
+        };
     const work = diffAcrossDay(start, end);
-    const bStart = (overtimeBreakStart.value?.toMinutes() || 0);
-    const bEnd = (overtimeBreakEnd.value?.toMinutes() || 0);
+    const bStart = overtimeBreakStart.value?.toMinutes() || 0;
+    const bEnd = overtimeBreakEnd.value?.toMinutes() || 0;
 
     let breakMin = 0;
     if (bStart !== null && bEnd !== null) {
@@ -248,10 +379,8 @@ const errorMessages = ref<UIError | null>(null);
 
 const notes = ref<string>("");
 
-
-
-
 const TAB_KEYS = {
+    detail: "detail",
     attendance: "attendance",
     overtime: "overtime",
 } as const;
@@ -259,11 +388,12 @@ const TAB_KEYS = {
 type TabKey = (typeof TAB_KEYS)[keyof typeof TAB_KEYS];
 
 const tabs: ReadonlyArray<{ key: TabKey; label: string }> = [
+    { key: TAB_KEYS.detail, label: "Detail Attendance" },
     { key: TAB_KEYS.attendance, label: "Attendance" },
     { key: TAB_KEYS.overtime, label: "Overtime" },
 ];
 
-const activeTab = ref<TabKey>(TAB_KEYS.attendance);
+const activeTab = ref<TabKey>(TAB_KEYS.detail);
 
 const disabled = computed(() => loading.value || !$props.selections.length);
 const isDataMoreThanOne = computed(() => $props.selections.length > 1);
@@ -286,6 +416,186 @@ const attendanceDate = computed(() => {
     return Number.isNaN(fallback.getTime()) ? new Date() : fallback;
 });
 
+const detailAttendance = computed<DomainAttendance | null>(() => {
+    if ($props.selections.length !== 1) {
+        return null;
+    }
+    return $props.selections[0];
+});
+
+const detailShift = computed<DomainShift | null>(() => {
+    return selectedShift.value ?? detailAttendance.value?.shift ?? null;
+});
+
+const detailTimeOff = computed<DomainTimeOff | null>(() => {
+    return selectedTimeOff.value ?? detailAttendance.value?.time_off ?? null;
+});
+
+type DetailSummaryCard = {
+    name: string;
+    shift: string;
+    date: string;
+    status: string;
+};
+
+type DetailChip = {
+    label: string;
+    value: string;
+    helper?: string;
+};
+
+type DetailMetric = {
+    label: string;
+    value: string;
+};
+
+const formatDisplayDate = (date: Date | null) => {
+    if (!date) {
+        return "-";
+    }
+    return date.toLocaleDateString("id-ID", {
+        weekday: "short",
+        day: "2-digit",
+        month: "short",
+        year: "numeric",
+    });
+};
+
+const formatMinutesValue = (value?: number | null) => {
+    if (value === undefined || value === null) {
+        return "-";
+    }
+    return `${value} menit`;
+};
+
+const formatDisplayTime = (time: UITime | null, fallback?: string | null) => {
+    if (time) {
+        return time.toHoursMinutesString();
+    }
+    if (fallback && fallback.trim()) {
+        return fallback;
+    }
+    return "-";
+};
+
+const formatShiftName = (shift: DomainShift | null) => {
+    if (!shift) {
+        return "-";
+    }
+    return shift.code ? `${shift.name} (${shift.code})` : shift.name;
+};
+
+const formatShiftSchedule = (shift: DomainShift | null) => {
+    if (!shift) {
+        return "-";
+    }
+    const scheduleIn = shift.schedule_in || "-";
+    const scheduleOut = shift.schedule_out || "-";
+    return `${scheduleIn} - ${scheduleOut}`;
+};
+
+const formatBreakSchedule = (shift: DomainShift | null) => {
+    if (!shift) {
+        return "-";
+    }
+    const breakStart = shift.break_start || "--:--";
+    const breakEnd = shift.break_end || "--:--";
+    return `${breakStart} - ${breakEnd}`;
+};
+
+const detailNotes = computed(() => {
+    const trimmed = notes.value.trim();
+    if (trimmed) {
+        return trimmed;
+    }
+    return detailAttendance.value?.notes ?? "";
+});
+
+const detailSummaryCard = computed<DetailSummaryCard | null>(() => {
+    const att = detailAttendance.value;
+    if (!att) {
+        return null;
+    }
+    return {
+        name: att.employee?.full_name ?? "-",
+        shift: formatShiftName(detailShift.value),
+        date: formatDisplayDate(attendanceDate.value),
+        status: att.status ?? "-",
+    };
+});
+
+const detailStatusClass = computed(() => {
+    return getStatusClass(detailSummaryCard.value?.status ?? "default");
+});
+
+const detailChips = computed<DetailChip[]>(() => {
+    const att = detailAttendance.value;
+    const shift = detailShift.value;
+    if (!att) {
+        return [];
+    }
+
+    const overtimeValue =
+        att.over_time || totalMinutes.value.minutes
+            ? totalMinutes.value.display
+            : "-";
+
+    return [
+        {
+            label: "Schedule",
+            value: formatShiftSchedule(shift),
+            helper: shift?.label ?? "",
+        },
+        {
+            label: "Break",
+            value: formatBreakSchedule(shift),
+            helper: "Break time",
+        },
+        {
+            label: "Clock In",
+            value: formatDisplayTime(clockIn.value, att.actual_check_in),
+            helper: att.is_late ? "Late check-in" : "",
+        },
+        {
+            label: "Clock Out",
+            value: formatDisplayTime(clockOut.value, att.actual_check_out),
+            helper: att.is_early_leave ? "Early leave" : "",
+        },
+        {
+            label: "Time Off",
+            value: detailTimeOff.value?.name ?? "-",
+            helper: detailTimeOff.value?.category ?? "",
+        },
+        {
+            label: "Overtime",
+            value: overtimeValue,
+            helper: isHoliday.value ? "Holiday overtime" : "",
+        },
+    ];
+});
+
+const detailMetrics = computed<DetailMetric[]>(() => {
+    const att = detailAttendance.value;
+    if (!att) {
+        return [];
+    }
+
+    return [
+        {
+            label: "Minutes Late",
+            value: formatMinutesValue(att.minutes_late),
+        },
+        {
+            label: "Minutes Early",
+            value: formatMinutesValue(att.minutes_early),
+        },
+        {
+            label: "Early Leave",
+            value: att.is_early_leave ? "Yes" : "No",
+        },
+    ];
+});
+
 const resetForm = () => {
     selectedShift.value = null;
     selectedTimeOff.value = null;
@@ -296,7 +606,8 @@ const resetForm = () => {
     overtimeEndTime.value = null;
     overtimeBreakEnd.value = null;
     notes.value = "";
-    activeTab.value = TAB_KEYS.attendance;
+    isHoliday.value = false;
+    activeTab.value = TAB_KEYS.detail;
 };
 
 const parseToUITime = (time?: string | null): UITime | null => {
@@ -353,6 +664,9 @@ watch(
                 );
                 overtimeEndTime.value = parseToUITime(att.over_time.end_time);
                 overtimeBreakEnd.value = parseToUITime(att.over_time.break_end);
+                isHoliday.value = Boolean(att.over_time.is_holiday);
+            } else {
+                isHoliday.value = false;
             }
             notes.value = attendance[0].notes ?? "";
         } else {
@@ -360,6 +674,8 @@ watch(
             overtimeBreakStart.value = null;
             overtimeEndTime.value = null;
             overtimeBreakEnd.value = null;
+            isHoliday.value = false;
+            notes.value = "";
         }
     },
     { immediate: true },
@@ -401,6 +717,41 @@ const buildOvertimePayload = (): DomainOvertime | null => {
     };
 
     return new DomainOvertime(overtimePayload);
+};
+
+const requestDeleteOvertime = () => {
+    if (deletingOvertime.value || !detailAttendance.value?.over_time) {
+        return;
+    }
+    showDeleteOvertimeConfirm.value = true;
+};
+
+const executeDeleteOvertime = async () => {
+    if (deletingOvertime.value) {
+        showDeleteOvertimeConfirm.value = false;
+        return;
+    }
+    const attendance = detailAttendance.value;
+    if (!attendance?.over_time) {
+        showDeleteOvertimeConfirm.value = false;
+        return;
+    }
+
+    showDeleteOvertimeConfirm.value = false;
+    deletingOvertime.value = true;
+    try {
+        await repository.deleteAttendanceOvertime(attendance.uuid);
+        $emit("alert", new ToastUI("Overtime deleted", "success", 2000));
+        resetForm();
+        $emit("close");
+        errorMessages.value = null;
+    } catch (error) {
+        const errors = handleErrors(error);
+        errorMessages.value = errors;
+        $emit("alert", new ToastUI(errors.message, "error", 2000));
+    } finally {
+        deletingOvertime.value = false;
+    }
 };
 
 const submit = async () => {

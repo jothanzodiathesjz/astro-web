@@ -6,6 +6,9 @@
   --slide-v-duration: 200ms;
   --dp-font-family: "Be Vietnam Pro", sans-serif;
   --dp-font-size: 0.875rem;
+  .dp--clear-btn {
+      display: none;
+    }
 
 }
 @import "tailwindcss";

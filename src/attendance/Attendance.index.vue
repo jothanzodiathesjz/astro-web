@@ -38,6 +38,16 @@
             @cancel="tbd = null"
         />
         <AttendanceLogsModal :attendance="log" @close="log = null" />
+        <ImportModal
+        :model-value="showImportPanel"
+        title="Import File"
+        :confirm-text="'Confirm'"
+        :cancel-text="'Cancel'"
+        :allowed-extensions="['.csv', '.xlsx', '.txt']"
+        :loading="isImporting"
+        @cancel="showImportPanel = false"
+        @import="(v) => onVerifyAttendanceImport({ rawFiles: v.files })"
+        />
         <div class="w-full flex flex-row py-3 mt-3">
             <span class="text-lg font-semibold dark:text-gray-200"
                 >Attendance</span
@@ -103,11 +113,18 @@
                         "
                     />
                 </div>
-                <ImportButtonComponent
+                <!-- <ImportButtonComponent
                         :allowed-extensions="['.csv', '.xlsx', '.txt']"
                         :loading="isImporting"
                         @import="onVerifyAttendanceImport"
-                    />
+                    /> -->
+                    <ButtonComponent
+                        class="text-sm"
+                        :variant="'outline'"
+                        :icon-name="'fa-file-export'"
+                        @click="showImportPanel = true"
+                        >Import</ButtonComponent
+                    >
                     <ButtonComponent
                         class="text-sm"
                         :variant="'outline'"
@@ -373,6 +390,9 @@
                             </td>
                             <td
                                 class="table-cell-custom text-gray-700 dark:text-gray-300"
+                                :class="{
+                                    'text-red-500': att.is_early_leave,
+                                }"
                             >
                                 {{ att.actual_check_out || "-" }}
                             </td>
@@ -469,12 +489,13 @@ import AttendanceEditModal from "./AttendanceEdit.modal.vue";
 import AttendanceSummaryModal from "./AttendanceSummary.modal.vue";
 import Toast from "@/core/components/Toast.vue";
 import { ToastUI } from "@/core/ui/Toast.ui";
-import ImportButtonComponent from "@/core/components/button/ImportButton.component.vue";
 import { getStatusClass } from "@/core/utils/StatusClass";
 import AttendanceLogsModal from "./AttendanceLogs.modal.vue";
 import { handleErrors } from "@/core/ui/UIError";
 import ConfirmModal from "@/core/components/modal/Confirm.modal.vue";
 import CheckBox from "@/core/components/CheckBox.vue";
+import ImportModal from "@/core/components/modal/Import.modal.vue";
+import { formatDate } from "@/core/utils/DateConverter";
 type ImportPayload = { rawFiles: File[] };
 
 type SseEnvelope = {
@@ -547,6 +568,7 @@ const log = ref<DomainAttendance | null>(null);
 const isLoading = ref(false);
 const isLoadingMore = ref(false);
 const skeletonCount = 10;
+const showImportPanel = ref(false);
 
 const selectedAttendanceIds = ref<Set<string>>(new Set<string>());
 const multiEditQueue = ref<DomainAttendance[]>([]);
@@ -802,7 +824,7 @@ async function getList() {
             cursor: undefined, // reset saat search/date berubah
             date:
                 date.value instanceof Date
-                    ? date.value.getTime().toString()
+                    ? formatDate(date.value)
                     : undefined,
         });
 
@@ -828,7 +850,7 @@ async function getListWithCursor() {
             cursor: cursor.value,
             date:
                 date.value instanceof Date
-                    ? date.value.getTime().toString()
+                    ? formatDate(date.value)
                     : undefined,
         });
 
@@ -1117,9 +1139,12 @@ async function getAttendanceWithSse() {
             "error",
             3000,
         );
+        isImporting.value = false;
+        activeImportController.value = null;
     } finally {
         isImporting.value = false;
         activeImportController.value = null;
+        showImportPanel.value = false;
     }
 }
 onBeforeUnmount(() => {
