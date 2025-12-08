@@ -355,7 +355,7 @@
                                                 </span>
                                                 <span
                                                     class="text-sm dark:text-gray-300"
-                                                    >MALE</span
+                                                    >Male</span
                                                 >
                                             </label>
 
@@ -386,7 +386,7 @@
                                                 </span>
                                                 <span
                                                     class="text-sm dark:text-gray-300"
-                                                    >FEMALE</span
+                                                    >Female</span
                                                 >
                                             </label>
                                         </div>
@@ -1114,6 +1114,7 @@ import DateInput from "@/core/components/input/Date.input.vue";
 import { container } from "@/container/di";
 import { TOKENS } from "@/container/tokens";
 import Toast from "@/core/components/Toast.vue";
+import { formatFeatureLabel } from "@/core/utils/Text";
 
 const vm = ref(container.get(TOKENS.EmployeeFormViewModel));
 
@@ -1147,17 +1148,29 @@ const selectedDepartment = computed(() =>
 );
 const selectedJobLevels = computed(() =>
     vm.value.employee.employmentDetail.jobLevel
-        ? new DropdownLabel(vm.value.employee.employmentDetail.jobLevel)
+        ? {
+            id: vm.value.employee.employmentDetail.jobLevel,
+            label: formatFeatureLabel(vm.value.employee.employmentDetail.jobLevel),
+            value: vm.value.employee.employmentDetail.jobLevel,
+        } as DropdownLabel<string>
         : null,
 );
 const selectedEmploymentType = computed(() =>
     vm.value.employee.employmentDetail.employmentType
-        ? new DropdownLabel(vm.value.employee.employmentDetail.employmentType)
+        ?{
+            id: vm.value.employee.employmentDetail.employmentType,
+            label: formatFeatureLabel(vm.value.employee.employmentDetail.employmentType),
+            value: vm.value.employee.employmentDetail.employmentType,
+        } as DropdownLabel<string>
         : null,
 );
 const selectedStatus = computed(() =>
     vm.value.employee.employmentDetail.status
-        ? new DropdownLabel(vm.value.employee.employmentDetail.status)
+        ? {
+            id: vm.value.employee.employmentDetail.status,
+            label: formatFeatureLabel(vm.value.employee.employmentDetail.status),
+            value: vm.value.employee.employmentDetail.status,
+        } as DropdownLabel<string>
         : null,
 );
 const selectedMaritalStatus = computed(() =>

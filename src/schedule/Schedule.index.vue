@@ -1,7 +1,11 @@
 <template>
-    <div class="w-full h-full min-h-0 flex flex-col px-14 dark:bg-gray-900">
+    <div
+        class="w-full h-full min-h-0 flex flex-col px-4 pb-6 dark:bg-gray-900 sm:px-6 lg:px-10 2xl:px-14"
+    >
         <div class="flex flex-row py-3 mt-3">
-            <div class="p-3 flex flex-row  bg-white/90 dark:bg-gray-800/90 backdrop-blur rounded-2xl shadow-sm ring-1 ring-gray-200/70 dark:ring-gray-700">
+            <div
+                class="p-3 flex flex-row flex-wrap gap-2 bg-white/90 dark:bg-gray-800/90 backdrop-blur rounded-2xl shadow-sm ring-1 ring-gray-200/70 dark:ring-gray-700"
+            >
                 <router-link
                     v-for="value in routes"
                     :key="value.name"
@@ -30,12 +34,16 @@ import ButtonComponent from "@/core/components/button/Button.component.vue";
 
 const routes = [
     {
+        name: "Scheduler",
+        label: "Scheduler",
+    },
+    {
         name: "Schedule",
         label: "Schedule",
     },
     {
-        name: "Scheduler",
-        label: "Scheduler",
-    },
+        name: "Shift",
+        label: "Shift",
+    }
 ];
 </script>

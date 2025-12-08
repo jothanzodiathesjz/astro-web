@@ -15,7 +15,7 @@
         :teleport="false"
     >
         <!-- Custom input -->
-        <template #dp-input="{ value }">
+        <template #dp-input="{ }">
             <TextInput
                 :value="displayValue"
                 :label="label"

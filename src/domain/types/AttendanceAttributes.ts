@@ -43,3 +43,29 @@ export type LogsType = BaseEntity & {
     new_value: string;
     notes: string;
 };
+
+export type AttendanceSummary = {
+    total_employee: number;
+    present: PresentSummary;
+    absent: AbsentSummary;
+};
+
+export type PresentSummary = {
+    total: number;
+    on_time: number;
+    late: number;
+    early_leave: number;
+    over_time: number;
+    incomplete: IncompleteSummary;
+};
+
+export type IncompleteSummary = {
+    no_check_in: number;
+    no_check_out: number;
+};
+
+export type AbsentSummary = {
+    total: number;
+    time_off: number;
+    day_off: number;
+};

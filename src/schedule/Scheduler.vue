@@ -37,7 +37,7 @@
     >
         <ConfirmModal
             :header="'Are you sure?'"
-            :content-class="'-top-14 w-[35rem]'"
+            :content-class="'-top-14 w-full max-w-2xl'"
             :message="'Jadwal biasanya dibuat otomatis setiap bulan oleh sistem. Apakah Anda ingin membuat jadwal secara manual sekarang?'"
             :visible="vm.showConfirmCreateScheduler"
             :icon="'fa-triangle-exclamation'"
@@ -48,7 +48,9 @@
             @cancel="vm.showConfirmCreateScheduler = false"
         />
         <span class="dark:text-gray-200">Scheduler</span>
-        <div class="w-full flex flex-row justify-between">
+        <div
+            class="w-full flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between"
+        >
             <div
                 class="flex flex-row border border-gray-200 dark:border-gray-700 rounded-lg px-2 py-1"
             >
@@ -65,7 +67,9 @@
                     >Calendar</ButtonComponent
                 >
             </div>
-            <div class="w-full flex flex-row gap-4 justify-end items-center">
+            <div
+                class="w-full flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:justify-end"
+            >
                 <ButtonComponent
                     v-if="vm.selectedEmployees.size > 0"
                     class="text-sm"
@@ -77,7 +81,7 @@
                     }}
                     Schedule</ButtonComponent
                 >
-                <div v-if="section === 'calendar'">
+                <div v-if="section === 'calendar'" class="w-full sm:w-auto">
                     <DateRangeInput
                         :model-value="vm.range"
                         :week-start="1"
@@ -92,7 +96,7 @@
                 <div ref="filterWrapper" class="relative">
                     <div
                         v-if="vm.showFilter"
-                        class="absolute z-40 top-0 right-[9rem] items-start w-60 border border-gray-300 p-2 flex flex-col bg-white rounded"
+                        class="absolute z-40 top-0 right-0 items-start w-60 border border-gray-300 p-2 flex flex-col bg-white rounded md:right-[9rem]"
                     >
                         <div
                             class="flex flex-col w-full"
@@ -145,9 +149,11 @@
                         }})</ButtonComponent
                     >
                 </div>
-                <div class="w-1/5">
+                <div
+                    v-if="section === 'list'"
+                    class="w-full sm:w-64 lg:w-1/5"
+                >
                     <TextInput
-                        v-if="section === 'list'"
                         :icon="{
                             left: {
                                 name: 'fa-search',

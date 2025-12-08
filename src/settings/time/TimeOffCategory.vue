@@ -12,9 +12,16 @@
 <script setup lang="ts">
 import TextDropdownInput from "@/core/components/input/TextDropdown.input.vue";
 import { DropdownLabel } from "@/core/components/models/DropdownLabel";
+import { formatFeatureLabel } from "@/core/utils/Text";
 const options = ["IZIN", "SAKIT", "CUTI", "LIBUR", "TUGAS"];
 
-const dropdownOptions = options.map((item) => new DropdownLabel(item));
+const dropdownOptions = options.map((item) => {
+    return {
+        id: item,
+        label: formatFeatureLabel(item),
+        value: item,
+    } as DropdownLabel<string>;
+});
 defineProps<{
     selected: DropdownLabel<string> | null;
 }>();

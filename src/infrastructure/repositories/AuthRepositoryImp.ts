@@ -10,7 +10,7 @@ export class AuthRepositoryImp implements AuthRepository {
         this.httpRequest = httpRequest;
     }
 
-    login(email: string, password: string): Promise<void> {
+    login(_email: string, _password: string): Promise<void> {
         throw new Error("Method not implemented.");
     }
     logout(): Promise<void> {

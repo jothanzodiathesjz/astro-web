@@ -1,5 +1,6 @@
 import { nanoid } from "nanoid";
-import type { TimeOff } from "../types/TimeOffAttributes";
+import type { EmployeeTimeOff, TimeOff } from "../types/TimeOffAttributes";
+import type { DomainEmployee } from "./Employee";
 
 export class DomainTimeOff {
     uuid: string;
@@ -38,3 +39,38 @@ export class DomainTimeOff {
         });
     }
 }
+
+export class EmployeeTimeOffToData {
+    date: number[];
+    employee_uuid: string;
+    time_off: DomainTimeOff;
+
+    constructor(date: number[], employee_uuid: string, time_off: DomainTimeOff) {
+        this.date = date;
+        this.employee_uuid = employee_uuid;
+        this.time_off = time_off;
+    }
+}
+
+export class DomainEmployeeTimeOff {
+    uuid: string;
+    branch_uuid: string;
+    date: number;
+    time_off_date: string;
+    employee: DomainEmployee;
+    time_off: DomainTimeOff;
+    inserted_by: string;
+    created_at?: number;
+
+    constructor(init: EmployeeTimeOff) {
+        this.uuid = init.uuid;
+        this.branch_uuid = init.branch_uuid;
+        this.date = init.date;
+        this.time_off_date = init.time_off_date;
+        this.employee = init.employee;
+        this.time_off = init.time_off;
+        this.inserted_by = init.inserted_by;
+        this.created_at = init.created_at;
+    }
+}
+

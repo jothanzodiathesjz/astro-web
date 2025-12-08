@@ -2,7 +2,7 @@
     <ModalContent
         :visible="visible"
         :header="'Set Time Off'"
-        :body-class="'w-[40rem] mt-10'"
+        :body-class="'w-full max-w-2xl mt-10'"
         :position="'top'"
         @close="$emit('close')"
     >

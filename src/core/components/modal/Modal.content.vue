@@ -7,7 +7,7 @@
         @close-self="$emit('close')"
     >
         <div
-            class="flex flex-col justify-center min-w-[500px] bg-white dark:bg-gray-800 rounded-lg shadow-lg"
+            class="flex flex-col justify-center w-full bg-white dark:bg-gray-800 rounded-lg shadow-lg"
         >
             <div
                 class="flex py-3 px-5 w-full justify-between border-b border-neutral-200 dark:border-gray-700"

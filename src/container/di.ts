@@ -17,6 +17,8 @@ import { ScheduleRepositoryImp } from "@/infrastructure/repositories/ScheduleRep
 import { ScheduleFormViewModel } from "@/schedule/ScheduleForm.vm";
 import { AttendanceRepositoryImp } from "@/infrastructure/repositories/AttendanceRepositoryImp";
 import { SchedulerViewModel } from "@/schedule/Scheduler.vm";
+import { AttendanceViewModel } from "@/attendance/Attendance.vm";
+import { ShiftFormViewModel } from "@/shift/ShiftForm.vm";
 
 export const container = new Container();
 
@@ -83,4 +85,12 @@ container
 container
     .bind(TOKENS.SchedulerViewModel)
     .toInstance(SchedulerViewModel)
+    .inTransientScope();
+container
+    .bind(TOKENS.AttendanceViewModel)
+    .toInstance(AttendanceViewModel)
+    .inTransientScope();
+container
+    .bind(TOKENS.ShiftFormViewModel)
+    .toInstance(ShiftFormViewModel)
     .inTransientScope();

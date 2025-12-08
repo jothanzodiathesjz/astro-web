@@ -172,67 +172,114 @@
                             "
                         />
                     </div>
-                    <div class="flex flex-col gap-2">
-                        <div class="flex flex-row items-center gap-4">
-                            <span class="text-sm dark:text-gray-400"
-                                >Select Access Feature</span
-                            >
-                        </div>
-                        <div class="grid grid-cols-6 gap-3">
-                            <div
-                                class="flex flex-row gap-3 items-center"
-                                @click="vm.toggleSelectAll(isAllSelected)"
-                            >
+                    <div class="flex flex-col gap-3">
+                        <div
+                            class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between"
+                        >
+                            <div class="flex flex-col gap-1">
+                                <span class="text-sm font-semibold dark:text-gray-200"
+                                    >Select Access Feature</span
+                                >
+                                <span class="text-xs text-gray-500 dark:text-gray-400"
+                                    >Pick which modules this user can access.</span
+                                >
+                            </div>
+                            <div class="flex flex-wrap items-center gap-3">
+                                <span class="text-xs text-gray-500 dark:text-gray-400"
+                                    >{{ selectedFeatureCount }} /
+                                    {{ vm.accessFeatureOptions.length }} selected</span
+                                >
                                 <button
-                                    class="flex flex-row gap-2 items-center rounded font-semibold"
+                                    type="button"
+                                    class="inline-flex flex-row items-center gap-2 rounded-full border px-3 py-1 text-xs font-semibold transition-all"
+                                    :class="[
+                                        isAllSelected
+                                            ? 'border-blue-500 text-blue-600 dark:text-blue-400'
+                                            : 'border-gray-200 text-gray-600 dark:border-gray-600 dark:text-gray-300',
+                                    ]"
+                                    @click="vm.toggleSelectAll(isAllSelected)"
                                 >
                                     <FontAwesomeIcon
-                                        v-if="isAllSelected"
-                                        class="text-xl text-blue-500"
-                                        icon="fa-regular fa-circle-check"
+                                        :icon="
+                                            isAllSelected
+                                                ? 'fa-solid fa-check-double'
+                                                : 'fa-regular fa-circle'
+                                        "
                                     />
-                                    <font-awesome-icon
-                                        v-else
-                                        class="text-xl text-gray-500"
-                                        icon="fa-regular fa-circle"
-                                    />
+                                    {{ isAllSelected ? "Clear All" : "Select All" }}
                                 </button>
-                                <span class="text-xs">ALL</span>
+                            </div>
+                        </div>
+                        <div class="flex flex-col gap-2">
+                            <div class="flex w-full flex-row items-center gap-2 sm:w-80">
+                                <!-- <TextInput
+                                    class="flex-1"
+                                    :value="accessFeatureSearch"
+                                    :placeholder="'Search feature...'"
+                                    :debounce="200"
+                                    :icon="{
+                                        left: { name: 'fa-search' },
+                                    }"
+                                    @input="(value) => (accessFeatureSearch = value)"
+                                /> -->
+                                <IconButton
+                                    v-if="accessFeatureSearch"
+                                    class="border border-gray-200 rounded-full bg-white dark:bg-gray-800 dark:border-gray-700"
+                                    :icon-name="'fa-circle-xmark'"
+                                    :icon-type="'fa-solid'"
+                                    :icon-color="'text-gray-400 dark:text-gray-500'"
+                                    size="sm"
+                                    @click="accessFeatureSearch = ''"
+                                    :title="'Clear search'"
+                                />
                             </div>
                             <div
-                                v-for="option in vm.accessFeatureOptions"
-                                :key="option"
-                                class="flex flex-row gap-3 items-center"
-                                @click="
-                                    vm.selectedAccessFeature.has(option)
-                                        ? vm.selectedAccessFeature.delete(
-                                              option,
-                                          )
-                                        : vm.selectedAccessFeature.add(option)
-                                "
+                                v-if="filteredAccessFeatures.length > 0"
+                                class="grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-3"
                             >
                                 <button
-                                    class="flex flex-row gap-2 items-center rounded font-semibold"
-                                    :class="
-                                        vm.selectedAccessFeature.has(option)
-                                            ? ''
-                                            : ''
-                                    "
+                                    v-for="option in filteredAccessFeatures"
+                                    :key="option"
+                                    type="button"
+                                    class="flex w-full flex-row items-center justify-between rounded-2xl border px-4 py-3 text-left transition-all duration-200"
+                                    :class="[
+                                        isFeatureSelected(option)
+                                            ? 'border-blue-500 bg-blue-50 text-blue-900 dark:border-blue-400 dark:bg-blue-900/30 dark:text-blue-100'
+                                            : 'border-gray-200 bg-white hover:border-blue-400 dark:border-gray-700 dark:bg-gray-800 dark:hover:border-blue-400',
+                                    ]"
+                                    @click="toggleFeature(option)"
                                 >
+                                    <div class="flex flex-col">
+                                        <span class="text-sm font-semibold">{{
+                                            formatFeatureLabel(option)
+                                        }}</span>
+                                        <span
+                                            class="text-xs text-gray-500 dark:text-gray-400"
+                                            >{{ featureDescriptions[option] ?? "Module access" }}</span
+                                        >
+                                    </div>
                                     <FontAwesomeIcon
-                                        v-if="
-                                            vm.selectedAccessFeature.has(option)
+                                        :icon="
+                                            isFeatureSelected(option)
+                                                ? 'fa-solid fa-circle-check'
+                                                : 'fa-regular fa-circle'
                                         "
-                                        class="text-xl text-blue-500"
-                                        icon="fa-regular fa-circle-check"
-                                    />
-                                    <font-awesome-icon
-                                        v-else
-                                        class="text-xl text-gray-500"
-                                        icon="fa-regular fa-circle"
+                                        :class="[
+                                            isFeatureSelected(option)
+                                                ? 'text-blue-500'
+                                                : 'text-gray-400 dark:text-gray-500',
+                                            'text-xl',
+                                        ]"
                                     />
                                 </button>
-                                <span class="text-xs">{{ option }}</span>
+                            </div>
+                            <div
+                                v-else
+                                class="rounded-xl border border-dashed border-gray-200 px-6 py-5 text-center text-sm text-gray-500 dark:border-gray-700 dark:text-gray-400"
+                            >
+                                No feature found for "
+                                <span class="font-semibold">{{ accessFeatureSearch }}</span
+                                >".
                             </div>
                         </div>
                         <span
@@ -276,6 +323,58 @@ const isAllSelected = computed(() => {
         vm.value.accessFeatureOptions.length
     );
 });
+
+const selectedFeatureCount = computed(
+    () => vm.value.selectedAccessFeature.size,
+);
+
+const accessFeatureSearch = ref("");
+
+const filteredAccessFeatures = computed(() => {
+    const keyword = accessFeatureSearch.value.trim().toLowerCase();
+    if (!keyword) {
+        return vm.value.accessFeatureOptions;
+    }
+
+    return vm.value.accessFeatureOptions.filter((option) =>
+        option.toLowerCase().includes(keyword),
+    );
+});
+
+const featureDescriptions: Record<string, string> = {
+    DASHBOARD: "Home overview & key stats",
+    USER: "Manage platform users & roles",
+    EMPLOYEE: "Maintain employee records",
+    ATTENDANCE: "Review and adjust attendance",
+    SCHEDULE: "Create and assign schedules",
+    SHIFT: "Configure and update shifts",
+    PAYROLL: "Access payroll & compensation",
+    LEAVE: "Approve or track leave",
+    REPORT: "View downloadable reports",
+    SETTING: "Manage application settings",
+    LOGOUT: "Force logout & session control",
+};
+
+function formatFeatureLabel(option: string) {
+    return option
+        .toLowerCase()
+        .replace(/_/g, " ")
+        .replace(/\b\w/g, (char) => char.toUpperCase());
+}
+
+function isFeatureSelected(option: string) {
+    return vm.value.selectedAccessFeature.has(option);
+}
+
+function toggleFeature(option: string) {
+    const nextSelection = new Set(vm.value.selectedAccessFeature);
+    if (nextSelection.has(option)) {
+        nextSelection.delete(option);
+    } else {
+        nextSelection.add(option);
+    }
+    vm.value.selectedAccessFeature = nextSelection;
+}
 
 onMounted(() => {
     if (route.params.uuid) {

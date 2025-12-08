@@ -15,6 +15,8 @@ import type { ShiftRepository } from "@/domain/repositories/ShiftRepository";
 import type { ScheduleRepository } from "@/domain/repositories/ScheduleRepository";
 import type { ScheduleFormViewModel } from "@/schedule/ScheduleForm.vm";
 import type { SchedulerViewModel } from "@/schedule/Scheduler.vm";
+import type { AttendanceViewModel } from "@/attendance/Attendance.vm";
+import type { ShiftFormViewModel } from "@/shift/ShiftForm.vm";
 export const TOKENS = {
     // Services
     httpRequest: token<HttpRequest>("httpRequest"),
@@ -40,4 +42,6 @@ export const TOKENS = {
         "SCHEDULE_FORM_VIEW_MODEL",
     ),
     SchedulerViewModel: token<SchedulerViewModel>("SCHEDULER_VIEW_MODEL"),
+    AttendanceViewModel: token<AttendanceViewModel>("ATTENDANCE_VIEW_MODEL"),
+    ShiftFormViewModel: token<ShiftFormViewModel>("SHIFT_FORM_VIEW_MODEL"),
 };

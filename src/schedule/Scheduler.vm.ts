@@ -176,7 +176,7 @@ export class SchedulerViewModel {
                     effective_date: d,
                     employee_uuid:
                         this.tbs?.employee_uuid.map((emp) => emp.uuid) ?? [],
-                    schedule_uuid: s.uuid,
+                    schedule: s,
                 },
                 this.tbs.has_schedule,
             );

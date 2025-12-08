@@ -58,6 +58,7 @@
                             ? 'bottom-full mb-2'
                             : 'top-full mt-2'
                     "
+                    @scroll.passive="handleScroll"
                 >
                     <li
                         v-for="option in filteredOptions"
@@ -136,7 +137,7 @@ const $emit = defineEmits<{
     (e: "add", value: string): void;
     (e: "remove", value: string): void;
     (e: "input", value: string): void;
-    (e: "clear"): void;
+    (e: "paginate"): void;
 }>();
 
 const searchQuery = ref("");
@@ -194,6 +195,18 @@ const determineDropdownDirection = () => {
         const spaceAbove = inputRect.top;
 
         dropdownDirection.value = spaceBelow > spaceAbove ? "down" : "up";
+    }
+};
+
+const handleScroll = (event: Event) => {
+    const target = event.target as HTMLElement | null;
+    if (!target) return;
+    const threshold = 16;
+    const isNearBottom =
+        target.scrollTop + target.clientHeight >=
+        target.scrollHeight - threshold;
+    if (isNearBottom) {
+        $emit("paginate");
     }
 };
 

@@ -8,6 +8,7 @@ import type { Department } from "@/domain/types/EmployeeAttributes";
 import { handleErrors, UIError } from "@/core/ui/UIError";
 import { useRoute, useRouter } from "vue-router";
 import { ToastUI } from "@/core/ui/Toast.ui";
+import { formatFeatureLabel } from "@/core/utils/Text";
 
 export class EmployeeFormViewModel {
     repository: EmployeeRepository;
@@ -50,16 +51,34 @@ export class EmployeeFormViewModel {
     );
     departMentOptions: DropdownLabel<Department>[] = [];
     jobLevelOptions = ["DIREKSI", "STAFF", "HARIAN", "MANAJER"].map(
-        (jobLevel) => new DropdownLabel<string>(jobLevel),
+        (jobLevel) => {
+            return {
+                id: jobLevel,
+                label: formatFeatureLabel(jobLevel),
+                value: jobLevel
+            } as DropdownLabel<string>
+        },
     );
     jobTitleOptions = ["IT", "HR", "Sales", "Marketing", "Finance"].map(
         (jobTitle) => new DropdownLabel<string>(jobTitle),
     );
     employmentTypeOptions = ["PERMANENT", "CONTRACT", "HARLES"].map(
-        (employmentType) => new DropdownLabel<string>(employmentType),
+        (employmentType) => {
+            return {
+                id: employmentType,
+                label: formatFeatureLabel(employmentType),
+                value: employmentType
+            } as DropdownLabel<string>
+        },
     );
     statusOptions = ["ACTIVE", "RESIGNED", "TERMINATED", "CONTRACT END"].map(
-        (status) => new DropdownLabel<string>(status),
+        (status) => {
+            return {
+                id: status,
+                label: formatFeatureLabel(status),
+                value: status
+            } as DropdownLabel<string>
+        },
     );
     relationOptions = [
         "Ibu",

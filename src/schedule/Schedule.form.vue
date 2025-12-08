@@ -1,6 +1,6 @@
 <template>
     <div
-        class="w-full h-full flex flex-col items-center px-14 dark:bg-gray-900 pb-6"
+        class="w-full h-full flex flex-col items-center px-4 dark:bg-gray-900 pb-6 sm:px-6 lg:px-10 2xl:px-14"
     >
         <Toast
             :duration="vm.alerts?.duration"
@@ -14,14 +14,16 @@
             :efective-date="vm.effectiveDate"
             @close="vm.previewVisible = false"
         />
-        <div class="w-[80%] flex flex-row items-center py-3 mt-3 gap-4">
+        <div
+            class="w-full max-w-5xl flex flex-col gap-4 items-start py-3 mt-3 md:flex-row md:items-center"
+        >
             <ButtonComponent
                 @click="$router.back()"
                 :variant="'outline'"
                 :icon-name="'fa-angle-left'"
                 >Back</ButtonComponent
             >
-            <div class="w-full flex flex-row gap-3 items-center">
+            <div class="w-full flex flex-row flex-wrap gap-3 items-center">
                 <span
                     @click="$router.back()"
                     class="font-semibold text-blue-600 dark:text-gray-200 cursor-pointer"
@@ -45,10 +47,10 @@
             >
         </div> -->
         <div
-            class="w-[80%] flex flex-col mt-5 px-8 py-3 gap-5 bg-white/90 dark:bg-gray-800/90 backdrop-blur rounded-2xl shadow-sm ring-1 ring-gray-200/70 dark:ring-gray-700"
+            class="w-full max-w-5xl flex flex-col mt-5 px-4 py-4 gap-5 bg-white/90 dark:bg-gray-800/90 backdrop-blur rounded-2xl shadow-sm ring-1 ring-gray-200/70 dark:ring-gray-700 sm:px-6"
         >
             <span class="font-semibold dark:text-gray-200">Add Schedule</span>
-            <div class="w-full flex flex-row gap-4">
+            <div class="w-full flex flex-col gap-4 md:flex-row">
                 <TextInput
                     :value="vm.data.name"
                     :placeholder="'Name'"
@@ -80,7 +82,7 @@
                     @clear="() => (vm.effectiveDate = undefined)"
                 />
             </div>
-            <div class="w-full flex flex-row gap-4">
+            <div class="w-full flex flex-col gap-4 md:flex-row">
                 <TextInput
                     :value="vm.data.description"
                     :placeholder="'Description'"
@@ -95,7 +97,9 @@
                     "
                 />
             </div>
-            <div class="w-full flex flex-row justify-between items-center">
+            <div
+                class="w-full flex flex-col gap-3 md:flex-row md:items-center md:justify-between"
+            >
                 <span class="font-semibold dark:text-gray-200"
                     >Set Shift Pattern</span
                 >
@@ -227,12 +231,11 @@
             </div>
             <div class="w-full flex flex-row justify-end">
                 <ButtonComponent
-                    v-if="!vm.isUpdate"
                     :disabled="vm.submiting"
                     :loading="vm.submiting"
                     @click="vm.save()"
                 >
-                    Save
+                    {{ vm.isUpdate ? "Update" : "Save" }}
                 </ButtonComponent>
             </div>
         </div>

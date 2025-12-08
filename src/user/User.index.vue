@@ -110,7 +110,7 @@
                         <td
                             class="table-cell-custom text-gray-700 dark:text-gray-300"
                         >
-                            {{ emp.role.name }}
+                            {{ formatFeatureLabel(emp.role.name) }}
                         </td>
                         <td class="table-cell-custom">
                             <div class="flex flex-row gap-2">
@@ -149,6 +149,7 @@ import { TOKENS } from "@/container/tokens";
 import { onMounted, ref } from "vue";
 import { DomainUser } from "@/domain/models/User";
 import ConfirmModal from "@/core/components/modal/Confirm.modal.vue";
+import { formatFeatureLabel } from "@/core/utils/Text";
 
 const repository = container.get(TOKENS.UserRepository);
 const userList = ref<DomainUser[]>([]);

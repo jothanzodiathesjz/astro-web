@@ -6,7 +6,7 @@
             :content-class="contentClass ? contentClass : '-top-14'"
             :position="'center'"
         >
-            <div class="flex flex-col justify-center min-w-[500px]">
+            <div class="flex flex-col justify-center w-full">
                 <div
                     class="flex py-3 px-5 w-full border-b border-gray-200 dark:border-gray-700"
                 >

@@ -1,4 +1,5 @@
 import type { DomainEmployeeSummary } from "../models/Employee";
+import type { DomainSchedule } from "../models/Schedule";
 import type { DomainShift } from "../models/Shift";
 import type { BaseEntity } from "../shared/Base";
 import type { DailyAttendance } from "./AttendanceAttributes";
@@ -20,7 +21,7 @@ export type DaySchedules = {
 };
 
 export type Scheduler = {
-    schedule_uuid: string;
+    schedule: DomainSchedule;
     employee_uuid: string[];
     effective_date: number;
 };

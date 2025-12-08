@@ -120,7 +120,7 @@
             <div class="w-full flex flex-row justify-end">
                 <ButtonComponent
                     :variant="'primary'"
-                    class="w-1/4"
+                    class="w-full sm:w-auto md:w-1/4"
                     :disabled="isSubmitting"
                     :loading="isSubmitting"
                     @click="submitCompanyForm()"

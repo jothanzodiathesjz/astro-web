@@ -69,22 +69,49 @@
                     "
                 />
             </div>
-            <div class="w-full pr-2 flex flex-row gap-4">
-                <TimeOffCategory
-                :selected="data.category ? new DropdownLabel(data.category) : null"
-                @update="(e) => data.category = e.value"
-                />
-                <NumberInput
-                :model-value="data.tolerance_minutes"
-                :placeholder="'Tolerance'"
-                :label="'Tolerance'"
-                @update:model-value="
-                    (value) => {
-                        data.tolerance_minutes = value;
-                    }
-                "
-                />
+            <div
+                class="w-full pr-2 flex flex-col gap-4 md:flex-row md:flex-wrap md:items-start"
+            >
+                <div class="w-full md:flex-1 min-w-[220px]">
+                    <TimeOffCategory
+                        :selected="
+                            data.category ? {
+                                value: data.category,
+                                label: formatFeatureLabel(data.category),
+                                id: data.category
+                            } as DropdownLabel<string> : null
+                        "
+                        @update="(e) => (data.category = e.value)"
+                    />
+                </div>
+                <div class="w-full md:flex-1 min-w-[220px]">
+                    <TextDropdownInput
+                        label="Duration Type"
+                        placeholder="Pilih duration"
+                        :options="durationOptions"
+                        :selected="durationSelected"
+                        :dontfilter="true"
+                        @update="
+                            (option) => {
+                                data.duration_type = option.value;
+                            }
+                        "
+                    />
+                </div>
+                
             </div>
+            <div class="grid grid-cols-2 gap-4">
+                    <NumberInput
+                        :model-value="data.tolerance_minutes"
+                        :placeholder="'Tolerance'"
+                        :label="'Tolerance (Minutes)'"
+                        @update:model-value="
+                            (value) => {
+                                data.tolerance_minutes = value;
+                            }
+                        "
+                    />
+                </div>
             <div class="w-full pr-2 flex flex-col gap-4">
                 <div class="flex flex-col gap-3">
                     <span class="text-sm">Paid</span>
@@ -105,7 +132,7 @@
                 <ButtonComponent
                     v-if="!isUpdate"
                     :variant="'primary'"
-                    class="w-1/4"
+                    class="w-full sm:w-auto md:w-1/4"
                     @click="submitForm"
                     >Save</ButtonComponent
                 >
@@ -120,7 +147,7 @@ import Toast from "@/core/components/Toast.vue";
 import { ToastUI } from "@/core/ui/Toast.ui";
 import { container } from "@/container/di";
 import { TOKENS } from "@/container/tokens";
-import { onMounted, reactive, ref } from "vue";
+import { computed, onMounted, reactive, ref } from "vue";
 import { DomainTimeOff } from "@/domain/models/TimeOff";
 import { handleErrors, UIError } from "@/core/ui/UIError";
 import IconButton from "@/core/components/button/Icon.button.vue";
@@ -129,6 +156,8 @@ import TimeOffCategory from "./TimeOffCategory.vue";
 import { DropdownLabel } from "@/core/components/models/DropdownLabel";
 import NumberInput from "@/core/components/input/Number.input.vue";
 import SwitchComponent from "@/core/components/button/Switch.component.vue";
+import TextDropdownInput from "@/core/components/input/TextDropdown.input.vue";
+import { formatFeatureLabel } from "@/core/utils/Text";
 
 const route = useRoute();
 
@@ -138,6 +167,26 @@ const alerts = ref<ToastUI | null>(null);
 const errors = ref<UIError | null>(null);
 const submiting = ref(false);
 const isUpdate = ref(false);
+
+const durationOptions = ["FULLDAY", "HALFDAY", "COSTUMTIME"].map(
+    (item) => {
+        return {
+            id: item,
+            label: formatFeatureLabel(item),
+            value: item,
+        } as DropdownLabel<string>;
+    },
+);
+
+const durationSelected = computed(() =>
+    data.value.duration_type
+        ? {
+            id: data.value.duration_type,
+            label: formatFeatureLabel(data.value.duration_type),
+            value: data.value.duration_type,
+        } as DropdownLabel<string>
+        : null,
+);
 
 type FormErrorField = "name" | "code" | "description";
 const formErrors = reactive<Record<FormErrorField, string[]>>({

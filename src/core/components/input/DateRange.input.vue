@@ -14,7 +14,7 @@
         @update:model-value="onDpUpdate"
     >
         <!-- ========== Custom Input (label + prev/next) ========== -->
-        <template #dp-input="{ value }">
+        <template #dp-input="{}">
             <div
                 class="flex items-center w-full px-2 py-2 border rounded-lg text-sm border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 focus-within:border-blue-400 dark:focus-within:border-blue-500"
             >

@@ -6,7 +6,7 @@
         :position="modalPosition"
         @close-self="handleCancel"
     >
-        <div class="flex flex-col min-w-[460px]">
+        <div class="flex flex-col w-full">
             <header
                 class="flex items-start justify-between gap-4 border-b border-gray-200 dark:border-gray-700 p-5"
             >

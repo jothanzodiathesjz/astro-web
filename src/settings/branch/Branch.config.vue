@@ -49,7 +49,7 @@ div
             <div class="w-full flex flex-row justify-end">
                 <ButtonComponent
                     :variant="'primary'"
-                    class="w-1/4"
+                    class="w-full sm:w-auto md:w-1/4"
                     :disabled="submiting"
                     :loading="submiting"
                     @click="createBranch()"
@@ -70,11 +70,8 @@ import { ToastUI } from "@/core/ui/Toast.ui";
 import { useRoute } from "vue-router";
 import Toast from "@/core/components/Toast.vue";
 import IconButton from "@/core/components/button/Icon.button.vue";
-import SwitchComponent from "@/core/components/button/Switch.component.vue";
 import { DomainBranch } from "@/domain/models/Branch";
 import { PhoneUI } from "@/core/ui/Phone.ui";
-import PhoneInput from "@/core/components/input/Phone.input.vue";
-import NumberInput from "@/core/components/input/Number.input.vue";
 import { validateBranchForm } from "./BranchForm.validate";
 
 // const router = useRouter();

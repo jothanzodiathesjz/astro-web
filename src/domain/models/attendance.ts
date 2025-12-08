@@ -2,6 +2,7 @@
 import type {
     Attendance,
     AttendanceLogs,
+    AttendanceSummary,
     DailyAttendance,
     LogsType,
 } from "../types/AttendanceAttributes";
@@ -77,3 +78,65 @@ export class DomainAttendanceLogs {
         this.updated_at = init.updated_at;
     }
 }
+
+export class DomainAttendanceSummary {
+    constructor(
+        public totalEmployee: number,
+        public present: DomainPresentSummary,
+        public absent: DomainAbsentSummary
+    ) {}
+
+    static empty() {
+        return new DomainAttendanceSummary(0, new DomainPresentSummary(0, 0, 0, 0, 0, new DomainIncompleteSummary(0, 0)), new DomainAbsentSummary(0, 0, 0));
+    }
+}
+
+export class DomainPresentSummary {
+    constructor(
+        public total: number,
+        public onTime: number,
+        public late: number,
+        public earlyLeave: number,
+        public overTime: number,
+        public incomplete: DomainIncompleteSummary
+    ) {}
+}
+
+export class DomainIncompleteSummary {
+    constructor(
+        public noCheckIn: number,
+        public noCheckOut: number
+    ) {}
+}
+
+export class DomainAbsentSummary {
+    constructor(
+        public total: number,
+        public timeOff: number,
+        public dayOff: number
+    ) {}
+}
+
+export const mapAttendanceSummaryToDomain = (
+    data: AttendanceSummary
+): DomainAttendanceSummary => {
+    return new DomainAttendanceSummary(
+        data.total_employee,
+        new DomainPresentSummary(
+            data.present.total,
+            data.present.on_time,
+            data.present.late,
+            data.present.early_leave,
+            data.present.over_time,
+            new DomainIncompleteSummary(
+                data.present.incomplete.no_check_in,
+                data.present.incomplete.no_check_out
+            )
+        ),
+        new DomainAbsentSummary(
+            data.absent.total,
+            data.absent.time_off,
+            data.absent.day_off
+        )
+    );
+};

@@ -33,9 +33,9 @@ export class UserFormViewModel {
     alerts: ToastUI | null = null;
 
     date: Date | Date[] = new Date();
-    roles: string[] = ["ADMIN", "MANAGER", "EMPLOYEE"];
+    roles: string[] = ["SUPER_ADMIN", "ADMIN", "EMPLOYEE"];
     roleOptions: DropdownLabel<string>[] = this.roles.map((role) => ({
-        label: role,
+        label: this.toCapitalize(role),
         value: role,
         id: role,
     }));
@@ -64,6 +64,14 @@ export class UserFormViewModel {
     selectedAccessFeature = new Set<string>();
 
     selectedGender: Gender = "M";
+
+    toCapitalize(value: string) {
+        return value
+            .toLowerCase()
+            .split("_")
+            .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+            .join(" ");
+    }
 
     validateForm(): UserFormValidationError {
         const errors: UserFormValidationError = {};

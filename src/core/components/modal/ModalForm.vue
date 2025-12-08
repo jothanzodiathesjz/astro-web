@@ -54,7 +54,7 @@ const $emit = defineEmits<{
 
 watch(
     () => $props.visible,
-    (newVal, oldVal) => {
+    (newVal, _oldVal) => {
         if (newVal === false) {
             contentVisible.value = newVal;
             setTimeout(() => {

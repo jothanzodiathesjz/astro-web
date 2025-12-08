@@ -3,8 +3,10 @@ import type { IQueryMetadata } from "@/http-client/query-metadata";
 import type {
     DomainAttendance,
     DomainAttendanceLogs,
+    DomainAttendanceSummary,
 } from "../models/Attendance";
 import type { DomainOvertime } from "../models/Overtime";
+import type { DomainEmployeeSummary } from "../models/Employee";
 
 export interface AttendanceRepository {
     getAttendanceList(
@@ -22,4 +24,6 @@ export interface AttendanceRepository {
         overtime: DomainOvertime,
     ): Promise<void>;
     deleteAttendanceOvertime(uuid: string): Promise<void>;
+    getTotals(query?: IQueryMetadata): Promise<DomainAttendanceSummary>;
+    getEmployeeSummary(query?: IQueryMetadata): Promise<[DomainEmployeeSummary[], string | undefined]>;
 }

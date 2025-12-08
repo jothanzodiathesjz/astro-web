@@ -29,7 +29,7 @@
                     month-picker
                     @update:model-value="handleMonthChange"
                 >
-                    <template #dp-input="{ value }">
+                    <template #dp-input="{}">
                         <div
                             class="px-4 py-2 rounded-lg bg-white border border-gray-200 shadow-sm text-gray-800 font-semibold"
                         >

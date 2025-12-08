@@ -218,7 +218,7 @@ const navItems = [
         label: "Schedule",
         icon: "fa-solid fa-table",
     },
-    { name: "Shift", label: "Shift", icon: "fa-solid fa-clock" },
+    { name: "EmployeeTimeOff", label: "Time Off", icon: "fa-solid fa-clock" },
     { name: "Calendar", label: "Calendar", icon: "fa-solid fa-calendar-check" },
     { name: "Employee", label: "Employee", icon: "fa-solid fa-building-user" },
     { name: "Settings", label: "Settings", icon: "fa-solid fa-gear" },

@@ -214,6 +214,7 @@ export class ScheduleFormViewModel {
 
     initialize() {
         const uuid = this.route.params.uuid as string | undefined;
+        console.log(uuid);
         if (uuid) {
             this.isUpdate = true;
             this.getSchedule();

@@ -1,5 +1,5 @@
 import type { IQueryMetadata } from "@/http-client/query-metadata";
-import type { DomainTimeOff } from "../models/TimeOff";
+import type { DomainEmployeeTimeOff, DomainTimeOff, EmployeeTimeOffToData } from "../models/TimeOff";
 
 export type TimeOffRepository = {
     getList(query?: IQueryMetadata): Promise<DomainTimeOff[]>;
@@ -7,4 +7,6 @@ export type TimeOffRepository = {
     update(timeOff: DomainTimeOff): Promise<DomainTimeOff>;
     delete(uuid: string): Promise<void>;
     get(uuid: string): Promise<DomainTimeOff>;
+    createEmployeeTimeOff(data: EmployeeTimeOffToData): Promise<void>;
+    getTimeOffRequestList(query?: IQueryMetadata): Promise<[DomainEmployeeTimeOff[], string | undefined]>;
 };

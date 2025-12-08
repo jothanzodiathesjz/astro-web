@@ -11,8 +11,10 @@
             @cancel="tbd = null"
         />
         <span class="dark:text-gray-200">Schedule</span>
-        <div class="w-full flex flex-row">
-            <div class="w-1/5">
+        <div
+            class="w-full flex flex-col gap-3 md:flex-row md:items-center"
+        >
+            <div class="w-full md:w-1/3 lg:w-1/4">
                 <TextInput
                     :value="search"
                     :placeholder="'Search schedule'"
@@ -20,7 +22,9 @@
                     @input="(v) => [(search = v), getList()]"
                 />
             </div>
-            <div class="w-full flex flex-row gap-4 justify-end">
+            <div
+                class="w-full flex flex-wrap gap-3 justify-start md:justify-end"
+            >
                 <ButtonComponent
                     class="text-sm"
                     :variant="'outline'"

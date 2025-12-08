@@ -124,23 +124,23 @@ const helper = computed((): Helper | undefined => {
     return undefined;
 });
 
-const increment = () => {
-    if (!isReadonly.value) {
-        const newValue = props.modelValue + 1;
-        if (props.max === undefined || newValue <= props.max) {
-            emit("update:modelValue", newValue);
-        }
-    }
-};
+// const increment = () => {
+//     if (!isReadonly.value) {
+//         const newValue = props.modelValue + 1;
+//         if (props.max === undefined || newValue <= props.max) {
+//             emit("update:modelValue", newValue);
+//         }
+//     }
+// };
 
-const decrement = () => {
-    if (!isReadonly.value) {
-        const newValue = props.modelValue - 1;
-        if (props.min === undefined || newValue >= props.min) {
-            emit("update:modelValue", newValue);
-        }
-    }
-};
+// const decrement = () => {
+//     if (!isReadonly.value) {
+//         const newValue = props.modelValue - 1;
+//         if (props.min === undefined || newValue >= props.min) {
+//             emit("update:modelValue", newValue);
+//         }
+//     }
+// };
 </script>
 
 <style scoped>

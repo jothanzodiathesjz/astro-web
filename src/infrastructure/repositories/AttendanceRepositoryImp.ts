@@ -2,15 +2,20 @@ import type { HttpRequest } from "@/http-client/httpRequest";
 import { TOKENS } from "@/container/tokens";
 import {
     DomainAttendance,
+    DomainAttendanceSummary,
+    mapAttendanceSummaryToDomain,
     type DomainAttendanceLogs,
 } from "@/domain/models/Attendance";
 import type { AttendanceRepository } from "@/domain/repositories/AttendanceRepository";
 import type { IQueryMetadata } from "@/http-client/query-metadata";
 import { injected } from "brandi";
 import { useAuthStore } from "@/auth/store/Auth.store";
-import type { Attendance } from "@/domain/types/AttendanceAttributes";
+import type { Attendance, AttendanceSummary } from "@/domain/types/AttendanceAttributes";
 import { AttendanceOvertimeDto } from "../dtos/Attendance.dto";
 import type { DomainOvertime } from "@/domain/models/Overtime";
+import { fetchSse } from "@/http-client/sseFetch";
+import { formatDate } from "@/core/utils/DateConverter";
+import { DomainEmployeeSummary } from "@/domain/models/Employee";
 
 export class AttendanceRepositoryImp implements AttendanceRepository {
     http: HttpRequest;
@@ -81,18 +86,12 @@ export class AttendanceRepositoryImp implements AttendanceRepository {
         return response;
     }
 
-    async getAttendanceSse(): Promise<Response> {
-        const response = await fetch(
-            `${import.meta.env.VITE_API_URL}/attendances/verify-attendance/stream`,
-            {
-                headers: {
-                    Authorization: `Bearer ${useAuthStore().token}`,
-                    "Content-Type": "text/event-stream",
-                    'ngrok-skip-browser-warning': 'true',
-                },
-                referrerPolicy: "no-referrer",
-            }
-        )
+    async getAttendanceSse(signal?: AbortSignal): Promise<Response> {
+        const url = new URL(
+            "/attendances/verify-attendance/stream",
+            import.meta.env.VITE_API_URL,
+        ).toString();
+        const response = await fetchSse(url, { signal });
 
         if (!response.ok) {
             throw new Error(`Verify attendance gagal (status ${response.status})`);
@@ -109,7 +108,7 @@ export class AttendanceRepositoryImp implements AttendanceRepository {
         await this.http.PUT<void, AttendanceOvertimeDto>(
             `/attendances/over-time`,
             new AttendanceOvertimeDto({
-                date,
+                date: formatDate(new Date(date)),
                 employee_uuid: uuid,
                 over_time: overtime
             }),
@@ -118,6 +117,25 @@ export class AttendanceRepositoryImp implements AttendanceRepository {
 
     async deleteAttendanceOvertime(uuid: string): Promise<void> {
         await this.http.DELETE(`/attendances/${uuid}/over-time`);
+    }
+
+    async getTotals(query?: IQueryMetadata): Promise<DomainAttendanceSummary> {
+        const response = await this.http.GET<AttendanceSummary
+        >(
+            `/summary/attendance`, {
+            ...query,
+        },
+        );
+        return mapAttendanceSummaryToDomain(response.data);
+    }
+
+    async getEmployeeSummary(query?: IQueryMetadata): Promise<[DomainEmployeeSummary[], string | undefined]> {
+        const response = await this.http.GET<any[]>(
+            `/summary/daily-attendance/employees`, {
+            ...query,
+        },
+        );
+        return [response.data.map((u) => new DomainEmployeeSummary(u)), response.next_cursor];
     }
 }
 

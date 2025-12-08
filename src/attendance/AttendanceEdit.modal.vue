@@ -6,7 +6,7 @@
             ' ' +
             (isDataMoreThanOne ? 's' : selections[0]?.employee.full_name)
         "
-        :body-class="'w-[40rem] mt-10'"
+        :body-class="'w-full max-w-2xl mt-10'"
         :position="'top'"
         @close="$emit('close')"
     >
@@ -342,14 +342,6 @@ function diffAcrossDay(start: number, end: number): number {
     return d;
 }
 const totalMinutes = computed(() => {
-    // const total =
-    //     (overtimeEndTime.value?.toMinutes() || 0) -
-    //     (overtimeStartTime.value?.toMinutes() || 0);
-    // const breakTotal =
-    //     (overtimeBreakEnd.value?.toMinutes() || 0) -
-    //     (overtimeBreakStart.value?.toMinutes() || 0);
-    // const result = total - breakTotal;
-
     const start = overtimeStartTime.value?.toMinutes() || 0;
     const end = overtimeEndTime.value?.toMinutes() || 0;
     if (start === null || end === null)
@@ -494,6 +486,13 @@ const formatShiftSchedule = (shift: DomainShift | null) => {
     return `${scheduleIn} - ${scheduleOut}`;
 };
 
+/**
+ * Format break schedule string from given shift.
+ * If shift is null or undefined, return "-".
+ * If break start or end is null or undefined, return "--:--".
+ * @param {DomainShift | null} shift - Shift object to format break schedule from.
+ * @returns {string} Formatted break schedule string.
+ */
 const formatBreakSchedule = (shift: DomainShift | null) => {
     if (!shift) {
         return "-";
@@ -502,14 +501,6 @@ const formatBreakSchedule = (shift: DomainShift | null) => {
     const breakEnd = shift.break_end || "--:--";
     return `${breakStart} - ${breakEnd}`;
 };
-
-const detailNotes = computed(() => {
-    const trimmed = notes.value.trim();
-    if (trimmed) {
-        return trimmed;
-    }
-    return detailAttendance.value?.notes ?? "";
-});
 
 const detailSummaryCard = computed<DetailSummaryCard | null>(() => {
     const att = detailAttendance.value;
@@ -610,6 +601,11 @@ const resetForm = () => {
     activeTab.value = TAB_KEYS.detail;
 };
 
+/**
+ * Parse a time string in the format "HH:MM" to a UITime object.
+ * @param {string | null} time - The time string to parse.
+ * @returns {UITime | null} - The parsed UITime object, or null if parsing failed.
+ */
 const parseToUITime = (time?: string | null): UITime | null => {
     if (!time) {
         return null;
@@ -625,6 +621,14 @@ const parseToUITime = (time?: string | null): UITime | null => {
     return new UITime(parsedHours, parsedMinutes);
 };
 
+/**
+ * Assigns a new value to a ref of type UITime | null.
+ * If the value is null, it will be set to null.
+ * If the value is not null, it will be parsed into a new UITime object
+ * and assigned to the target ref.
+ * @param {Ref<UITime | null>} target The ref to assign the new value to
+ * @returns {(value: UITime | null) => void} A function that takes a new value and assigns it to the target ref
+ */
 const assignTime = (target: Ref<UITime | null>) => (value: UITime | null) => {
     target.value = value ? UITime.from(value) : null;
 };
@@ -694,6 +698,14 @@ const formatToHoursMinutes = (time: UITime | null): string => {
     return time ? time.toHoursMinutesString() : "00:00";
 };
 
+/**
+ * Builds the overtime payload from the attendance edit modal state.
+ *
+ * If the modal state doesn't have overtime data, it will return null.
+ * Otherwise, it will build the overtime payload and return it.
+ *
+ * @returns {DomainOvertime | null}
+ */
 const buildOvertimePayload = (): DomainOvertime | null => {
     const hasOvertime = [
         overtimeStartTime.value,
@@ -719,6 +731,13 @@ const buildOvertimePayload = (): DomainOvertime | null => {
     return new DomainOvertime(overtimePayload);
 };
 
+
+/**
+ * Request to delete overtime of attendance.
+ *
+ * If the overtime is being deleted or the attendance doesn't have overtime, it will do nothing.
+ * Otherwise, it will show a confirm modal to delete the overtime.
+ */
 const requestDeleteOvertime = () => {
     if (deletingOvertime.value || !detailAttendance.value?.over_time) {
         return;
@@ -726,6 +745,14 @@ const requestDeleteOvertime = () => {
     showDeleteOvertimeConfirm.value = true;
 };
 
+/**
+ * Delete overtime of attendance.
+ *
+ * @remarks
+ * This function is triggered when "Delete Overtime" button is clicked.
+ * It will delete the overtime of the attendance and reset the form.
+ * If there is an error, it will show an error toast.
+ */
 const executeDeleteOvertime = async () => {
     if (deletingOvertime.value) {
         showDeleteOvertimeConfirm.value = false;

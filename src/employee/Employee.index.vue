@@ -1,5 +1,7 @@
 <template>
-    <div class="w-full min-h-0 flex flex-col px-14 dark:bg-gray-900">
+    <div
+        class="w-full min-h-0 flex flex-col px-4 pb-6 dark:bg-gray-900 sm:px-6 lg:px-10 2xl:px-14"
+    >
         <ConfirmModal
             :visible="tbd ? true : false"
             :header="'Delete Employee'"
@@ -17,8 +19,10 @@
             class="py-5 flex flex-col gap-3 mt-2 px-5 mb-3 bg-white/90 dark:bg-gray-800/90 backdrop-blur rounded-2xl shadow-sm ring-1 ring-gray-200/70 dark:ring-gray-700"
         >
             <span class="dark:text-gray-200">List Employee</span>
-            <div class="w-full flex flex-row">
-                <div class="w-1/5">
+            <div
+                class="w-full flex flex-col gap-3 md:flex-row md:items-center"
+            >
+                <div class="w-full md:w-1/3 lg:w-1/4">
                     <TextInput
                         :value="search"
                         :placeholder="'Search employee'"
@@ -26,7 +30,9 @@
                         @input="(v) => [(search = v), getList()]"
                     />
                 </div>
-                <div class="w-full flex flex-row gap-4 justify-end">
+                <div
+                    class="w-full flex flex-wrap gap-3 justify-start md:justify-end"
+                >
                     <ButtonComponent
                         class="text-sm"
                         :variant="'outline'"
@@ -130,14 +136,14 @@
                         <td
                             class="table-cell-custom text-gray-700 dark:text-gray-300"
                         >
-                            {{ emp.employment.job_level }}
+                            {{ capitalizeWords(emp.employment.job_level) }}
                         </td>
                         <td
                             class="table-cell-custom text-gray-700 dark:text-gray-300"
                         >
                             <span
                                 class="text-green-500 border border-green-500 rounded px-2 text-xs"
-                                >{{ emp.employment.status }}</span
+                                >{{ capitalize(emp.employment.status)}}</span
                             >
                         </td>
                         <td class="table-cell-custom">
@@ -156,8 +162,8 @@
                                 <IconButton
                                     class="border border-gray-300 dark:border-gray-600 rounded p-2"
                                     :icon-color="'text-gray-400 dark:text-gray-400'"
-                                    @click="tbd = emp"
                                     :icon-name="'trash'"
+                                    @click="tbd = emp"
                                 />
                             </div>
                         </td>
@@ -180,6 +186,7 @@ import { container } from "@/container/di";
 import { TOKENS } from "@/container/tokens";
 import { DomainEmployee } from "@/domain/models/Employee";
 import ConfirmModal from "@/core/components/modal/Confirm.modal.vue";
+import { capitalize, capitalizeWords } from "@/core/utils/Text";
 
 const repository = container.get(TOKENS.EmployeeRepository);
 

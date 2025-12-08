@@ -1,12 +1,12 @@
 import type { DomainOvertime } from "@/domain/models/Overtime";
 
 export class AttendanceOvertimeDto {
-    date: number;
+    date: string;
     employee_uuid: string[];
     over_time: DomainOvertime;
 
     constructor(init: {
-        date: number;
+        date: string;
         employee_uuid: string[];
         over_time: DomainOvertime;
     }) {

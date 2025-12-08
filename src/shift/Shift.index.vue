@@ -1,5 +1,7 @@
 <template>
-    <div class="w-full min-h-0 flex flex-col px-14 dark:bg-gray-900">
+    <div
+        class=""
+    >
         <ConfirmModal
             :visible="tbd ? true : false"
             :header="'Delete Employee'"
@@ -8,15 +10,14 @@
             @confirm="deleteItem()"
             @cancel="tbd = null"
         />
-        <div class="w-full flex flex-row py-3 mt-3">
-            <span class="text-lg font-semibold dark:text-gray-200">Shifts</span>
-        </div>
         <div
             class="py-5 flex flex-col gap-3 mt-2 px-5 mb-3 bg-white/90 dark:bg-gray-800/90 backdrop-blur rounded-2xl shadow-sm ring-1 ring-gray-200/70 dark:ring-gray-700"
         >
             <span class="dark:text-gray-200">List shift</span>
-            <div class="w-full flex flex-row">
-                <div class="w-1/5">
+            <div
+                class="w-full flex flex-col gap-3 md:flex-row md:items-center"
+            >
+                <div class="w-full md:w-1/3 lg:w-1/4">
                     <TextInput
                         :value="search"
                         :placeholder="'Search shift'"
@@ -24,7 +25,9 @@
                         @input="(v) => [(search = v), getList()]"
                     />
                 </div>
-                <div class="w-full flex flex-row gap-4 justify-end">
+                <div
+                    class="w-full flex flex-wrap gap-3 justify-start md:justify-end"
+                >
                     <ButtonComponent
                         class="text-sm"
                         :variant="'outline'"

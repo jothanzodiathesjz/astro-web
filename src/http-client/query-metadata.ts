@@ -13,6 +13,7 @@ export interface IQueryMetadata {
     status?: string;
     has_schedule?: boolean;
     employment_type?: string;
+    category?: string;
 }
 
 export class QueryMetadata {
@@ -73,6 +74,10 @@ export class QueryMetadata {
 
         if (query?.employment_type) {
             this.params.set("employment_type", query.employment_type);
+        }
+
+        if (query?.category) {
+            this.params.set("category", query.category);
         }
     }
 
