@@ -24,3 +24,11 @@ export type EmployeeTimeOff = {
     inserted_by: string;
     created_at?: number;
 }
+
+export type TimeOffPolicy = {
+    time_off: DomainTimeOff;
+    employee_uuid: string[];
+    quota: number;
+    start_date: number;
+    end_date: number;
+}

@@ -1,6 +1,6 @@
 import type { HttpRequest } from "@/http-client/httpRequest";
 import { TOKENS } from "@/container/tokens";
-import { DomainEmployeeTimeOff, DomainTimeOff, EmployeeTimeOffToData } from "@/domain/models/TimeOff";
+import { DomainEmployeeTimeOff, DomainTimeOff, DomainTimeOffPolicy, EmployeeTimeOffToData } from "@/domain/models/TimeOff";
 import type { TimeOffRepository } from "@/domain/repositories/TimeOffRepository";
 import type { IQueryMetadata } from "@/http-client/query-metadata";
 import { injected } from "brandi";
@@ -57,6 +57,19 @@ export class TimeOffRepositoryImp implements TimeOffRepository {
             return [[], undefined];
         }
         return [response.data.map((u) => new DomainEmployeeTimeOff(u)), response.next_cursor];
+    }
+
+    async createPolicy(policy: DomainTimeOffPolicy): Promise<DomainTimeOffPolicy> {
+        const response = await this.http.POST<DomainTimeOffPolicy, DomainTimeOffPolicy>("employee-timeoff-policies", policy);
+        return response.data;
+    }
+
+    async getListPolicy(query?: IQueryMetadata): Promise<DomainTimeOffPolicy[]> {
+        const response = await this.http.GET<DomainTimeOffPolicy[]>("employee-timeoff-policies", {
+            ...query,
+        });
+
+        return response.data;
     }
 }
 

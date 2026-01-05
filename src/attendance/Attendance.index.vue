@@ -321,7 +321,7 @@
                             </td>
                             <td class="table-cell-custom">
                                 <div
-                                    class="inline-flex rounded-full border px-6 py-2"
+                                    class="inline-flex rounded-full  px-6 py-2"
                                 >
                                     <div
                                         class="h-3 w-16 bg-gray-200 dark:bg-gray-700 rounded animate-pulse"
@@ -516,9 +516,9 @@ import ImportModal from "@/core/components/modal/Import.modal.vue";
 const vm = ref(container.get(TOKENS.AttendanceViewModel));
 
 const displayedAttendances = computed(() => {
-    const targetDate =
-        vm.value.date instanceof Date ? new Date(vm.value.date) : new Date();
-    const targetDay = targetDate.toDateString();
+    // const targetDate =
+    //     vm.value.date instanceof Date ? new Date(vm.value.date) : new Date();
+    // const targetDay = targetDate.toDateString();
 
     // return vm.value.attendanceList.filter(
     //     (attendance) => attendance.date.toDateString() === targetDay,

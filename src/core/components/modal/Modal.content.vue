@@ -10,7 +10,7 @@
             class="flex flex-col justify-center w-full bg-white dark:bg-gray-800 rounded-lg shadow-lg"
         >
             <div
-                class="flex py-3 px-5 w-full justify-between border-b border-neutral-200 dark:border-gray-700"
+                class="flex py-3 px-5 w-full justify-between border-b border-neutral-200 dark:border-gray-700 sticky top-0 bg-white z-10" 
             >
                 <span class="font-semibold text-gray-900 dark:text-white">{{
                     header
@@ -27,7 +27,6 @@
 <script setup lang="ts">
 import IconButton from "../button/Icon.button.vue";
 import Modal from "./Modal.vue";
-import { defineProps, defineEmits } from "vue";
 const $props = defineProps<{
     visible: boolean;
     header: string;

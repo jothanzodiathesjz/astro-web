@@ -7,7 +7,7 @@ import { settingsRoutes } from "./modules/settings.routes";
 import { scheduleRoutes } from "./modules/schedule.routes";
 // import { shiftRoutes } from "./modules/shift.routes";
 import { calendarRoutes } from "./modules/calendar.routes";
-import { EmployeeTimeOffRoutes } from "./modules/EmployeeTimeOff.routes";
+import { EmployeeTimeOffRoutes } from "./modules/employeeTimeOff.routes";
 
 export const appRoute: RouteRecordRaw = {
     path: "/app",

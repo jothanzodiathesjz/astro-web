@@ -2,7 +2,7 @@
     <ModalContent
         :visible="visible"
         :header="'Preview Schedule'"
-        :body-class="'max-w-4xl mt-10'"
+        :body-class="'mt-10'"
         :position="'top'"
         @close="$emit('close')"
     >

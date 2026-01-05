@@ -73,6 +73,9 @@
                     :with-range="false"
                     :with-time="false"
                     :error="vm.formErrors.efectiveDate"
+                    :hint="{
+                            text: 'Tanggal mulai berlakunya jadwal kerja'
+                        }"
                     @update:model-value="
                         (value) => {
                             value instanceof Date && (vm.effectiveDate = value);

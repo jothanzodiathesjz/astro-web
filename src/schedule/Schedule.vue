@@ -1,7 +1,5 @@
 <template>
-    <div
-        class="py-5 flex flex-col gap-3 mt-2 px-5 mb-3 h-full min-h-0 bg-white/90 dark:bg-gray-800/90 backdrop-blur rounded-2xl shadow-sm ring-1 ring-gray-200/70 dark:ring-gray-7"
-    >
+    <div>
         <ConfirmModal
             :visible="tbd ? true : false"
             :header="'Delete Employee'"
@@ -10,132 +8,136 @@
             @confirm="deleteItem()"
             @cancel="tbd = null"
         />
-        <span class="dark:text-gray-200">Schedule</span>
         <div
-            class="w-full flex flex-col gap-3 md:flex-row md:items-center"
+            class="py-5 flex flex-col gap-3 mt-2 px-5 mb-3 h-full min-h-0 bg-white/90 dark:bg-gray-800/90 backdrop-blur rounded-2xl shadow-sm ring-1 ring-gray-200/70 dark:ring-gray-7"
         >
-            <div class="w-full md:w-1/3 lg:w-1/4">
-                <TextInput
-                    :value="search"
-                    :placeholder="'Search schedule'"
-                    :debounce="400"
-                    @input="(v) => [(search = v), getList()]"
-                />
-            </div>
+            <span class="dark:text-gray-200">Schedule</span>
             <div
-                class="w-full flex flex-wrap gap-3 justify-start md:justify-end"
+                class="w-full flex flex-col gap-3 md:flex-row md:items-center"
             >
-                <ButtonComponent
-                    class="text-sm"
-                    :variant="'outline'"
-                    :icon-name="'fa-file-import'"
-                    :disabled="true"
-                    >Import</ButtonComponent
+                <div class="w-full md:w-1/3 lg:w-1/4">
+                    <TextInput
+                        :value="search"
+                        :placeholder="'Search schedule'"
+                        :debounce="400"
+                        @input="(v) => [(search = v), getList()]"
+                    />
+                </div>
+                <div
+                    class="w-full flex flex-wrap gap-3 justify-start md:justify-end"
                 >
-                <ButtonComponent
-                    class="text-sm"
-                    :variant="'outline'"
-                    :icon-name="'fa-file-export'"
-                    >Export</ButtonComponent
-                >
-                <ButtonComponent
-                    @click="$router.push({ name: 'ScheduleForm' })"
-                    class="text-sm"
-                    :variant="'primary'"
-                    >Add Schedule</ButtonComponent
-                >
+                    <ButtonComponent
+                        class="text-sm"
+                        :variant="'outline'"
+                        :icon-name="'fa-file-import'"
+                        :disabled="true"
+                        >Import</ButtonComponent
+                    >
+                    <ButtonComponent
+                        class="text-sm"
+                        :variant="'outline'"
+                        :icon-name="'fa-file-export'"
+                        >Export</ButtonComponent
+                    >
+                    <ButtonComponent
+                        @click="$router.push({ name: 'ScheduleForm' })"
+                        class="text-sm"
+                        :variant="'primary'"
+                        >Add Schedule</ButtonComponent
+                    >
+                </div>
             </div>
-        </div>
-        <TableComponent :empty="schedules.length === 0">
-            <template #table-header>
-                <tr>
-                    <th
-                        class="table-header-custom text-start font-normal dark:text-gray-400"
-                    >
-                        Name
-                    </th>
-                    <th
-                        class="table-header-custom text-start font-normal dark:text-gray-400"
-                    >
-                        Efective Date
-                    </th>
-                    <th
-                        class="table-header-custom text-start font-normal dark:text-gray-400"
-                    >
-                        Shift Pattern
-                    </th>
-
-                    <th class="table-header-custom"></th>
-                    <th class="table-header-custom"></th>
-                </tr>
-            </template>
-            <template #table-body>
-                <tr
-                    class="table-row-custom"
-                    v-for="emp in schedules.toSorted((a, b) =>
-                        a.name.localeCompare(b.name),
-                    )"
-                    :key="emp.uuid"
-                >
-                    <td
-                        class="table-cell-custom text-gray-700 dark:text-gray-300"
-                    >
-                        {{ emp.name }}
-                    </td>
-                    <td
-                        class="table-cell-custom text-gray-700 dark:text-gray-300"
-                    >
-                        {{
-                            new Date(emp.effective_date).toLocaleDateString(
-                                "id-ID",
-                                {
-                                    year: "numeric",
-                                    month: "short",
-                                    day: "2-digit",
-                                },
-                            )
-                        }}
-                    </td>
-
-                    <td
-                        class="table-cell-custom text-gray-700 dark:text-gray-300"
-                    >
-                        {{ emp.cycle_days }} Days
-                    </td>
-                    <td
-                        class="table-cell-custom text-gray-700 dark:text-gray-300"
-                    >
-                        <span
-                            class="border border-gray-300 dark:border-gray-600 rounded p-2"
-                            >{{
-                                emp.is_assigned ? "Assigned" : "Unassigned"
-                            }}</span
+            <TableComponent :empty="schedules.length === 0">
+                <template #table-header>
+                    <tr>
+                        <th
+                            class="table-header-custom text-start font-normal dark:text-gray-400"
                         >
-                    </td>
-                    <td class="table-cell-custom">
-                        <div class="flex flex-row gap-2">
-                            <IconButton
+                            Name
+                        </th>
+                        <th
+                            class="table-header-custom text-start font-normal dark:text-gray-400"
+                        >
+                            Efective Date
+                        </th>
+                        <th
+                            class="table-header-custom text-start font-normal dark:text-gray-400"
+                        >
+                            Shift Pattern
+                        </th>
+    
+                        <th class="table-header-custom"></th>
+                        <th class="table-header-custom"></th>
+                    </tr>
+                </template>
+                <template #table-body>
+                    <tr
+                        class="table-row-custom"
+                        v-for="emp in schedules.toSorted((a, b) =>
+                            a.name.localeCompare(b.name),
+                        )"
+                        :key="emp.uuid"
+                    >
+                        <td
+                            class="table-cell-custom text-gray-700 dark:text-gray-300"
+                        >
+                            {{ emp.name }}
+                        </td>
+                        <td
+                            class="table-cell-custom text-gray-700 dark:text-gray-300"
+                        >
+                            {{
+                                new Date(emp.effective_date).toLocaleDateString(
+                                    "id-ID",
+                                    {
+                                        year: "numeric",
+                                        month: "short",
+                                        day: "2-digit",
+                                    },
+                                )
+                            }}
+                        </td>
+    
+                        <td
+                            class="table-cell-custom text-gray-700 dark:text-gray-300"
+                        >
+                            {{ emp.cycle_days }} Days
+                        </td>
+                        <td
+                            class="table-cell-custom text-gray-700 dark:text-gray-300"
+                        >
+                            <span
                                 class="border border-gray-300 dark:border-gray-600 rounded p-2"
-                                :icon-color="'text-gray-400 dark:text-gray-400'"
-                                @click="
-                                    $router.push({
-                                        name: 'ScheduleDetail',
-                                        params: { uuid: emp.uuid },
-                                    })
-                                "
-                                :icon-name="'eye'"
-                            />
-                            <IconButton
-                                class="border border-gray-300 dark:border-gray-600 rounded p-2"
-                                :icon-color="'text-gray-400 dark:text-gray-400'"
-                                @click="tbd = emp"
-                                :icon-name="'trash'"
-                            />
-                        </div>
-                    </td>
-                </tr>
-            </template>
-        </TableComponent>
+                                >{{
+                                    emp.is_assigned ? "Assigned" : "Unassigned"
+                                }}</span
+                            >
+                        </td>
+                        <td class="table-cell-custom">
+                            <div class="flex flex-row gap-2">
+                                <IconButton
+                                    class="border border-gray-300 dark:border-gray-600 rounded p-2"
+                                    :icon-color="'text-gray-400 dark:text-gray-400'"
+                                    @click="
+                                        $router.push({
+                                            name: 'ScheduleDetail',
+                                            params: { uuid: emp.uuid },
+                                        })
+                                    "
+                                    :icon-name="'eye'"
+                                />
+                                <IconButton
+                                    class="border border-gray-300 dark:border-gray-600 rounded p-2"
+                                    :icon-color="'text-gray-400 dark:text-gray-400'"
+                                    @click="tbd = emp"
+                                    :icon-name="'trash'"
+                                />
+                            </div>
+                        </td>
+                    </tr>
+                </template>
+            </TableComponent>
+        </div>
     </div>
 </template>
 

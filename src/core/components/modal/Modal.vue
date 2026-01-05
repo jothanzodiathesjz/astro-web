@@ -13,7 +13,7 @@
             <transition name="slide-down">
                 <div
                     v-if="childVisible"
-                    class="bg-white dark:bg-gray-800 relative rounded-lg shadow-lg w-full max-w-lg mx-4 sm:mx-0 max-h-[90vh] overflow-auto"
+                    class="bg-white dark:bg-gray-800 relative rounded-lg shadow-lg w-full max-w-5xl mx-4 sm:mx-0 max-h-[90vh] overflow-auto"
                     :class="contentClass"
                 >
                     <slot></slot>

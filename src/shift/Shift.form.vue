@@ -53,6 +53,9 @@
                     :value="vm.data.code"
                     :placeholder="'Code'"
                     :label="'Code'"
+                    :hint="{
+                       text: 'Kode unik untuk mengidentifikasi shift.' 
+                    }"
                     :error="vm.formErrors.code"
                     @input="
                         (value) => {
@@ -87,7 +90,7 @@
                     <TextDropdownInput
                         :options="vm.typeDropdown"
                         :selected="selectedType"
-                        :dontfilter="true"
+                        :dontfilter="true"  
                         label="Shift Type"
                         placeholder="Select Type"
                         @update="
@@ -139,6 +142,9 @@
                         label="Schedule In"
                         :model-value="vm.scheduleIn"
                         :placeholder="'00:00'"
+                        :hint="{
+                            text: 'Jam masuk kerja yang dijadwalkan'
+                        }"
                         @update:model-value="
                             (value) => {
                                 vm.scheduleIn = value
@@ -160,6 +166,9 @@
                         label="Schedule Out"
                         :model-value="vm.scheduleOut"
                         :placeholder="'00:00'"
+                        :hint="{
+                            text: 'Jam masuk kerja yang dijadwalkan'
+                        }"
                         @update:model-value="
                             (value) => {
                                 vm.scheduleOut = value
@@ -182,6 +191,9 @@
                         label="Break Start"
                         :model-value="vm.breakStart"
                         :placeholder="'00:00'"
+                        :hint="{
+                            text: 'Waktu mulai istirahat'
+                        }"
                         @update:model-value="
                             (value) => {
                                 vm.breakStart = value
@@ -202,6 +214,9 @@
                         label="Break End"
                         :model-value="vm.breakEnd"
                         :placeholder="'00:00'"
+                        :hint="{
+                            text: 'Waktu selesai istirahat'
+                        }"
                         @update:model-value="
                             (value) => {
                                 vm.breakEnd = value ? UITime.from(value) : null;

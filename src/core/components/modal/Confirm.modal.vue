@@ -3,7 +3,7 @@
         <Modal
             v-model="showModal"
             :close-self="false"
-            :content-class="contentClass ? contentClass : '-top-14'"
+            :content-class="contentClass ? contentClass : '-top-14 max-w-lg'"
             :position="'center'"
         >
             <div class="flex flex-col justify-center w-full">

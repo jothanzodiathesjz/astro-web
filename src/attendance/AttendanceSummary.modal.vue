@@ -2,7 +2,7 @@
     <ModalContent
         :visible="summaryType ? true : false"
         :header="summaryHeader"
-        :body-class="' mt-10'"
+        :body-class="'max-w-lg mt-10'"
         :position="'top'"
         @close="emit('close')"
     >
@@ -69,7 +69,7 @@
 
                 <div
                     ref="listContainer"
-                    class="relative max-h-[28rem] overflow-y-auto custom-scrollbar"
+                    class="relative max-h-[45vh] overflow-y-auto custom-scrollbar"
                 >
                     <div
                         v-if="loading"
@@ -120,10 +120,11 @@
                         class="divide-y divide-gray-100 dark:divide-gray-800"
                     >
                         <li
-                            v-for="employee in employees"
+                            v-for="(employee, i) in employees"
                             :key="employee.uuid"
                             class="flex flex-col gap-4 px-5 py-4 transition hover:bg-gray-50 dark:hover:bg-gray-800/50 sm:flex-row sm:items-center"
                         >
+                        <span class="text-sm">{{ i + 1 }}</span>
                             <div class="flex items-center gap-4">
                                 <div
                                     class="flex h-12 w-12 items-center justify-center rounded-full border border-gray-200 bg-white text-sm font-semibold uppercase text-gray-700 shadow-sm dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"

@@ -126,6 +126,24 @@ const timeOffRoutes: RouteRecordRaw = {
     ],
 };
 
+const timeOffPolicyRoutes: RouteRecordRaw = {
+    path: "time-off-policy",
+    children: [
+        {
+            path: "",
+            name: "TimeOffPolicy",
+            component: () =>
+                import("@/settings/time/TimeOffPolicy.index.vue"),
+        },
+        {
+            path: "form",
+            name: "TimeOffPolicyForm",
+            component: () =>
+                import("@/settings/time/TimeOffPolicy.form.vue"),
+        },
+    ],
+}
+
 const overtimeRoutes: RouteRecordRaw = {
     path: "overtime",
     children: [
@@ -161,5 +179,6 @@ export const settingsRoutes: RouteRecordRaw = {
         timeOffRoutes,
         overtimeRoutes,
         holidayRoutes,
+        timeOffPolicyRoutes
     ],
 };

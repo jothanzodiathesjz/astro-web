@@ -91,6 +91,9 @@
                         :options="durationOptions"
                         :selected="durationSelected"
                         :dontfilter="true"
+                        :hint="{
+                            text: 'Jenis durasi yang digunakan'
+                        }"
                         @update="
                             (option) => {
                                 data.duration_type = option.value;
@@ -105,6 +108,9 @@
                         :model-value="data.tolerance_minutes"
                         :placeholder="'Tolerance'"
                         :label="'Tolerance (Minutes)'"
+                        :hint="{
+                            text: 'Batas toleransi dalam menit sebelum dianggap pelanggaran'
+                        }"
                         @update:model-value="
                             (value) => {
                                 data.tolerance_minutes = value;
@@ -119,6 +125,7 @@
                     :checked="data.is_paid"
                     @click=" data.is_paid = !data.is_paid"
                     />
+                    <span class="text-xs font-light text-gray-400 dark:text-gray-500">Durasi ini tetap dibayar</span>
                 </div>
                 <div class="flex flex-col gap-3">
                     <span class="text-sm">Deduct Leave</span>
@@ -126,6 +133,7 @@
                     :checked="data.is_deduct_leave"
                     @click=" data.is_deduct_leave = !data.is_deduct_leave"
                     />
+                    <span class="text-xs font-light text-gray-400 dark:text-gray-500">Mengurangi saldo cuti karyawan</span>
                 </div>
             </div>
             <div class="w-full flex flex-row justify-end">

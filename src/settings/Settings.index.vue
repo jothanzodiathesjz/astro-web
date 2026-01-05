@@ -1,5 +1,5 @@
 <template>
-    <div class="w-full flex flex-col gap-5 px-12 overflow-x-hidden">
+    <div class="w-full flex flex-col gap-5 px-12 ">
         <div class="px-5">
             <div
                 class="w-full border-b border-gray-300 dark:border-gray-600 pt-4 gap-5 flex flex-row items-start justify-start"
@@ -48,6 +48,11 @@ const routes = [
     {
         name: "TimeOff",
         label: "Time Off",
+        active: false,
+    },
+    {
+        name: "TimeOffPolicy",
+        label: "Policy",
         active: false,
     },
     {

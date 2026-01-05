@@ -12,7 +12,7 @@ export default defineConfig({
   server: {
     host: env.VITE_HOST,
     port: parseInt(env.VITE_PORT),
-    allowedHosts: ['advantage-poison-felt-contrary.trycloudflare.com'],
+    allowedHosts: ['operating-gif-previously-assigned.trycloudflare.com'],
   },
   resolve: {
     alias: {

@@ -28,6 +28,7 @@
                 :placeholder="placeholder ?? ''"
                 :readonly="readonly"
                 :error="error"
+                :hint="hint"
             >
                 <template #suffix>
                     <IconButton
@@ -83,6 +84,7 @@ const props = withDefaults(
         withRange?: boolean;
         label?: string;
         error?: string[] | string;
+        hint?: { link?: string; text: string };
     }>(),
     {
         readonly: false,
